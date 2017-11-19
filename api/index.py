@@ -38,7 +38,7 @@ except ImportError:
 
 import threading
 from flup.server.fcgi import WSGIServer
-from linkshort import app
+from app import app
 
 _mtimes = {}
 def code_changed(): # lovingly stolen from django. See above.
