@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/observable';
 export class AuthService {
   private BASE_URL = 'api';
   private headers: HttpHeaders = new HttpHeaders({
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
   });
 
   constructor(private http: HttpClient) { }

@@ -7,7 +7,7 @@
     "start": "ng serve --proxy-config proxy.conf.json",
     "build": "ng build --env=prod --base-href=/s2/",
     "test": "ng test",
-    "lint": "ng lint",
+    "lint": "ng lint --type-check",
     "e2e": "ng e2e"
   },
   "private": true,
@@ -23,6 +23,7 @@
     "@angular/router": "^4.0.0",
     "core-js": "^2.4.1",
     "rxjs": "^5.1.0",
+    "tslint-config-airbnb": "^5.4.2",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
@@ -43,7 +44,7 @@
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.1.2",
     "ts-node": "~3.0.4",
-    "tslint": "~5.3.2",
+    "tslint": "^5.8.0",
     "typescript": "~2.3.3"
   }
 }

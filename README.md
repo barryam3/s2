@@ -2,6 +2,9 @@
 
 Version 2 of the Cross Products set selection site.
 
+## Contributing
+Do `npm run lint` before committing.
+
 ## Development server
 
 1. Start the back-end server. From the `api` directory do  
