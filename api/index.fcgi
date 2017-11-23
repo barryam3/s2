@@ -38,7 +38,14 @@ except ImportError:
 
 import threading
 from flup.server.fcgi import WSGIServer
-from app import app
+from app import create_app
+try:
+    from app import realconfig as config
+except ImportError:
+    from app import config
+
+
+app = create_app(config.base_config)
 
 _mtimes = {}
 def code_changed(): # lovingly stolen from django. See above.
@@ -60,6 +67,7 @@ def code_changed(): # lovingly stolen from django. See above.
             _mtimes = {}
             return True
     return False
+
 def reload_on_edit():
     while True:
         if code_changed():

@@ -8,13 +8,20 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-  message = 'The API is not working!';
+  username: '';
+  password: '';
 
   constructor(private auth: AuthService) { }
 
+  login() {
+    this.auth.login(this.username, this.password)
+      .subscribe(
+        success => console.log('success', success),
+        failure => console.log('failure', failure.error),
+      );
+  }
+
   ngOnInit() {
-    this.auth.test()
-      .subscribe(msg => this.message = msg);
   }
 
 }
