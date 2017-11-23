@@ -21,4 +21,6 @@ flask run
 3. Do `./deploy_prod.sh yourkerb` when you're ready to make your changes live.
 
 ## Database Configuration
-When testing locally, you should put your MySQL database credentials in environment variables, as specified in `config.py`. In the athena locker, there exists a file `realconfig.py` that has the crossp SQL database credentials which is loaded automatically if present. In the future we should create a tool to initialize a personal database with dummy data for testing.
+When testing locally, you should put your MySQL database credentials in environment variables, as specified in `config.py`. In the athena locker, there exists a file `realconfig.py` that has the crossp SQL database credentials which is loaded automatically if present.  
+
+You can create a database using the dump in `ssdb.sql`. The command to do so (after creating the database) is `mysql yourkerb+s2 < ssdb.sql`. If this does not work, you can paste and execute the SQL manually.
