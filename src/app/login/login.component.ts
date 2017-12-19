@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { AuthService } from '../auth.service';
+import { MessageService, Context } from '../message.service';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,7 @@ export class LoginComponent implements OnInit {
   password: '';
   season: any = 'Spring 2018';
 
-  constructor(private auth: AuthService) {}
+  constructor(private auth: AuthService, private msg: MessageService) {}
 
   calculateSeason() {
     let today = new Date();
@@ -33,8 +34,8 @@ export class LoginComponent implements OnInit {
   login() {
     this.auth.login(this.username, this.password)
       .subscribe(
-        success => console.log('success', success),
-        failure => console.log('failure', failure.error),
+        success => this.msg.add('Login successful.', Context.Success),
+        failure => this.msg.add('Login unsuccessful.', Context.Danger),
       );
   }
 

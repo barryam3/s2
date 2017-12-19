@@ -23,7 +23,6 @@ export class MessageService {
   add(message: string, context: Context=Context.Info) {
     this.messages.push({content: message, context: context, id: this.nextID});
     this.nextID += 1;
-    console.log(this.messages);
   }
 
   clear() {
