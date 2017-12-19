@@ -4,6 +4,8 @@ import { Observable } from 'rxjs/observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
+import { MessageService } from './message.service';
+
 
 @Injectable()
 export class AuthService {
@@ -12,7 +14,10 @@ export class AuthService {
     'Content-Type': 'application/json',
   });
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private messageService: MessageService
+   ) { }
 
   login(username: string, password: string): Observable<boolean> {
     const url = `${this.BASE_URL}/login`;
@@ -20,6 +25,7 @@ export class AuthService {
       username,
       password,
     };
+    this.messageService.add("Trying to log in.");
     return this.http.post<boolean>(url, payload, { headers: this.headers });
   }
 }

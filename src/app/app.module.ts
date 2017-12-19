@@ -6,14 +6,17 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
-import { LoginComponent } from './components/login/login.component';
+import { LoginComponent } from './login/login.component';
+import { MessagesComponent } from './messages/messages.component';
 
-import { AuthService } from './services/auth.service';
+import { AuthService } from './auth.service';
+import { MessageService } from './message.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
+    MessagesComponent,
   ],
   imports: [
     BrowserModule,
@@ -21,7 +24,7 @@ import { AuthService } from './services/auth.service';
     AppRoutingModule,
     HttpClientModule,
   ],
-  providers: [AuthService],
+  providers: [AuthService, MessageService],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
