@@ -1,10 +1,10 @@
 <div *ngIf='messageService.messages.length' id='messages'>
   <div
     *ngFor='let message of messageService.messages'
-    class="alert alert-info alert-dismissable"
+    class='alert alert-{{message.context}} alert-dismissable'
   >
     <span> {{message.content}} </span>
-    <a class="close" (click)="messageService.remove(message)">
+    <a class='close' (click)="messageService.remove(message)">
       &times;
     </a>
   </div>
