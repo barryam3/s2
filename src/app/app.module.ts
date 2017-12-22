@@ -11,12 +11,14 @@ import { MessagesComponent } from './messages/messages.component';
 
 import { AuthService } from './auth.service';
 import { MessageService } from './message.service';
+import { SongsComponent } from './songs/songs.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     MessagesComponent,
+    SongsComponent,
   ],
   imports: [
     BrowserModule,
