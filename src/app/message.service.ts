@@ -20,8 +20,8 @@ export class MessageService {
   messages: Message[] = [];
   nextID = 0;
 
-  add(message: string, context: Context=Context.Info) {
-    this.messages.push({content: message, context: context, id: this.nextID});
+  add(content: string, context: Context=Context.Info) {
+    this.messages.push({content: content, context: context, id: this.nextID});
     this.nextID += 1;
   }
 
