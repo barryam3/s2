@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { MessageService, Context } from '../message.service';
 
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -13,7 +15,11 @@ export class LoginComponent implements OnInit {
   password: '';
   season: any = 'Spring 2018';
 
-  constructor(private auth: AuthService, private msg: MessageService) {}
+  constructor(
+    private auth: AuthService,
+    private msg: MessageService,
+    private router: Router
+   ) {}
 
   calculateSeason() {
     let today = new Date();
@@ -34,7 +40,7 @@ export class LoginComponent implements OnInit {
   login() {
     this.auth.login(this.username, this.password)
       .subscribe(
-        success => this.msg.add('Login successful.', Context.Success),
+        success => this.router.navigateByUrl('/songs'),
         failure => this.msg.add('Login unsuccessful.', Context.Danger),
       );
   }
