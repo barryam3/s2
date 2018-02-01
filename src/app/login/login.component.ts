@@ -18,13 +18,13 @@ export class LoginComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private msg: MessageService,
-    private router: Router
+    private router: Router,
    ) {}
 
   calculateSeason() {
-    let today = new Date();
-    let year = today.getFullYear()
-    let month = today.getMonth()
+    const today = new Date();
+    let year = today.getFullYear();
+    const month = today.getMonth();
     let fall = false;
     // if it's between apr & sep, assume Fall semester
     if (month >= 3 && month <= 8) {

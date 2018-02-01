@@ -36,6 +36,10 @@ class CRUDMixin(object):
         db.session.delete(self)
         return commit and db.session.commit()
 
+    def to_dict(self):
+        return {col.name: getattr(self, col.name) for col in \
+        self.__table__.columns}
+
 
 class DataTable(object):
     """

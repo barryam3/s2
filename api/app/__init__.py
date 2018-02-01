@@ -5,7 +5,9 @@ from flask import Flask, g, request
 from app.database import db
 from app.extensions import lm, bcrypt
 from app.utils import send_success_response
+
 from app.routes.auth import auth
+from app.routes.song import song
 
 
 def create_app(config):
@@ -40,3 +42,4 @@ def register_extensions(app):
 def register_blueprints(app):
     """Register blueprints with the Flask application."""
     app.register_blueprint(auth, url_prefix="/auth")
+    app.register_blueprint(song, url_prefix="/song")

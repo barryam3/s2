@@ -24,11 +24,10 @@ export class SongService {
 
   constructor(private http: HttpClient) { }
 
-  getSongs(current=true): Observable<Song[]> {
-    const url = `${this.BASE_URL}/login`;
-    let params = new HttpParams()
-    params.set('current', current ? '1' : '0');
-    return this.http.get<Song[]>(url, { headers: this.headers, params: params});
+  getSongs(current= true): Observable<Song[]> {
+    const url = `${this.BASE_URL}/`;
+    const params = new HttpParams().set('current', current ? '1' : '0');
+    return this.http.get<Song[]>(url, { params, headers: this.headers });
   }
 
 }

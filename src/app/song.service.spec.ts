@@ -5,7 +5,7 @@ import { SongService } from './song.service';
 describe('SongService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [SongService]
+      providers: [SongService],
     });
   });
 
