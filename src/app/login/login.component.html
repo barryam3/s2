@@ -9,31 +9,29 @@
 <h2>{{season}}</h2>
 
 <form #loginForm="ngForm">
-  <div class="form-group">
-    <label for="username">Athena Username</label>
+  <mat-form-field>
     <input
-      type="text"
-      class="form-control"
-      id="username"
+      matInput
+      placeholder="Athena Username"
       name="username"
       [(ngModel)]="username"
       required
     >
-  </div>
-  <div class="form-group">
-    <label for="password">Password</label><br>
+  </mat-form-field>
+  <mat-form-field>
     <input
+      matInput
       type="password"
-      class="form-control"
-      id="password"
+      placeholder="Password"
       name="password"
       [(ngModel)]="password"
       required
     >
-  </div>
+  </mat-form-field>
   <button
+    mat-raised-button
+    color="primary"
     type="submit"
-    class="btn btn-success"
     (click)="login()"
   >
     Log In

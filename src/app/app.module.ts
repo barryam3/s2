@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
+import { MatModule } from './mat/mat.module';
 
 import { AppComponent } from './app.component';
 import { MessagesComponent } from './messages/messages.component';
@@ -26,6 +27,7 @@ import { SongService } from './song.service';
     FormsModule,
     AppRoutingModule,
     HttpClientModule,
+    MatModule,
   ],
   providers: [
     AuthService,
