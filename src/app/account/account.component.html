@@ -1,0 +1,44 @@
+<div *ngIf="currentUser">
+  <h1>Hi, {{currentUser.name}}</h1>
+
+  <form #passwordForm="ngForm">
+    <mat-form-field>
+      <input
+        matInput
+        type="password"
+        placeholder="Old Password"
+        name="oldPassword"
+        [(ngModel)]="oldPassword"
+        required
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        type="password"
+        placeholder="New Password"
+        name="newPassword"
+        [(ngModel)]="newPassword"
+        required
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        type="password"
+        placeholder="Confirm New Password"
+        name="newPasswordConf"
+        [(ngModel)]="newPasswordConf"
+        required
+      >
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="accent"
+      type="submit"
+      (click)="changePassword()"
+    >
+      Change Password
+    </button>
+  </form>
+</div>

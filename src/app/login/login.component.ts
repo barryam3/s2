@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material';
 
 import { AuthService } from '../auth.service';
-import { MessageService, Context } from '../message.service';
-
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -17,8 +16,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private auth: AuthService,
-    private msg: MessageService,
     private router: Router,
+    private snackBar: MatSnackBar,
    ) {}
 
   calculateSeason() {
@@ -40,8 +39,14 @@ export class LoginComponent implements OnInit {
   login() {
     this.auth.login(this.username, this.password)
       .subscribe(
-        success => this.router.navigateByUrl('/songs'),
-        failure => this.msg.add('Login unsuccessful.', Context.Danger),
+        success => this.snackBar.open('Successfully signed in.', 'dismiss'),
+        failure => {
+          if (failure.status === 504) {
+            this.snackBar.open('Unable to connect to server.', 'dismiss');
+          } else {
+            this.snackBar.open('Unsuccessful signin attempt.', 'dismiss');
+          }
+        },
       );
   }
 

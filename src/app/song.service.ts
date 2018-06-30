@@ -3,17 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
-export interface Song {
-  id: number;
-  title: string;
-  artist: string;
-  genre: string;
-  solo: string;
-  suggestor: number;
-  last_edit: Date;
-  current: boolean;
-  arranged: boolean;
-}
+import { Song } from './song';
 
 @Injectable()
 export class SongService {
@@ -24,7 +14,7 @@ export class SongService {
 
   constructor(private http: HttpClient) { }
 
-  getSongs(current= true): Observable<Song[]> {
+  getSongs(current = true): Observable<Song[]> {
     const url = `${this.BASE_URL}/`;
     const params = new HttpParams().set('current', current ? '1' : '0');
     return this.http.get<Song[]>(url, { params, headers: this.headers });

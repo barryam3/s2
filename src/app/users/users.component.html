@@ -1,0 +1,10 @@
+<mat-list>
+  <mat-list-item *ngFor="let user of users">
+    <span>
+      {{user.name}}
+    </span>
+    <button mat-button (click)="resetPassword(user.id)">
+      Reset Password
+    </button>
+  </mat-list-item>
+</mat-list>
