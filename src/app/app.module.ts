@@ -17,6 +17,7 @@ import { SongCardComponent } from './song-card/song-card.component';
 import { AuthService } from './auth.service';
 import { SongService } from './song.service';
 import { UserService } from './user.service';
+import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { UserService } from './user.service';
     UsersComponent,
     AccountComponent,
     SongCardComponent,
+    NavbarComponent,
   ],
   imports: [
     BrowserModule,
