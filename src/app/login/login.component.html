@@ -1,39 +1,41 @@
-<img
-  src="http://xprod.mit.edu/SetSelection/img/logo_web.png"
-  alt="Cross Products"
-  id="login-logo"
-  width="600px"
-  height="279px"
->
-<h1>Xprod Song Suggestions</h1>
-<h2>{{season}}</h2>
-
-<form #loginForm="ngForm">
-  <mat-form-field>
-    <input
-      matInput
-      placeholder="Athena Username"
-      name="username"
-      [(ngModel)]="username"
-      required
-    >
-  </mat-form-field>
-  <mat-form-field>
-    <input
-      matInput
-      type="password"
-      placeholder="Password"
-      name="password"
-      [(ngModel)]="password"
-      required
-    >
-  </mat-form-field>
-  <button
-    mat-raised-button
-    color="accent"
-    type="submit"
-    (click)="login()"
+<div class="center">
+  <img
+    src="assets/xprodlogo.svg"
+    alt="Cross Products"
+    id="login-logo"
+    width="600px"
+    height="279px"
   >
-    Log In
-  </button>
-</form>
+  <h1>Xprod Song Suggestions</h1>
+  <h2>{{season}}</h2>
+  
+  <form #loginForm="ngForm">
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Athena Username"
+        name="username"
+        [(ngModel)]="username"
+        required
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        type="password"
+        placeholder="Password"
+        name="password"
+        [(ngModel)]="password"
+        required
+      >
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="accent"
+      type="submit"
+      (click)="login()"
+    >
+      Log In
+    </button>
+  </form>
+</div>
