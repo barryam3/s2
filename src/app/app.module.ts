@@ -12,6 +12,7 @@ import { LoginComponent } from './login/login.component';
 import { SongsComponent } from './songs/songs.component';
 import { UsersComponent } from './users/users.component';
 import { AccountComponent } from './account/account.component';
+import { SongCardComponent } from './song-card/song-card.component';
 
 import { AuthService } from './auth.service';
 import { SongService } from './song.service';
@@ -24,6 +25,7 @@ import { UserService } from './user.service';
     SongsComponent,
     UsersComponent,
     AccountComponent,
+    SongCardComponent,
   ],
   imports: [
     BrowserModule,
