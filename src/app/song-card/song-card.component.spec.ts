@@ -8,7 +8,7 @@ describe('SongCardComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SongCardComponent ]
+      declarations: [SongCardComponent],
     })
     .compileComponents();
   }));

@@ -10,7 +10,7 @@ user = Blueprint('user', __name__)
 @login_required
 def change_password(id):
     newPassword = 'xprod05'
-    if request.method == 'DELETE' and not current_user.pitch:
+    if request.method == 'DELETE' and current_user.pitch == False:
         return send_error_response(403, 'Only a pitch can reset passwords.')
     if request.method == 'PUT':
         data = request.get_json()
@@ -29,10 +29,10 @@ def change_password(id):
 @user.route('/', methods=['GET'])
 @login_required
 def get_users():
-    if not current_user.pitch:
+    if current_user.pitch == False:
         return send_error_response(403, "Only a pitch can enumerate users.")
-    users = User.query.with_entities(User.id, User.name).all()
-    users_list = [{"id": u[0], "name": u[1]} for u in users]
+    users = User.query.with_entities(User.id, User.athena).all()
+    users_list = [{"id": u[0], "username": u[1]} for u in users]
     return send_success_response(users_list)
 
 @user.route('/current', methods=['GET'])

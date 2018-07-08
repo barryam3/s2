@@ -2,7 +2,7 @@
     width: 100%;
 }
 
-$navbar-height: 100px;
+$navbar-height: 60px;
 #navbar {
     height: $navbar-height;
     width: 100%;
@@ -13,5 +13,5 @@ $navbar-height: 100px;
 }
 
 #main-content {
-    margin-top: $navbar-height;
+    margin-top: $navbar-height + 15px;
 }

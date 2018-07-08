@@ -1,5 +1,13 @@
 <mat-toolbar color="primary">
-    <mat-toolbar-row>
-      <span>Cross Products: s2</span>
-    </mat-toolbar-row>
+  <button>
+    <mat-icon>filter_list</mat-icon>
+  </button>
+  <button>
+    <mat-icon>search</mat-icon>
+  </button>
+  <span id="title">Cross Products: s2</span>
+  <button class="right">
+    <span id="user" *ngIf="user">{{user.username}}</span>
+    <mat-icon>account_box</mat-icon>
+  </button>
 </mat-toolbar>

@@ -20,4 +20,9 @@ export class AuthService {
     };
     return this.http.post<boolean>(url, payload, { headers: this.headers });
   }
+
+  logout(): Observable<boolean> {
+    const url = `${this.BASE_URL}/logout`;
+    return this.http.get<boolean>(url, { headers: this.headers });
+  }
 }

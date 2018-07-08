@@ -39,7 +39,9 @@ export class LoginComponent implements OnInit {
   login() {
     this.auth.login(this.username, this.password)
       .subscribe(
-        success => this.snackBar.open('Successfully signed in.', 'dismiss'),
+        success => {
+          this.router.navigateByUrl('/songs');
+        },
         failure => {
           if (failure.status === 504) {
             this.snackBar.open('Unable to connect to server.', 'dismiss');
@@ -51,6 +53,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.auth.logout().subscribe(success => console.log(success));
     this.calculateSeason();
   }
 

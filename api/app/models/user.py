@@ -38,5 +38,5 @@ class User(CRUDMixin, UserMixin, db.Model):
     def to_dict(self):
         return {
             "id": self.get_id(),
-            "name": self.name,
+            "username": self.athena,
         }
