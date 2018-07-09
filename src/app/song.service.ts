@@ -16,7 +16,10 @@ export class SongService {
 
   getSongs(current = true): Observable<Song[]> {
     const url = `${this.BASE_URL}/`;
-    const params = new HttpParams().set('current', current ? '1' : '0');
+    const params = new HttpParams();
+    if (current !== undefined) {
+      params.set('current', current ? '1' : '0');
+    }
     return this.http.get<Song[]>(url, { params, headers: this.headers });
   }
 

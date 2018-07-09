@@ -9,6 +9,5 @@ song = Blueprint('song', __name__)
 @song.route('/', methods=['GET'])
 @login_required
 def get_songs():
-    current = request.args.get('current')
-    songs = [s.to_dict() for s in Song.query.filter_by(current=current).all()]
+    songs = [s.to_dict() for s in Song.query.filter(**request.args).all()]
     return send_success_response(songs)
