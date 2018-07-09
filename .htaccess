@@ -1,7 +1,7 @@
 RewriteEngine On
 
 # request for app root gets index.html
-RewriteRule ^$ index.html/o [QSA,L]
+RewriteRule ^$ index.html [QSA,L]
 
 # api requests don't get rewritten
 RewriteRule ^api - [L,NC]
