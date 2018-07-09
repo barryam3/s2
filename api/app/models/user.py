@@ -14,7 +14,7 @@ class User(CRUDMixin, UserMixin, db.Model):
     current = db.Column(db.Boolean)
     explanation = db.Column(db.Text(), nullable=True)
     hash = db.Column(db.String(60), nullable=False) # unsure what used for
-    pitch = db.column(db.Boolean)
+    pitch = db.Column(db.Boolean)
 
     def __init__(self, password, **kwargs):
         super(User, self).__init__(**kwargs)
