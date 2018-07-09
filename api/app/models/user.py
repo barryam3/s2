@@ -10,11 +10,10 @@ class User(CRUDMixin, UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(40), nullable=False) # display name
     athena = db.Column(db.String(40), nullable=False, unique=True) # username
-    password = db.Column(db.String(60), nullable=False) # hash
+    password = db.Column(db.String(60), nullable=False) # hashed with a salt
     current = db.Column(db.Boolean)
     explanation = db.Column(db.Text(), nullable=True)
     hash = db.Column(db.String(60), nullable=False) # unsure what used for
-    salt = db.Column(db.String(60), nullable=False) # for pw security
     pitch = db.column(db.Boolean)
 
     def __init__(self, password, **kwargs):
@@ -24,16 +23,12 @@ class User(CRUDMixin, UserMixin, db.Model):
     def __repr__(self):
         return '<User #%s:%r>' % (self.id, self.athena)
 
+    # bcyrpt stores the salt in the password
     def set_password(self, password):
-        salt = b64encode(urandom(44)).decode('utf-8')
-        pw_s = password + salt
-        hash_pw_s = bcrypt.generate_password_hash(pw_s, 10).decode('utf-8')
-        self.password = hash_pw_s
-        self.salt = salt
+        self.password = bcrypt.generate_password_hash(password)
 
     def check_password(self, password):
-        pw_s = password + self.salt
-        return bcrypt.check_password_hash(self.password, pw_s)
+        return bcrypt.check_password_hash(self.password, password)
 
     def to_dict(self):
         return {
