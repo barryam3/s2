@@ -1,7 +1,7 @@
 @import '~@angular/material/theming';
 @include mat-core();
 
-$my-app-primary: mat-palette($mat-grey);
+$my-app-primary: mat-palette($mat-grey, 500, 300);
 $my-app-accent:  mat-palette($mat-red, 600);
 $my-app-warn:    mat-palette($mat-deep-orange);
 

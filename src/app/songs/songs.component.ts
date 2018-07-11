@@ -9,12 +9,12 @@ import { SongService } from '../song.service';
   styleUrls: ['./songs.component.scss'],
 })
 export class SongsComponent implements OnInit {
-  songs: Song[];
+  songs: Song[] = [];
 
   constructor(private songService: SongService) { }
 
   ngOnInit() {
-    this.songService.getSongs(false)
+    this.songService.getSongs(true)
       .subscribe(songs => {
         this.songs = songs;
       });
