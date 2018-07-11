@@ -8,6 +8,6 @@ $navbar-height: 60px;
     z-index: 99;
 }
 
-#main-content {
+#main-content:nth-child(2) {
     margin-top: $navbar-height + 15px;
 }
