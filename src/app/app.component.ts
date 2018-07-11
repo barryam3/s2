@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
   }
 
   showNavbar() {
-    return this.router.url === '/songs';
+    return this.router.url !== '/login';
   }
 
   getCurrentUser() {
