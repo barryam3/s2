@@ -15,15 +15,12 @@ export class UsersComponent implements OnInit {
 
   ngOnInit() {
     this.user.getUsers().subscribe(users => {
-      console.log('users:', users);
       this.users = users;
     });
   }
 
   resetPassword(userID) {
-    this.user.resetPassword(userID).subscribe(success => {
-      console.log('success:', success);
-    });
+    this.user.resetPassword(userID).subscribe();
   }
 
 }

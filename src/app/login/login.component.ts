@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.auth.logout().subscribe(success => console.log(success));
+    this.auth.logout().subscribe();
     this.calculateSeason();
   }
 
