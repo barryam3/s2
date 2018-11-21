@@ -1,0 +1,53 @@
+<html>
+
+<head>
+  <title>Fritter</title>
+  <meta name="author" content="6.170 Staff">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="stylesheets/style.css">
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="javascripts/services.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1>Fritter</h1>
+  </header>
+
+  <main class="two-col">
+    <section>
+      <h2>Request</h2>
+      <form id="request-form">
+        <div>
+          <label for="route">Route:</label>
+          <input id="route" name="route" class="teletype">
+        </div>
+        <div>
+          <label for="method">Method:</label>
+          <select id="method" name="method">
+            <option value="GET">GET</option>
+            <option value="POST">POST</option>
+            <option value="PUT">PUT</option>
+            <option value="PATCH">PATCH</option>
+            <option value="DELETE">DELETE</option>
+          </select>
+        </div>
+        <div>
+          <label for="body">Body:</label>
+          <textarea id="body" name="body"></textarea>
+        </div>
+        <input type="submit" value="Send Request">
+        </div>
+      </form>
+    </section>
+
+    <section>
+      <h2>Response:</h2>
+      <div class="scrollbox">
+        <pre id="response" class="teletype"></pre>
+      </div>
+    </section>
+  </main>
+</body>
+
+</html>

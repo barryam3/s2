@@ -1,28 +1,12 @@
 import os
-# athena uses MySQLdb but I couldn't get it working locally
-mysqlconnector = False
-try:
-    import MySQLdb
-except ImportError:
-    mysqlconnector = True
-
 
 class base_config(object):
     """Default configuration options."""
     SITE_NAME = 's2'
 
-    SECRET_KEY = os.environ.get('SECRET_KEY', 'secrets')
+    SECRET_KEY = os.environ.get('S2_SECRET', 'secrets')
 
-    MYSQL_HOST = os.environ.get('MYSQL_HOST', 'localhost')
-    MYSQL_USER = os.environ.get('MYSQL_USER', 'root')
-    MYSQL_PASS = os.environ.get('MYSQL_PASS', 'password')
-    MYSQL_DB = os.environ.get('MYSQL_DB', 's2')
-
-    SQLALCHEMY_DATABASE_URI = 'mysql%s://%s:%s@%s/%s' % (
-        '+mysqlconnector' if mysqlconnector else '',
-        MYSQL_USER,
-        MYSQL_PASS,
-        MYSQL_HOST,
-        MYSQL_DB
-    )
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    MYSQL_DATABASE_HOST = os.environ.get('S2_DB_HOST', 'localhost')
+    MYSQL_DATABASE_USER = os.environ.get('S2_DB_USER', 'root')
+    MYSQL_DATABASE_PASSWORD = os.environ.get('S2_DB_PASS', 'AcKgFHhihBhXCf2THfnQrwFx')
+    MYSQL_DATABASE_DB = os.environ.get('S2_DB_NAME', 'barryam3+s2')
