@@ -11,10 +11,10 @@ class User(CRUDMixin, UserMixin, db.Model):
     name = db.Column(db.String(40), nullable=False) # display name
     athena = db.Column(db.String(40), nullable=False, unique=True) # username
     password = db.Column(db.String(60), nullable=False) # hashed with a salt
-    current = db.Column(db.Boolean)
+    current = db.Column(db.Boolean(), nullable=False, default=True)
     explanation = db.Column(db.Text(), nullable=True)
     hash = db.Column(db.String(60), nullable=False) # unsure what used for
-    pitch = db.Column(db.Boolean)
+    pitch = db.Column(db.Boolean(), nullable=False, default=False)
 
     def __init__(self, password, **kwargs):
         super(User, self).__init__(**kwargs)
