@@ -1,0 +1,32 @@
+<div class="centered-page">
+  <h1>Suggest Song</h1>
+
+  <form #newSongForm="ngForm">
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Title"
+        name="title"
+        [(ngModel)]="title"
+        required
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Artist"
+        name="artist"
+        [(ngModel)]="artist"
+        required
+      >
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="accent"
+      type="submit"
+      (click)="submit()"
+    >
+      Suggest Song
+    </button>
+  </form>
+</div>

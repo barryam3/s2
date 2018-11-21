@@ -17,7 +17,7 @@ def login():
     user = User.query.filter_by(athena=user_data['username']).first()
     if user and user.check_password(user_data['password']):
         login_user(user)
-        return send_success_response(True)
+        return send_success_response(user.to_dict())
     return send_error_response(403, 'Incorrect login.')
 
 @auth.route('/logout', methods=['GET'])

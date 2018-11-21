@@ -26,6 +26,7 @@ export class AppComponent implements OnInit {
     this.router.events
       .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe(nav => this.getCurrentUser());
+    this.userService.currentUser.subscribe(user => this.user = user);
   }
 
   showNavbar() {
@@ -35,13 +36,12 @@ export class AppComponent implements OnInit {
   getCurrentUser() {
     this.userService.getCurrentUser()
       .subscribe(
-        user => {
-          this.user = user;
+        () => {
           if (window.location.pathname === '/') {
             this.router.navigateByUrl('/songs');
           }
         },
-        error => {
+        () => {
           if (window.location.pathname !== '/login') {
             this.router.navigateByUrl('/login');
             this.snackBar.open('Your session timed out. Please log in again.', 'dismiss');

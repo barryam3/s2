@@ -21,8 +21,7 @@ export class AccountComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.user.getCurrentUser()
-      .subscribe(user => this.currentUser = user);
+    this.user.currentUser.subscribe(user => this.currentUser = user);
   }
 
   changePassword() {
@@ -31,7 +30,7 @@ export class AccountComponent implements OnInit {
       return;
     }
 
-    this.user.updatePassword(this.currentUser.id, this.oldPassword, this.newPassword)
+    this.user.updateCurrentUserPassword(this.oldPassword, this.newPassword)
       .subscribe(
         success => this.snackBar.open(
           'Your password has been updated.',

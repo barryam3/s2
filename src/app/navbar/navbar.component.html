@@ -1,27 +1,30 @@
-<mat-toolbar>
-  <button mat-button *ngIf="showFilters()">
-    <mat-icon>filter_list</mat-icon>
-  </button>
-  <button mat-button *ngIf="showFilters()">
-    <mat-icon>search</mat-icon>
-  </button>
-  <a mat-button *ngIf="showHome()" routerLink="/songs">
-    <mat-icon>arrow_back</mat-icon>
-    <span id="to-songs">To Songs</span>
-  </a>
-  <img
-    src="assets/s2.svg"
-    alt="s2"
-    id="navbar-logo"
-  >
-  <button mat-button class="right" [matMenuTriggerFor]="accountMenu">
-    <span id="user" *ngIf="user">{{user.username}}</span>
-    <mat-icon>account_box</mat-icon>
-  </button>
-</mat-toolbar>
+<div *ngIf="user" style="height:100%">
+  <mat-toolbar>
+    <button mat-button *ngIf="showFilters()">
+      <mat-icon>filter_list</mat-icon>
+    </button>
+    <button mat-button routerLink="add-song" *ngIf="showFilters()">
+      <mat-icon>library_add</mat-icon>
+    </button>
+    <a mat-button *ngIf="showHome()" routerLink="/songs">
+      <mat-icon>arrow_back</mat-icon>
+      <span id="to-songs">To Songs</span>
+    </a>
+    <img
+      src="assets/s2.svg"
+      alt="s2"
+      id="navbar-logo"
+    >
+    <button mat-button class="right" [matMenuTriggerFor]="accountMenu">
+      <span id="user" *ngIf="user">{{user.username}}</span>
+      <mat-icon>account_box</mat-icon>
+    </button>
+  </mat-toolbar>
 
-<!-- mat-menu does not render anything -->
-<mat-menu #accountMenu="matMenu" [overlapTrigger]="false">
-  <button mat-menu-item routerLink="/account">Account</button>
-  <button mat-menu-item routerLink="/login">Logout</button>
-</mat-menu>
+  <!-- mat-menu does not render anything -->
+  <mat-menu #accountMenu="matMenu" [overlapTrigger]="false">
+    <button mat-menu-item routerLink="/account">Account</button>
+    <button mat-menu-item routerLink="/users" *ngIf="user.pitch">Pitch</button>
+    <button mat-menu-item routerLink="/login">Logout</button>
+  </mat-menu>
+</div>

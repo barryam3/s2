@@ -13,6 +13,8 @@ import { SongsComponent } from './songs/songs.component';
 import { UsersComponent } from './users/users.component';
 import { AccountComponent } from './account/account.component';
 import { SongCardComponent } from './song-card/song-card.component';
+import { AddSongComponent } from './add-song/add-song.component';
+
 
 import { AuthService } from './auth.service';
 import { SongService } from './song.service';
@@ -28,6 +30,7 @@ import { NavbarComponent } from './navbar/navbar.component';
     AccountComponent,
     SongCardComponent,
     NavbarComponent,
+    AddSongComponent,
   ],
   imports: [
     BrowserModule,

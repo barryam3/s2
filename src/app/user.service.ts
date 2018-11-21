@@ -1,38 +1,67 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { tap, distinctUntilChanged } from 'rxjs/operators';
 
 import { User } from './user';
 
+const headers: HttpHeaders = new HttpHeaders({
+  'Content-Type': 'application/json',
+});
+
 @Injectable()
 export class UserService {
-  private BASE_URL = 'api/user';
-  private headers: HttpHeaders = new HttpHeaders({
-    'Content-Type': 'application/json',
-  });
+  private userSubject = new BehaviorSubject<User>(null);
+  public currentUser = this.userSubject.asObservable().pipe(distinctUntilChanged());
 
   constructor(private http: HttpClient) { }
 
-  getUsers(): Observable<User[]> {
-    const url = `${this.BASE_URL}/`;
-    return this.http.get<User[]>(url, { headers: this.headers });
+  login(username: string, password: string): Observable<User> {
+    const url = '/api/auth/login';
+    const payload = {
+      username,
+      password,
+    };
+    return this.http.post<User>(url, payload, { headers })
+      .pipe(tap(
+        user => this.userSubject.next(user),
+        () => this.userSubject.next(null),
+      ));
+  }
+
+  logout(): Observable<boolean> {
+    const url = 'api/auth/logout';
+    return this.http.get<boolean>(url, { headers })
+    .pipe(tap(
+      () => this.userSubject.next(null),
+      () => this.userSubject.next(null),
+    ));
   }
 
   getCurrentUser(): Observable<User> {
-    const url = `${this.BASE_URL}/current`;
-    return this.http.get<User>(url, { headers: this.headers });
+    const url = 'api/user/current';
+    return this.http.get<User>(url, { headers })
+      .pipe(tap(
+        user => this.userSubject.next(user),
+        () => this.userSubject.next(null),
+      ));
+  }
+
+  getUsers(): Observable<User[]> {
+    const url = '/api/user/';
+    return this.http.get<User[]>(url, { headers });
   }
 
   resetPassword(userID): Observable<boolean> {
-    const url = `${this.BASE_URL}/${userID}/password`;
-    return this.http.delete<boolean>(url, { headers: this.headers });
+    const url = `/api/user/${userID}/password`;
+    return this.http.delete<boolean>(url, { headers });
   }
 
-  updatePassword(userID, oldPassword, newPassword): Observable<boolean> {
-    const url = `${this.BASE_URL}/${userID}/password`;
+  updateCurrentUserPassword(oldPassword, newPassword): Observable<boolean> {
+    const url = `/api/user/current/password`;
     const payload = { oldPassword, newPassword };
-    return this.http.put<boolean>(url, payload, { headers: this.headers });
+    return this.http.put<boolean>(url, payload, { headers });
   }
 
 }

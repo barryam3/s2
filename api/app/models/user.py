@@ -25,7 +25,7 @@ class User(CRUDMixin, UserMixin, db.Model):
 
     # bcyrpt stores the salt in the password
     def set_password(self, password):
-        self.password = bcrypt.generate_password_hash(password)
+        self.update(password=bcrypt.generate_password_hash(password))
 
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password, password)
@@ -34,4 +34,5 @@ class User(CRUDMixin, UserMixin, db.Model):
         return {
             "id": self.get_id(),
             "username": self.athena,
+            "pitch": self.pitch
         }

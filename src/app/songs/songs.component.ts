@@ -9,7 +9,7 @@ import { SongService } from '../song.service';
   styleUrls: ['./songs.component.scss'],
 })
 export class SongsComponent implements OnInit {
-  songs: Song[] = [];
+  songs: Song[];
 
   constructor(private songService: SongService) { }
 

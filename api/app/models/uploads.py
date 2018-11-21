@@ -11,4 +11,4 @@ class Uploads(CRUDMixin, db.Model):
         super(Uploads, self).__init__(**kwargs)
 
     def __repr__(self):
-        return '<Uploads #%s: on %r>' % (self.id, self.song_id)
+        return '<Upload #%s: on %r>' % (self.id, self.song_id)
