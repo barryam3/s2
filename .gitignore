@@ -43,3 +43,5 @@ Thumbs.db
 
 # python
 *.pyc
+
+.cache
