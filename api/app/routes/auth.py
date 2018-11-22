@@ -4,8 +4,6 @@ from flask_login import login_user, login_required, logout_user, UserMixin
 from app.extensions import lm, mysql, bcrypt
 from app.utils import res
 
-from flask_login import UserMixin
-
 class User(UserMixin):
     def __init__(self, id, username, current, pitch):
         self.id = id
@@ -40,7 +38,7 @@ def login():
     cursor = mysql.get_db().cursor()
     cursor.execute("SELECT id, athena, current, pitch, password FROM user WHERE athena = %s", body['username'])
     user_data = cursor.fetchone()
-    if bcrypt.check_password_hash(user_data['password'], body['password']):
+    if user_data and bcrypt.check_password_hash(user_data['password'], body.get('password', '')):
         login_user(User.from_dict(user_data))
         return res(True)
     return res('Incorrect login.', 403)
