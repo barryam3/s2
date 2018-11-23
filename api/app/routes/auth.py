@@ -1,8 +1,8 @@
 from flask import Blueprint, request
-from flask_login import login_user, login_required, logout_user, UserMixin
+from flask_login import login_user, logout_user, UserMixin
 
 from app.extensions import lm, mysql, bcrypt
-from app.utils import res
+from app.utils import res, login_required
 
 class User(UserMixin):
     def __init__(self, id, athena, current, pitch, password):
@@ -45,7 +45,7 @@ def login():
 
     body = request.get_json()
     cursor = mysql.get_db().cursor()
-    cursor.execute("SELECT id, athena, current, pitch, password FROM user WHERE athena = %s", body['athena'])
+    cursor.execute("SELECT id, athena, current, pitch, password FROM user WHERE athena = %s", body.get('athena', ''))
     user_data = cursor.fetchone()
     if user_data and bcrypt.check_password_hash(user_data['password'], body.get('password', '')):
         login_user(User.from_dict(user_data))

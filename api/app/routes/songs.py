@@ -1,8 +1,8 @@
 from flask import Blueprint, request
-from flask_login import login_required, current_user
+from flask_login import current_user
 
 from app.extensions import mysql
-from app.utils import res
+from app.utils import res, login_required
 
 songs = Blueprint('songs', __name__)
 

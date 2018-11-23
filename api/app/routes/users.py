@@ -1,8 +1,8 @@
 from flask import Blueprint, request
-from flask_login import current_user, login_required
+from flask_login import current_user
 
 from app.extensions import mysql, bcrypt
-from app.utils import res, pitch_required
+from app.utils import res, login_required, pitch_required
 
 users = Blueprint('users', __name__)
 
@@ -15,6 +15,7 @@ users = Blueprint('users', __name__)
 """
 
 @users.route('/', methods=['GET'])
+@pitch_required
 def list_users():
     """Enumerate all users.
     
