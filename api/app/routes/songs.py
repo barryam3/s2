@@ -6,9 +6,43 @@ from app.utils import res
 
 songs = Blueprint('songs', __name__)
 
+"""
+@typedef {("Male" | "Female" | "Both" | "Either" | "None")} Solo
+"""
+
+"""
+@typedef SongOverview
+@prop {int} id
+@prop {string} title
+@prop {str} artist
+@prop {bool} current
+@prop {bool} arranged
+@prop {Solo} solo
+@prop {str} genre
+@prop {str} last_edit
+@prop {str} last_view
+@prop {int} rating
+@prop {str} suggestor
+"""
+
 @songs.route('/', methods=['GET'])
 @login_required
 def list_songs():
+    """List all songs.
+
+    @query {int} size - number of songs per "page"
+    @query {int} page - "page" to get
+    @query {str} title - get songs with a title matching this string
+    @query {str} artist - get songs with an artist matching this string
+    @query {bool} current - get only suggested/notsuggested songs
+    @query {bool} arranged - get only arranged/notarranged songs
+    @query {Solo} solo - get only songs with a certain solo type
+    @query {("title" | "artist" | "suggestor")} sort -  sort by
+    @query {bool} asc - sort ascending / descending
+    @return {SongOverview[]}
+    @throws {401} - if you are not logged in
+    """
+
     start_page = request.args.get('page', 0)
     page_size = request.args.get('size', 10)
     start_row = int(start_page) * int(page_size)
