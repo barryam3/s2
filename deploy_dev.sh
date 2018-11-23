@@ -1,1 +1,1 @@
-scp -r dist/* .htaccess api $1@athena.dialup.mit.edu:web_scripts/s2
+scp -r gui/dist/* api .htaccess $1@athena.dialup.mit.edu:web_scripts/s2
