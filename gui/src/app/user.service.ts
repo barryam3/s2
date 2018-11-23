@@ -4,7 +4,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap, distinctUntilChanged } from 'rxjs/operators';
 
-import { User } from './user';
+export class User {
+  id: string;
+  athena: string;
+  current: boolean;
+  pitch: boolean;
+}
 
 const headers: HttpHeaders = new HttpHeaders({
   'Content-Type': 'application/json',
@@ -17,10 +22,10 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  login(username: string, password: string): Observable<User> {
+  login(athena: string, password: string): Observable<User> {
     const url = '/api/auth/login';
     const payload = {
-      username,
+      athena,
       password,
     };
     return this.http.post<User>(url, payload, { headers })
@@ -40,7 +45,7 @@ export class UserService {
   }
 
   getCurrentUser(): Observable<User> {
-    const url = 'api/user/current';
+    const url = 'api/user/me';
     return this.http.get<User>(url, { headers })
       .pipe(tap(
         user => this.userSubject.next(user),
@@ -53,13 +58,13 @@ export class UserService {
     return this.http.get<User[]>(url, { headers });
   }
 
-  resetPassword(userID): Observable<boolean> {
+  resetPassword(userID: number): Observable<boolean> {
     const url = `/api/user/${userID}/password`;
     return this.http.delete<boolean>(url, { headers });
   }
 
-  updateCurrentUserPassword(oldPassword, newPassword): Observable<boolean> {
-    const url = `/api/user/current/password`;
+  updateCurrentUserPassword(oldPassword: string, newPassword: string): Observable<boolean> {
+    const url = `/api/user/me/password`;
     const payload = { oldPassword, newPassword };
     return this.http.put<boolean>(url, payload, { headers });
   }

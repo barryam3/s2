@@ -8,9 +8,9 @@ class User(UserMixin):
     def __init__(self, id, athena, current, pitch, password):
         self.id = id
         self.username = athena
-        self.current = current
-        self.pitch = pitch
         self.password = password
+        self.current = bool(current)
+        self.pitch = bool(pitch)
 
     @classmethod
     def from_dict(cls, d):
@@ -48,8 +48,9 @@ def login():
     cursor.execute("SELECT id, athena, current, pitch, password FROM user WHERE athena = %s", body.get('athena', ''))
     user_data = cursor.fetchone()
     if user_data and bcrypt.check_password_hash(user_data['password'], body.get('password', '')):
-        login_user(User.from_dict(user_data))
-        return res(True)
+        user_obj = User.from_dict(user_data)
+        login_user(user_obj)
+        return res(user_obj.to_dict())
     return res('Incorrect login.', 401)
 
 @auth.route('/logout', methods=['POST'])

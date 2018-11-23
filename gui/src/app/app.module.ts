@@ -15,8 +15,6 @@ import { AccountComponent } from './account/account.component';
 import { SongCardComponent } from './song-card/song-card.component';
 import { AddSongComponent } from './add-song/add-song.component';
 
-
-import { AuthService } from './auth.service';
 import { SongService } from './song.service';
 import { UserService } from './user.service';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -41,7 +39,6 @@ import { NavbarComponent } from './navbar/navbar.component';
     MatModule,
   ],
   providers: [
-    AuthService,
     SongService,
     UserService,
   ],
