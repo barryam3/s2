@@ -1,7 +1,13 @@
+"""MySQL Credentials."""
+
 import os
 
-class base_config(object):
-    """Default configuration options."""
+# pylint: disable=R0903
+class BaseConfig: # pylint: disable=R0205
+    """Default configuration options.
+
+    This has to be an object."""
+
     SITE_NAME = 's2'
 
     SECRET_KEY = os.environ.get('S2_SECRET', 'secrets')

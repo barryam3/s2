@@ -1,22 +1,26 @@
+"""Authentication route handlers"""
+
 from flask import Blueprint, request
 from flask_login import login_user, logout_user, UserMixin
 
-from app.extensions import lm, mysql, bcrypt
+from app.extensions import LM, MYSQL, BCRYPT
 from app.utils import res, login_required
 
 class User(UserMixin):
-    def __init__(self, id, athena, current, pitch, password):
-        self.id = id
-        self.username = athena
-        self.password = password
-        self.current = bool(current)
-        self.pitch = bool(pitch)
+    """A class representing a user.
 
-    @classmethod
-    def from_dict(cls, d):
-        return cls(d['id'], d['athena'], d['current'], d['pitch'], d['password'])
+    Required for flask_login."""
+
+    def __init__(self, user_info_dict):
+        self.id = user_info_dict['id'] # pylint: disable=C0103
+        self.username = user_info_dict['athena']
+        self.password = user_info_dict['password']
+        self.current = bool(user_info_dict['current'])
+        self.pitch = bool(user_info_dict['pitch'])
 
     def to_dict(self):
+        """Return a dictionary representation of the user."""
+
         return {
             "id": self.id,
             "athena": self.username,
@@ -24,19 +28,24 @@ class User(UserMixin):
             "pitch": self.pitch
         }
 
-auth = Blueprint('auth', __name__)
+AUTH = Blueprint('auth', __name__)
 
-@lm.user_loader
-def load_user(id):
-    cursor = mysql.get_db().cursor()
-    cursor.execute("SELECT id, athena, current, pitch, password FROM user WHERE id = %s", id)
+@LM.user_loader
+def load_user(user_id):
+    """Get User object by id.
+
+    Required for flask_login."""
+
+    cursor = MYSQL.get_db().cursor()
+    query = "SELECT id, athena, current, pitch, password FROM user WHERE id = %s"
+    cursor.execute(query, user_id)
     user = cursor.fetchone()
-    return User.from_dict(user)
+    return User(user)
 
-@auth.route('/login', methods=['POST'])
+@AUTH.route('/login', methods=['POST'])
 def login():
     """Start a session.
-    
+
     @param {str} athena
     @param {str} password
     @return {bool} - success
@@ -44,20 +53,21 @@ def login():
     """
 
     body = request.get_json()
-    cursor = mysql.get_db().cursor()
-    cursor.execute("SELECT id, athena, current, pitch, password FROM user WHERE athena = %s", body.get('athena', ''))
+    cursor = MYSQL.get_db().cursor()
+    query = "SELECT id, athena, current, pitch, password FROM user WHERE athena = %s"
+    cursor.execute(query, body.get('athena', ''))
     user_data = cursor.fetchone()
-    if user_data and bcrypt.check_password_hash(user_data['password'], body.get('password', '')):
-        user_obj = User.from_dict(user_data)
+    if user_data and BCRYPT.check_password_hash(user_data['password'], body.get('password', '')):
+        user_obj = User(user_data)
         login_user(user_obj)
         return res(user_obj.to_dict())
     return res('Incorrect login.', 401)
 
-@auth.route('/logout', methods=['POST'])
+@AUTH.route('/logout', methods=['POST'])
 @login_required
 def logout():
     """End your session.
-    
+
     @return {bool} - success
     @throws {401} - if you are not logged in
     """

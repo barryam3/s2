@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # Autoreloading launcher.
 # Borrowed from Peter Hunt and the CherryPy project (http://www.cherrypy.org).
@@ -45,7 +45,7 @@ except ImportError:
     from app import config
 
 
-app = create_app(config.base_config)
+app = create_app(config.BaseConfig)
 
 _mtimes = {}
 def code_changed(): # lovingly stolen from django. See above.

@@ -54,5 +54,8 @@ Do one of the following:
 ### Start the App
 - `flask run`
 
+## Contributing
+Run `pylint app` and fix any non-TODO errors before each commit.
+
 ## DB Note
 You can create a database using the dump in `ssdb.sql`. The command to do so (after creating the database) is `mysql yourkerb+s2 < ssdb.sql`. If this does not work, you can paste and execute the SQL manually.
