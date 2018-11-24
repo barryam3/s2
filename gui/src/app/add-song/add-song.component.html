@@ -20,6 +20,13 @@
         required
       >
     </mat-form-field>
+    <mat-form-field>
+      <select matNativeControl placeholder="Solo" [(ngModel)]="solo" name="solo">
+        <option *ngFor="let soloOption of soloOptions" [value]="soloOption.value">
+          {{soloOption.key}}
+        </option>
+      </select>
+    </mat-form-field>
     <button
       mat-raised-button
       color="accent"

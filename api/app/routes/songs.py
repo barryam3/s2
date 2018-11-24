@@ -48,17 +48,17 @@ def list_songs():
     start_row = start_page * page_size
 
     cols = [
-      "song.id",
-      "song.title",
-      "song.artist",
-      "song.current",
-      "song.arranged",
-      "song.genre",
-      "song.solo",
-      "song.last_edit",
-      "song_user.last_view",
-      "song_user.rating",
-      "user.name AS suggestor"
+        "song.id",
+        "song.title",
+        "song.artist",
+        "song.current",
+        "song.arranged",
+        "song.genre",
+        "song.solo",
+        "song.last_edit",
+        "song_user.last_view",
+        "song_user.rating",
+        "user.name AS suggestor"
     ]
     query = "SELECT " + ", ".join(cols) + " FROM song, song_user, user"
     
@@ -66,33 +66,33 @@ def list_songs():
     args = [current_user.id]
 
     if request.args.get('title'):
-      query += " AND song.title LIKE %s"
-      args.append('%' + request.args.get("title") + '%')
+        query += " AND song.title LIKE %s"
+        args.append('%' + request.args.get("title") + '%')
 
     if request.args.get("artist"):
-      query += " AND song.artist LIKE %s"
-      args.append('%' + request.args.get("artist") + '%')
+        query += " AND song.artist LIKE %s"
+        args.append('%' + request.args.get("artist") + '%')
 
     if request.args.get("current") != None:
-      query += " AND song.current = %s"
-      args.append(1 if int(request.args.get("current", 0)) else 0)
+        query += " AND song.current = %s"
+        args.append(1 if int(request.args.get("current", 0)) else 0)
 
     if request.args.get("arranged") != None:
-      query += " AND song.arranged = %s"
-      args.append(1 if int(request.args.get("arranged", 0)) else 0)
+        query += " AND song.arranged = %s"
+        args.append(1 if int(request.args.get("arranged", 0)) else 0)
   
     if request.args.get("solo") != None:
-      query += " AND song.solo = %s"
-      args.append(request.args.get("solo"))
+        query += " AND song.solo = %s"
+        args.append(request.args.get("solo"))
 
     if request.args.get("sort") == "title":
-      query += " ORDER BY song.title"
+        query += " ORDER BY song.title"
     elif request.args.get("sort") == "artist":
-      query += " ORDER BY song.artist"
+        query += " ORDER BY song.artist"
     elif request.args.get("sort") == "suggestor":
-      query += " ORDER BY suggestor"
+        query += " ORDER BY suggestor"
     else:
-      query += " ORDER BY song.last_edit"
+        query += " ORDER BY song.last_edit"
     query += " ASC" if int(request.args.get("asc", 0)) else " DESC"
     query += " LIMIT %s, %s"
 
@@ -102,3 +102,51 @@ def list_songs():
     cursor.execute(query, args)
     query_result = cursor.fetchall()
     return res(query_result)
+
+@songs.route('/', methods=['POST'])
+@login_required
+def add_song():
+    """Add a song.
+    
+    @param {str} title
+    @param {str} artist
+    @param {Solo} solo
+    @return {int} - id of the new song
+    @throws {401} - if you are not logged in
+    """
+
+    req_body = request.get_json()
+    title = req_body.get('title', '')
+    artist = req_body.get('artist', '')
+    solo = req_body.get('solo', '')
+
+    if len(title) == 0 or len(artist) == 0:
+        return send("Song must have a title and artist.", 400)
+
+    if solo not in ["Male", "Female", "Both", "Either", "None"]:
+        return send("Invalid solo type.", 400)
+
+    # create the new song
+    db = mysql.get_db()
+    cursor = db.cursor()
+    query = "INSERT INTO song (title, artist, solo, suggestor, genre) VALUES (%s, %s, %s, %s, '')"
+    params = (title, artist, solo, current_user.id)
+    cursor.execute(query, params)
+    db.commit()
+
+    # create data for the new song
+
+    # TODO: make lyrics be column of song table
+    new_song_id = cursor.lastrowid
+    cursor.execute("INSERT INTO lyrics (song_id, lyrics) VALUES (%s, '')", new_song_id)
+
+    # TODO: remove once s1 is fully replaced
+    cursor.execute("SELECT id FROM user")
+    user_ids = [u['id'] for u in cursor.fetchall()]
+    query = "INSERT INTO song_user (song_id, user_id, rating) VALUES (%s, %s, 0)"
+    params = [(new_song_id, user_id) for user_id in user_ids]
+    cursor.executemany(query, params)
+
+    db.commit()
+
+    return res(new_song_id)

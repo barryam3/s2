@@ -126,6 +126,7 @@ def add_user():
     params = [(new_user_id, i) for i in range(1,11)]
     cursor.executemany(query, params)
 
+    # TODO: remove once s1 is fully replaced
     cursor.execute("SELECT id FROM song WHERE current = 1")
     song_ids = [d['id'] for d in cursor.fetchall()]
     query = "INSERT INTO song_user (song_id, user_id, rating) VALUES (%s, %s, 0)"

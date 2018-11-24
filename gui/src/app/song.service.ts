@@ -10,7 +10,7 @@ const headers: HttpHeaders = new HttpHeaders({
   'Content-Type': 'application/json',
 });
 
-enum Solo {
+export enum Solo {
   Male = 'Male',
   Female = 'Female',
   Both = 'Both',
@@ -18,7 +18,7 @@ enum Solo {
   None = 'None',
 }
 
-type SongQueryOptions = {
+export type SongQueryOptions = {
   title?: string;
   artist?: string;
   current?: boolean;
@@ -42,13 +42,14 @@ export class SongService {
     return this.http.get<Song[]>(url, { params, headers });
   }
 
-  addSong(title: string, artist: string) {
+  addSong(title: string, artist: string, solo: Solo) {
     const url = `${this.BASE_URL}/`;
     const body = {
       title,
       artist,
+      solo,
     };
-    return this.http.post<Song>(url, body, { headers });
+    return this.http.post<number>(url, body, { headers });
   }
 
 }
