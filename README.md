@@ -11,5 +11,5 @@ Start both the GUI and API in separate terminals. Then, go to `localhost:4200` t
 
 ## Build & Deploy
 *Be sure you have built the GUI first.*
-1. Do `./deploy_dev.sh yourkerb` to send to your `web_scripts/s2`. You can view your version of the site at `yourkerb.scripts.mit.edu/s2`.
-2. Do `./deploy_prod.sh yourkerb` when you're ready to make your changes live.
+1. Do `./deploy.sh` to send to your `web_scripts/s2`. You can view your version of the site at `yourkerb.scripts.mit.edu/s2`.
+2. Do `./deploy.sh prod` when you're ready to make your changes live.
