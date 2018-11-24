@@ -1,4 +1,8 @@
 <mat-card (click)="showDetails()">
   <mat-card-title id="song-title">{{song.title}}</mat-card-title>
   <mat-card-subtitle id="song-artist">{{song.artist}}</mat-card-subtitle>
+  <mat-card-content>
+    <div>Suggested by {{song.suggestor}}</div>
+    <star-rating [starType]="'svg'" [rating]="song.rating"></star-rating>
+  </mat-card-content>
 </mat-card>

@@ -3,12 +3,24 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
-import { Song } from './song';
 import { objectToParams } from '../utils';
 
 const headers: HttpHeaders = new HttpHeaders({
   'Content-Type': 'application/json',
 });
+
+export interface SongOverview {
+  arranged: boolean;
+  artist: string;
+  current: boolean;
+  genre: string;
+  id: number;
+  rating: number;
+  solo: Solo;
+  suggestor: string;
+  title: string;
+  updated: boolean;
+}
 
 export enum Solo {
   Male = 'Male',
@@ -39,7 +51,7 @@ export class SongService {
   getSongs(options: SongQueryOptions): Observable<Song[]> {
     const url = `${this.BASE_URL}/`;
     const params = objectToParams(options);
-    return this.http.get<Song[]>(url, { params, headers });
+    return this.http.get<SongOverview[]>(url, { params, headers });
   }
 
   addSong(title: string, artist: string, solo: Solo) {

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Song } from '../song';
-import { SongService } from '../song.service';
+import { SongService, SongOverview } from '../song.service';
 
 @Component({
   selector: 'app-songs',
@@ -9,11 +8,12 @@ import { SongService } from '../song.service';
   styleUrls: ['./songs.component.scss'],
 })
 export class SongsComponent implements OnInit {
-  songs: Song[];
+  songs: SongOverview[];
 
   constructor(private songService: SongService) { }
 
   ngOnInit() {
+    // TODO: dynamically load pages
     this.songService.getSongs({ current: true, size: 1000 })
       .subscribe(songs => {
         this.songs = songs;

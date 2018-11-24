@@ -101,6 +101,12 @@ def list_songs():
     cursor = mysql.get_db().cursor()
     cursor.execute(query, args)
     query_result = cursor.fetchall()
+    for song in query_result:
+        song['current'] = bool(song['current'])
+        song['arranged'] = bool(song['arranged'])
+        song['updated'] = song['last_view'] < song['last_edit']
+        del song['last_view']
+        del song['last_edit']
     return res(query_result)
 
 @songs.route('/', methods=['POST'])

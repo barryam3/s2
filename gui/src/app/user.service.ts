@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap, distinctUntilChanged } from 'rxjs/operators';
 
-export class User {
+export interface User {
   id: string;
   athena: string;
   current: boolean;

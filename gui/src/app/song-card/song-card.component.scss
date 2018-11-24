@@ -5,3 +5,9 @@
 mat-card {
   height: 100%;
 }
+
+mat-card-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
