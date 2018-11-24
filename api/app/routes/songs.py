@@ -43,9 +43,9 @@ def list_songs():
     @throws {401} - if you are not logged in
     """
 
-    start_page = request.args.get('page', 0)
-    page_size = request.args.get('size', 10)
-    start_row = int(start_page) * int(page_size)
+    start_page = int(request.args.get('page', 0))
+    page_size = int(request.args.get('size', 10))
+    start_row = start_page * page_size
 
     cols = [
       "song.id",
@@ -75,11 +75,11 @@ def list_songs():
 
     if request.args.get("current") != None:
       query += " AND song.current = %s"
-      args.append(1 if request.args.get("current") else 0)
+      args.append(1 if int(request.args.get("current", 0)) else 0)
 
     if request.args.get("arranged") != None:
       query += " AND song.arranged = %s"
-      args.append(1 if request.args.get("arranged") else 0)
+      args.append(1 if int(request.args.get("arranged", 0)) else 0)
   
     if request.args.get("solo") != None:
       query += " AND song.solo = %s"
@@ -93,7 +93,7 @@ def list_songs():
       query += " ORDER BY suggestor"
     else:
       query += " ORDER BY song.last_edit"
-    query += " ASC" if request.args.get("asc") else " DESC"
+    query += " ASC" if int(request.args.get("asc", 0)) else " DESC"
     query += " LIMIT %s, %s"
 
     args.extend([start_row, page_size])

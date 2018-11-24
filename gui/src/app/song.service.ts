@@ -18,7 +18,7 @@ enum Solo {
   None = 'None',
 }
 
-interface SongQueryOptions {
+type SongQueryOptions = {
   title?: string;
   artist?: string;
   current?: boolean;
@@ -28,11 +28,11 @@ interface SongQueryOptions {
   asc?: boolean;
   size?: number;
   page?: number;
-}
+};
 
 @Injectable()
 export class SongService {
-  private BASE_URL = 'api/song';
+  private BASE_URL = 'api/songs';
 
   constructor(private http: HttpClient) { }
 

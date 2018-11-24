@@ -45,7 +45,7 @@ export class UserService {
   }
 
   getCurrentUser(): Observable<User> {
-    const url = 'api/user/me';
+    const url = 'api/users/me';
     return this.http.get<User>(url, { headers })
       .pipe(tap(
         user => this.userSubject.next(user),
@@ -54,17 +54,17 @@ export class UserService {
   }
 
   getUsers(): Observable<User[]> {
-    const url = '/api/user/';
+    const url = '/api/users/';
     return this.http.get<User[]>(url, { headers });
   }
 
   resetPassword(userID: number): Observable<boolean> {
-    const url = `/api/user/${userID}/password`;
+    const url = `/api/users/${userID}/password`;
     return this.http.delete<boolean>(url, { headers });
   }
 
   updateCurrentUserPassword(oldPassword: string, newPassword: string): Observable<boolean> {
-    const url = `/api/user/me/password`;
+    const url = `/api/users/me/password`;
     const payload = { oldPassword, newPassword };
     return this.http.put<boolean>(url, payload, { headers });
   }

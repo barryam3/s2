@@ -3,8 +3,7 @@ import { Router, NavigationEnd } from '@angular/router';
 
 import { filter, windowToggle } from 'rxjs/operators';
 
-import { User } from './user';
-import { UserService } from './user.service';
+import { UserService, User } from './user.service';
 import { MatSnackBar } from '../../node_modules/@angular/material';
 
 @Component({

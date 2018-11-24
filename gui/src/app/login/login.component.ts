@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 
-import { AuthService } from '../auth.service';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-login',
@@ -10,12 +10,12 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  username: '';
+  athena: '';
   password: '';
   season: any = 'Spring 2018';
 
   constructor(
-    private auth: AuthService,
+    private user: UserService,
     private router: Router,
     private snackBar: MatSnackBar,
    ) {}
@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.auth.login(this.username, this.password)
+    this.user.login(this.athena, this.password)
       .subscribe(
         success => {
           this.router.navigateByUrl('/songs');
@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.auth.logout().subscribe();
+    this.user.logout().subscribe();
     this.calculateSeason();
   }
 

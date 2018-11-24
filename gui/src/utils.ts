@@ -1,5 +1,9 @@
 import { HttpParams } from '@angular/common/http';
 
+export interface StringToSupportedValue {
+  [s: string]: SupportedValue;
+}
+
 // Does an in-place filter
 export function filterInPlace<T>(arr: T[], f: (elm: T) => boolean) {
   let out = 0;
@@ -19,7 +23,7 @@ function supportedValueToString(sv: SupportedValue) {
   return `${sv}`;
 }
 
-export function objectToParams(obj: {[k: string]: SupportedValue }) {
+export function objectToParams(obj: StringToSupportedValue) {
   let params = new HttpParams();
   Object.keys(obj).forEach(key => {
     params = params.set(key, supportedValueToString(obj[key]));
