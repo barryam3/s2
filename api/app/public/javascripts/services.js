@@ -21,7 +21,7 @@ function showResponse(axiosResponse) {
 }
 
 function handleSubmit(fields) {
-  const body = JSON.parse(fields.body);
+  const body = JSON.parse(fields.body || '{}');
   axios[fields.method.toLowerCase()](fields.route, body)
     .then(showResponse)
     .catch(showResponse);
