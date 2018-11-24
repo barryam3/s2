@@ -48,7 +48,7 @@ export class SongService {
 
   constructor(private http: HttpClient) { }
 
-  getSongs(options: SongQueryOptions): Observable<Song[]> {
+  getSongs(options: SongQueryOptions) {
     const url = `${this.BASE_URL}/`;
     const params = objectToParams(options);
     return this.http.get<SongOverview[]>(url, { params, headers });
