@@ -150,3 +150,33 @@ def add_song():
     db.commit()
 
     return res(new_song_id)
+
+@songs.route('/<song_id>', methods=['DELETE'])
+@login_required
+def delete_song(song_id):
+    """Delete a song.
+    
+    @return {bool} - success
+    @throws {401} - if you are not logged in
+    @throws {404} - if the song is not found
+    """
+
+    # delete the song
+    db = mysql.get_db()
+    cursor = db.cursor()
+    # TODO: use foreign keys so we can use cascade
+    cursor.execute("DELETE FROM song WHERE id = %s", song_id)
+    found = cursor.rowcount > 0
+    cursor.execute("DELETE FROM comment WHERE song_id = %s", song_id)
+    cursor.execute("DELETE FROM links WHERE song_id = %s", song_id)
+    cursor.execute("DELETE FROM lyrics WHERE song_id = %s", song_id)
+    cursor.execute("DELETE FROM media WHERE song_id = %s", song_id)
+    cursor.execute("DELETE FROM song_user WHERE song_id = %s", song_id)
+    cursor.execute("DELETE FROM uploads WHERE song_id = %s", song_id)
+    cursor.execute("DELETE FROM vote WHERE song_id = %s", song_id)
+    cursor.execute("DELETE FROM youtube WHERE song_id = %s", song_id)
+    db.commit()
+
+    if not found:
+        return res("Song not found.", 404)
+    return res(True)
