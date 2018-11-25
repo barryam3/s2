@@ -10,7 +10,7 @@ import { UserService } from '../user.service';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  athena: '';
+  username: '';
   password: '';
   season: any = 'Spring 2018';
 
@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.user.login(this.athena, this.password)
+    this.user.login(this.username, this.password)
       .subscribe(
         success => {
           this.router.navigateByUrl('/songs');

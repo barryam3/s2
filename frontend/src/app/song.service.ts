@@ -2,66 +2,82 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
-
-import { objectToParams } from '../utils';
+import { map } from 'rxjs/operators';
 
 const headers: HttpHeaders = new HttpHeaders({
   'Content-Type': 'application/json',
 });
 
-export interface SongOverview {
+export interface SongOverviewBase {
   arranged: boolean;
   artist: string;
-  current: boolean;
-  genre: string;
   id: number;
-  rating: number;
-  solo: Solo;
-  suggestor: string;
+  lyrics: string;
   title: string;
-  updated: boolean;
 }
 
-export enum Solo {
-  Male = 'Male',
-  Female = 'Female',
-  Both = 'Both',
-  Either = 'Either',
-  None = 'None',
+interface SongOverviewJSON extends SongOverviewBase {
+  edited: string;
 }
 
-export type SongQueryOptions = {
-  title?: string;
-  artist?: string;
-  current?: boolean;
-  arranged?: boolean;
-  solo?: Solo;
-  sort?: 'title' | 'artist' | 'suggestor';
-  asc?: boolean;
-  size?: number;
-  page?: number;
-};
+export interface SuggestedSongOverview extends SongOverviewBase {
+  suggestion?: {
+    id: number,
+    suggestor: string,
+    rating: number,
+  };
+}
+
+export type SongOverview = SuggestedSongOverview | SongOverviewBase;
+
+interface SuggestionJSON {
+  song: SongOverviewJSON;
+  id: number;
+  suggestor: string;
+}
+
+function suggestionToSong(suggestion: SuggestionJSON): SuggestedSongOverview {
+  return {
+    ...suggestion.song,
+    suggestion: {
+      id: suggestion.id,
+      suggestor: suggestion.suggestor,
+      rating: Math.floor(Math.random() * 4) + 1, // TODO
+    },
+  };
+}
 
 @Injectable()
 export class SongService {
-  private BASE_URL = 'api/songs';
-
   constructor(private http: HttpClient) { }
 
-  getSongs(options: SongQueryOptions) {
-    const url = `${this.BASE_URL}/`;
-    const params = objectToParams(options);
-    return this.http.get<SongOverview[]>(url, { params, headers });
+  getSongs(): Observable<SongOverviewBase[]> {
+    const url = 'api/songs';
+    return this.http.get<SongOverviewJSON[]>(url, { headers });
   }
 
-  addSong(title: string, artist: string, solo: Solo) {
-    const url = `${this.BASE_URL}/`;
+  addSong(title: string, artist: String): Observable<SongOverviewBase> {
+    const url = 'api/songs';
     const body = {
       title,
       artist,
-      solo,
     };
-    return this.http.post<number>(url, body, { headers });
+    return this.http.post<SongOverviewJSON>(url, body, { headers });
+  }
+
+  getSuggestions(setlistID: number): Observable<SuggestedSongOverview[]> {
+    const url = `api/setlists/${setlistID}/suggestions`;
+    return this.http.get<SuggestionJSON[]>(url, { headers })
+      .pipe(map(jsonArr => jsonArr.map(suggestionToSong)));
+  }
+
+  suggestSong(setlistID: number, songID: number): Observable<SuggestedSongOverview> {
+    const url = `api/setlists/${setlistID}/suggestions`;
+    const body = {
+      songID,
+    };
+    return this.http.post<SuggestionJSON>(url, body, { headers })
+      .pipe(map(suggestionToSong));
   }
 
 }

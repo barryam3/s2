@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { filter } from 'rxjs/operators';
 
+import { SetlistService } from '../setlist.service';
 import { SongService, SongOverview } from '../song.service';
 
 @Component({
@@ -10,13 +12,20 @@ import { SongService, SongOverview } from '../song.service';
 export class SongsComponent implements OnInit {
   songs: SongOverview[];
 
-  constructor(private songService: SongService) { }
+  constructor(
+    private setlistService: SetlistService,
+    private songService: SongService,
+  ) { }
 
   ngOnInit() {
     // TODO: dynamically load pages
-    this.songService.getSongs({ current: true, size: 1000 })
-      .subscribe(songs => {
-        this.songs = songs;
+    this.setlistService.currentSetlist
+      .pipe(filter(setlist => setlist !== null))
+      .subscribe(({ id }) => {
+        this.songService.getSuggestions(id)
+          .subscribe(songs => {
+            this.songs = songs;
+          });
       });
   }
 

@@ -15,10 +15,11 @@ import { UsersComponent } from './users/users.component';
 import { AccountComponent } from './account/account.component';
 import { SongCardComponent } from './song-card/song-card.component';
 import { AddSongComponent } from './add-song/add-song.component';
-
-import { SongService } from './song.service';
-import { UserService } from './user.service';
 import { NavbarComponent } from './navbar/navbar.component';
+
+import { UserService } from './user.service';
+import { SongService } from './song.service';
+import { SetlistService } from './setlist.service';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { NavbarComponent } from './navbar/navbar.component';
   providers: [
     SongService,
     UserService,
+    SetlistService,
   ],
   bootstrap: [AppComponent],
 })

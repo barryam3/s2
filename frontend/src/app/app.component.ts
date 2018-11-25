@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 
-import { filter, windowToggle } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 
 import { UserService, User } from './user.service';
 import { MatSnackBar } from '../../node_modules/@angular/material';
+import { SetlistService } from './setlist.service';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +19,7 @@ export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     private userService: UserService,
+    private setlistService: SetlistService,
     private snackBar: MatSnackBar,
   ) { }
 
@@ -47,5 +49,8 @@ export class AppComponent implements OnInit {
           }
         },
       );
+
+    // load the current setlist so no other component else ever has to
+    this.setlistService.getSetlists().subscribe();
   }
 }

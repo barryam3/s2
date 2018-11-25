@@ -2,9 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 
-import { SongService, Solo } from '../song.service';
-
-const soloOptions = Object.keys(Solo).map(key => ({ key, value: Solo[key] }));
+import { SongService } from '../song.service';
 
 @Component({
   selector: 'app-create-song',
@@ -14,9 +12,6 @@ const soloOptions = Object.keys(Solo).map(key => ({ key, value: Solo[key] }));
 export class AddSongComponent {
   title = '';
   artist = '';
-  solo: Solo = Solo.None;
-
-  soloOptions = soloOptions;
 
   constructor(
     private songService: SongService,
@@ -25,7 +20,7 @@ export class AddSongComponent {
   ) { }
 
   submit() {
-    this.songService.addSong(this.title, this.artist, this.solo)
+    this.songService.addSong(this.title, this.artist)
       .subscribe(
         success => this.router.navigateByUrl('/songs'),
         failure => this.snackBar.open(failure.error, 'dismiss'),

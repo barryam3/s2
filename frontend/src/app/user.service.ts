@@ -6,9 +6,9 @@ import { tap, distinctUntilChanged } from 'rxjs/operators';
 
 export interface User {
   id: string;
-  athena: string;
-  current: boolean;
-  pitch: boolean;
+  username: string;
+  active: boolean;
+  admin: boolean;
 }
 
 const headers: HttpHeaders = new HttpHeaders({
@@ -22,10 +22,10 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  login(athena: string, password: string): Observable<User> {
-    const url = '/api/auth/login';
+  login(username: string, password: string): Observable<User> {
+    const url = 'api/auth/login';
     const payload = {
-      athena,
+      username,
       password,
     };
     return this.http.post<User>(url, payload, { headers })
@@ -54,17 +54,17 @@ export class UserService {
   }
 
   getUsers(): Observable<User[]> {
-    const url = '/api/users/';
+    const url = 'api/users';
     return this.http.get<User[]>(url, { headers });
   }
 
   resetPassword(userID: number): Observable<boolean> {
-    const url = `/api/users/${userID}/password`;
+    const url = `api/users/${userID}/password`;
     return this.http.delete<boolean>(url, { headers });
   }
 
   updateCurrentUserPassword(oldPassword: string, newPassword: string): Observable<boolean> {
-    const url = `/api/users/me/password`;
+    const url = `api/users/me/password`;
     const payload = { oldPassword, newPassword };
     return this.http.put<boolean>(url, payload, { headers });
   }
