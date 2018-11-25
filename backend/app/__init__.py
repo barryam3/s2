@@ -1,46 +1,85 @@
-"""Initializes a Flask app for the web service."""
+'''Initializes a Flask app for the web service.'''
 
-import time
-from flask import Flask, g, request, send_from_directory
+from flask import Flask, g, send_from_directory
 
-from app.extensions import LM, BCRYPT, MYSQL
-from app.utils import res
-from app.routes.auth import AUTH
-from app.routes.songs import SONGS
-from app.routes.users import USERS
+from app.extensions import bcrypt, lm, db
+
+from app.routes.auth import auth
+from app.routes.users import users
+from app.routes.songs import songs
+from app.routes.setlists import setlists
+
+# models must be imported for create_all to work
+from models.comment import Comment
+from models.link import Link
+from models.rating import Rating
+from models.setlist import Setlist
+from models.song import Song
+from models.suggestion import Suggestion
+from models.user import User
+
 
 def create_app(config):
-    """Returns an initialized Flask application."""
+    '''Returns an initialized Flask application.'''
+
     app = Flask(__name__, static_folder='public')
+    app.app_context().push()
 
-    app.config.from_object(config)
-
+    configure(app, config)
+    top_level_routes(app)
     register_extensions(app)
     register_blueprints(app)
-
-    @app.before_request
-    def _before_request():
-        """Prepare some things before the application handles a request."""
-        g.request_start_time = time.time()
-        g.request_time = lambda: '%.5fs' % (time.time() - g.request_start_time)
-
-    # serve static files (for testing only)
-    @app.route('/<path:path>')
-    def _send_static_files(path):
-        return send_from_directory(app.static_folder, path)
 
     return app
 
 
+def configure(app, config):
+    '''Configure the app.'''
+
+    app.config.from_mapping(
+        SITE_NAME='s2',
+        SQLALCHEMY_TRACK_MODIFICATIONS=False
+    )
+    app.config.from_object(config)
+    assert app.config['SECRET_KEY']
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://%s:%s@%s/%s' % (
+        app.config['MYSQL_USER'],
+        app.config['MYSQL_PASSWORD'],
+        app.config['MYSQL_HOST'],
+        app.config['MYSQL_DB']
+    )
+
+
+def top_level_routes(app):
+    '''Routes beginning with /'''
+    @app.route('/<path:path>')
+    def send_static_files(path):
+        '''Serve a basic webapp for sending requests.'''
+        return send_from_directory(app.static_folder, path)
+
+
 def register_extensions(app):
-    """Register extensions with the Flask application."""
-    LM.init_app(app)
-    BCRYPT.init_app(app)
-    MYSQL.init_app(app)
+    '''Register extensions with the Flask application.'''
+
+    bcrypt.init_app(app)
+    lm.init_app(app)
+    db.init_app(app)
 
 
 def register_blueprints(app):
-    """Register blueprints with the Flask application."""
-    app.register_blueprint(AUTH, url_prefix="/auth")
-    app.register_blueprint(SONGS, url_prefix="/songs")
-    app.register_blueprint(USERS, url_prefix="/users")
+    '''Register blueprints with the Flask application.'''
+
+    app.register_blueprint(auth, url_prefix='/auth')
+    app.register_blueprint(users, url_prefix='/users')
+    app.register_blueprint(songs, url_prefix='/songs')
+    app.register_blueprint(setlists, url_prefix='/setlists')
+
+
+def initialize_database(app):
+    '''Create tables if they don't exist and create an initial user if needed.'''
+
+    db.create_all()
+    if User.query.count() == 0:
+        initial_user = User('crossp', 'xprod05', admin=True)
+        db.session.add(initial_user)
+        db.session.commit()

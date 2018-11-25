@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 # Autoreloading launcher.
 # Borrowed from Peter Hunt and the CherryPy project (http://www.cherrypy.org).
@@ -19,7 +19,7 @@
 #       may be used to endorse or promote products derived from this software
 #       without specific prior written permission.
 #
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 'AS IS' AND
 # ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 # DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
@@ -38,24 +38,26 @@ except ImportError:
 
 import threading
 from flup.server.fcgi import WSGIServer
-from app import create_app
+from app import create_app, initialize_database
 try:
     from app import realconfig as config
 except ImportError:
     from app import config
 
 
-app = create_app(config.BaseConfig)
+app = create_app(config.Config)
+initialize_database(app)
+
 
 _mtimes = {}
 def code_changed(): # lovingly stolen from django. See above.
     global _mtimes
     names = sys.modules.values()
-    for filename in filter(lambda v: v, map(lambda m: getattr(m, "__file__", None), names)):
-        if filename.endswith(".pyc") or filename.endswith(".pyo"):
+    for filename in filter(lambda v: v, map(lambda m: getattr(m, '__file__', None), names)):
+        if filename.endswith('.pyc') or filename.endswith('.pyo'):
             filename = filename[:-1]
-        if filename.endswith("$py.class"):
-            filename = filename[:-9] + ".py"
+        if filename.endswith('$py.class'):
+            filename = filename[:-9] + '.py'
         if not os.path.exists(filename):
             continue # File might be in an egg, so it can't be reloaded.
         stat = os.stat(filename)

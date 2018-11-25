@@ -1,186 +1,72 @@
-"""Route hanlders beginning with /songs."""
+'''Route hanlders beginning with /songs.'''
 
-from flask import Blueprint, request
+from flask import Blueprint, request, g
 from flask_login import current_user
+from sqlalchemy.orm.exc import NoResultFound
 
-from app.extensions import MYSQL
+from app.extensions import db
 from app.utils import res, login_required
+from app.models.song import Song
 
-SONGS = Blueprint('songs', __name__)
 
-# @typedef {("Male" | "Female" | "Both" | "Either" | "None")} Solo
+songs = Blueprint('songs', __name__)
 
-# @typedef SongOverview
-# @prop {int} id
-# @prop {string} title
-# @prop {str} artist
-# @prop {bool} current
-# @prop {bool} arranged
-# @prop {Solo} solo
-# @prop {str} genre
-# @prop {str} last_edit
-# @prop {str} last_view
-# @prop {int} rating
-# @prop {str} suggestor
 
-@SONGS.route('/', methods=['GET'])
+@songs.route('', methods=['GET'])
 @login_required
 def list_songs():
-    """List all songs.
-
-    @query {int} size - number of songs per "page"
-    @query {int} page - "page" to get
-    @query {str} title - get songs with a title matching this string
-    @query {str} artist - get songs with an artist matching this string
-    @query {bool} current - get only suggested/notsuggested songs
-    @query {bool} arranged - get only arranged/notarranged songs
-    @query {Solo} solo - get only songs with a certain solo type
-    @query {("title" | "artist" | "suggestor")} sort -  sort by
-    @query {bool} asc - sort ascending / descending
-    @return {SongOverview[]}
+    '''List all songs.
+    
+    @return {Song[]}
     @throws {401} - if you are not logged in
-    """
+    '''
 
-    start_page = int(request.args.get('page', 0))
-    page_size = int(request.args.get('size', 10))
-    start_row = start_page * page_size
+    return res([s.to_dict() for s in Song.query.all()])
 
-    cols = [
-        "song.id",
-        "song.title",
-        "song.artist",
-        "song.current",
-        "song.arranged",
-        "song.genre",
-        "song.solo",
-        "song.last_edit",
-        "song_user.last_view",
-        "song_user.rating",
-        "user.name AS suggestor"
-    ]
-    query = "SELECT " + ", ".join(cols) + " FROM song, song_user, user"
 
-    query += " WHERE user.id = suggestor AND song.id = song_id AND user_id = %s"
-    args = [current_user.id]
-
-    if request.args.get('title'):
-        query += " AND song.title LIKE %s"
-        args.append('%' + request.args.get("title") + '%')
-
-    if request.args.get("artist"):
-        query += " AND song.artist LIKE %s"
-        args.append('%' + request.args.get("artist") + '%')
-
-    if request.args.get("current") is not None:
-        query += " AND song.current = %s"
-        args.append(1 if int(request.args.get("current", 0)) else 0)
-
-    if request.args.get("arranged") is not None:
-        query += " AND song.arranged = %s"
-        args.append(1 if int(request.args.get("arranged", 0)) else 0)
-
-    if request.args.get("solo") is not None:
-        query += " AND song.solo = %s"
-        args.append(request.args.get("solo"))
-
-    if request.args.get("sort") == "title":
-        query += " ORDER BY song.title"
-    elif request.args.get("sort") == "artist":
-        query += " ORDER BY song.artist"
-    elif request.args.get("sort") == "suggestor":
-        query += " ORDER BY suggestor"
-    else:
-        query += " ORDER BY song.last_edit"
-    query += " ASC" if int(request.args.get("asc", 0)) else " DESC"
-    query += " LIMIT %s, %s"
-
-    args.extend([start_row, page_size])
-
-    cursor = MYSQL.get_db().cursor()
-    cursor.execute(query, args)
-    query_result = cursor.fetchall()
-    for song in query_result:
-        song['current'] = bool(song['current'])
-        song['arranged'] = bool(song['arranged'])
-        song['updated'] = song['last_view'] < song['last_edit']
-        del song['last_view']
-        del song['last_edit']
-    return res(query_result)
-
-@SONGS.route('/', methods=['POST'])
+@songs.route('', methods=['POST'])
 @login_required
 def add_song():
-    """Add a song.
+    '''Add a song.
 
     @param {str} title
     @param {str} artist
-    @param {Solo} solo
-    @return {int} - id of the new song
+    @return {Song} - the new song
     @throws {401} - if you are not logged in
-    """
+    '''
 
     req_body = request.get_json()
     title = req_body.get('title', '')
     artist = req_body.get('artist', '')
-    solo = req_body.get('solo', '')
 
     if not title or not artist:
-        return res("Song must have a title and artist.", 400)
-
-    if solo not in ["Male", "Female", "Both", "Either", "None"]:
-        return res("Invalid solo type.", 400)
+        return res('Song must have a title and artist.', 400)
 
     # create the new song
-    database = MYSQL.get_db()
-    cursor = database.cursor()
-    query = "INSERT INTO song (title, artist, solo, suggestor, genre) VALUES (%s, %s, %s, %s, '')"
-    params = (title, artist, solo, current_user.id)
-    cursor.execute(query, params)
-    database.commit()
+    song = Song(title=title, artist=artist)
+    db.session.add(song)
+    db.session.commit()
 
-    # create data for the new song
+    return res(song.to_dict())
 
-    # TODO: make lyrics be column of song table
-    new_song_id = cursor.lastrowid
-    cursor.execute("INSERT INTO lyrics (song_id, lyrics) VALUES (%s, '')", new_song_id)
 
-    # TODO: remove once s1 is fully replaced
-    cursor.execute("SELECT id FROM user")
-    user_ids = [u['id'] for u in cursor.fetchall()]
-    query = "INSERT INTO song_user (song_id, user_id, rating) VALUES (%s, %s, 0)"
-    params = [(new_song_id, user_id) for user_id in user_ids]
-    cursor.executemany(query, params)
-
-    database.commit()
-
-    return res(new_song_id)
-
-@SONGS.route('/<song_id>', methods=['DELETE'])
+@songs.route('/<song_id>', methods=['DELETE'])
 @login_required
 def delete_song(song_id):
-    """Delete a song.
+    '''Delete a song.
 
     @return {bool} - success
     @throws {401} - if you are not logged in
     @throws {404} - if the song is not found
-    """
+    '''
 
-    # delete the song
-    database = MYSQL.get_db()
-    cursor = database.cursor()
-    # TODO: use foreign keys so we can use cascade
-    cursor.execute("DELETE FROM song WHERE id = %s", song_id)
-    found = cursor.rowcount > 0
-    cursor.execute("DELETE FROM comment WHERE song_id = %s", song_id)
-    cursor.execute("DELETE FROM links WHERE song_id = %s", song_id)
-    cursor.execute("DELETE FROM lyrics WHERE song_id = %s", song_id)
-    cursor.execute("DELETE FROM media WHERE song_id = %s", song_id)
-    cursor.execute("DELETE FROM song_user WHERE song_id = %s", song_id)
-    cursor.execute("DELETE FROM uploads WHERE song_id = %s", song_id)
-    cursor.execute("DELETE FROM vote WHERE song_id = %s", song_id)
-    cursor.execute("DELETE FROM youtube WHERE song_id = %s", song_id)
-    database.commit()
+    song_id = int(song_id)
 
-    if not found:
-        return res("Song not found.", 404)
+    try:
+        song = Song.query.filter_by(id=song_id).one()
+    except NoResultFound:
+        return res('Song not found.', 404)
+
+    db.session.delete(song)
+    db.session.commit()
     return res(True)

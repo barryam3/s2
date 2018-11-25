@@ -2,7 +2,9 @@
 *A mostly RESTful web service.*
 
 ## Technical Overview
-We're using Python because we want to host this on scripts.mit.edu which only supports PHP, Perl, and Python; Python is by far the most popular of the three at MIT. We're using the Flask microframework because it's powerful and easy to pick up. We're using MySQL because it's provided for free by MIT SIPB.
+We're using Python because we want to host this on scripts.mit.edu which only supports PHP, Perl, and Python; Python is by far the most popular of the three at MIT. We're using Python 2 because it seems to have better support on the server. We're using a MySQL database because it's provided for free by MIT SIPB.
+
+We are using Flask and SQLAlchemy.
 
 ## Prerequisite Knowledge
 - Basic knowledge of Python
@@ -16,8 +18,8 @@ We're using Python because we want to host this on scripts.mit.edu which only su
     - REST
 
 ## Technical Prerequisites
-- Python 3
-- MySQL (local or [remote](https://sql.mit.edu/main/do/index))
+- Python 2
+- MySQL
 
 ## Getting Started
 
@@ -30,14 +32,15 @@ We're using Python because we want to host this on scripts.mit.edu which only su
 ### MySQL Credentials
 Do one of the following:
 1. Set Environment Variables
-    - S2_DB_USER
-    - S2_DB_PASS
-    - S2_DB_HOST
-    - S2_DB-NAME
+    - `S2_SECRET_KEY`
+    - `S2_USER`
+    - `S2_PASSWORD`
+    - `S2_HOST`
+    - `S2_DB`
 2. Copy `config.py` to `realconfig.py` and replace the values in `realconfig.py` with your actual credentials. `realconfig.py` is in `.gitignore`. There is a `realconfig.py` in the `crossp` Athena locker with the production database credentials.
 
 ### Creating a Virtual Environment (After Fresh Clone Only)
-- `python3 -m venv venv`
+- `python -m virtualenv venv`
 
 ### Loading the Virtual Environment (For New Terminal)
 - (Mac/Linux) `. venv/bin/activate`
@@ -54,8 +57,15 @@ Do one of the following:
 ### Start the App
 - `flask run`
 
-## Contributing
-Run `pylint app` and fix any non-TODO errors before each commit.
+## Tests
+Run `py.test` to run all of the tests. We are using the `pylint` framework with `pylint-flask`.
 
-## DB Note
-You can create a database using the dump in `ssdb.sql`. The command to do so (after creating the database) is `mysql yourkerb+s2 < ssdb.sql`. If this does not work, you can paste and execute the SQL manually.
+Before you run the tests, you need to set environment variables:
+- `S2_TEST_SECRET_KEY`
+- `S2_TEST_USER`
+- `S2_TEST_PASSWORD`
+- `S2_TEST_HOST`
+- `S2_TEST_DB`
+
+**Note that running the tests will wipe whatever database you are testing on.**
+Relatedly, each test function runs with a fresh database.

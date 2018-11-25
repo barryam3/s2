@@ -2,9 +2,8 @@
 
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
-from flaskext.mysql import MySQL
-from pymysql.cursors import DictCursor
+from flask_sqlalchemy import SQLAlchemy
 
-BCRYPT = Bcrypt()
-LM = LoginManager()
-MYSQL = MySQL(cursorclass=DictCursor)
+bcrypt = Bcrypt()
+lm = LoginManager()
+db = SQLAlchemy()
