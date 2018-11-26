@@ -39,12 +39,12 @@ def test_ratings(client):
     # Should be able to rate a song.
     rv = client.put('/suggestions/%d/ratings/mine' % suggestion['id'], json=3)
     assert rv.status_code == 200
-    assert rv.get_json()['value'] == 3
+    assert rv.get_json()['suggestion']['myRating'] == 3
 
     # Should be able to re-rate a song.
     rv = client.put('/suggestions/%d/ratings/mine' % suggestion['id'], json=4)
     assert rv.status_code == 200
-    assert rv.get_json()['value'] == 4
+    assert rv.get_json()['suggestion']['myRating'] == 4
 
     # Should not be able rate a nonexistent suggestion.
     rv = client.put('/suggestions/0/ratings/mine', json=1)

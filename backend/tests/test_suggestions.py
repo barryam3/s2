@@ -51,18 +51,12 @@ def test_setlists(client):
     assert rv.status_code == 200
     setlist_2 = rv.get_json()
 
-    # Should return empty list for setlist with no suggestions
-    rv = client.get('/setlists/%d/suggestions' % setlist_1['id'])
-    assert rv.status_code == 200
-    assert rv.get_json() == []
-
     # Should be able to suggest a song.
     rv = client.post('/setlists/%d/suggestions' % setlist_2['id'], json={
         'songID': song_1['id']
     })
     assert rv.status_code == 200
-    suggestion = rv.get_json()
-    assert suggestion['song'] == song_1
+    assert rv.get_json()['id'] == song_1['id']
 
     # Should not be able to suggest if deadline is passed.
     rv = client.post('/setlists/%d/suggestions' % setlist_1['id'], json={
@@ -99,15 +93,6 @@ def test_setlists(client):
     })
     assert rv.status_code == 404
 
-    # Should fail to list suggestions for nonexistant setlist
-    rv = client.get('/setlists/0/suggestions')
-    assert rv.status_code == 404
-
-    # Should list suggestions of setlist
-    rv = client.get('/setlists/%d/suggestions' % setlist_2['id'])
-    assert rv.status_code == 200
-    assert rv.get_json() == [suggestion]
-
     # Should autosuggest an added song if possible
     rv = client.post('/songs', json={
         'title': song_3['title'],
@@ -115,10 +100,6 @@ def test_setlists(client):
         'autosuggest': setlist_2['id']
     })
     assert rv.status_code == 200
-
-    rv = client.get('/setlists/%d/suggestions' % setlist_2['id'])
-    assert rv.status_code == 200
-    assert len(rv.get_json()) == 2
 
     # Should not be able to suggest a song when not logged in.
     rv = client.post('/auth/logout')

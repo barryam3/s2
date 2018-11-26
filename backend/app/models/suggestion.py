@@ -21,10 +21,10 @@ class Suggestion(db.Model):
     def __repr__(self):
         return '<Suggestion: of %r for %r>' % (self.song, self.setlist)
 
-    def to_dict(self):
+    def to_dict(self, rating_num=None):
         return {
-            "id": self.id,
-            "suggestor": self.user.username,
-            "setlist": self.setlist.title,
-            "song": self.song.to_dict()
+            'id': self.id,
+            'suggestor': self.user.username,
+            'setlistID': self.setlist.id,
+            'myRating': rating_num
         }

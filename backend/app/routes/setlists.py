@@ -12,6 +12,7 @@ from app.utils import res, login_required, admin_required
 from app.models.setlist import Setlist
 from app.models.song import Song
 from app.models.suggestion import Suggestion
+from app.models.rating import Rating
 
 
 setlists = Blueprint('setlists', __name__)
@@ -26,6 +27,7 @@ def add_setlist():
     @param {int} suggestDeadline - num seconds since epoch
     @param {int} voteDeadline - num seconds since epoch
     @return {Setlist} - the new setlist
+    @throws {400} - if one or more of your deadlines are invalid
     @throws {401} - if you are not logged in
     @throws {403} - if you are not an admin
     '''
@@ -92,7 +94,7 @@ def suggest_song(setlist_id):
         return res('Nope! The deadline has passed.', 403)
 
     try:
-        Song.query.filter_by(id=song_id).one()
+        song = Song.query.filter_by(id=song_id).one()
     except NoResultFound:
         return res('Song not found.', 404)
     
@@ -103,37 +105,17 @@ def suggest_song(setlist_id):
     db.session.add(suggestion)
     db.session.commit()
 
-    return res(suggestion.to_dict())
-
-
-@setlists.route('/<setlist_id>/suggestions', methods=['GET'])
-@login_required
-def list_suggestions(setlist_id):
-    '''List the songs suggested for a setlist.
-
-    @return {Suggestion[]}
-    @throws {401} - if you are not logged in
-    @throws {404} - if the setlist is not found
-    '''
-
-    setlist_id = int(setlist_id)
-
-    try:
-        Setlist.query.filter_by(id=setlist_id).one()
-    except NoResultFound:
-        return res('Setlist not found.', 404)
-
-    suggestions = Suggestion.query.options(joinedload(Suggestion.song)).filter_by(setlist_id=setlist_id).all()
-    return res([s.to_dict() for s in suggestions])
+    return res(song.to_dict(suggestion.to_dict()))
 
 
 @setlists.route('/<setlist_id>', methods=['PATCH'])
-@login_required
+@admin_required
 def update_deadlines(setlist_id):
-    '''List the songs suggested for a setlist.
+    '''Update the deadline(s) of a setlist.
 
-    @return {Suggestion[]}
+    @return {Setlist}
     @throws {401} - if you are not logged in
+    @throws {403} - if you are not an admin
     @throws {404} - if the setlist is not found
     '''
 

@@ -14,7 +14,19 @@ def query_to_bool(string):
     '''Convert 0 to False and 1 to True, leaving None as is.'''
     if string is None:
         return None
-    return bool(int(string))
+    try:
+        return bool(int(string))
+    except:
+        return None
+
+def query_to_int(string):
+    '''Convert to int, leaving None as is.'''
+    if string is None:
+        return None
+    try:
+        return int(string)
+    except:
+        return None
 
 def login_required(func):
     '''Verify that a user is authenticated.'''

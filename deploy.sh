@@ -1,6 +1,6 @@
 mkdir api
 cd backend
-git ls-files . | xargs -I '{}' rsync -R '{}' ../api
+git ls-files . | grep -v tests | xargs -I '{}' rsync -R '{}' ../api
 cp index.fcgi ../api
 cd ..
 if [ $# -eq 0 ]; then

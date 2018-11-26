@@ -27,7 +27,7 @@ def rate_suggestion(suggestion_id):
         return('Rating must be an integer in [1,5].', 400)
 
     try:
-        Suggestion.query.filter_by(id=suggestion_id).one()
+        suggestion = Suggestion.query.filter_by(id=suggestion_id).one()
     except NoResultFound:
         return res('Suggestion not found.', 404)
 
@@ -40,4 +40,4 @@ def rate_suggestion(suggestion_id):
 
     db.session.commit()
 
-    return res(rating.to_dict())
+    return res(suggestion.song.to_dict(suggestion.to_dict(rating.value)))

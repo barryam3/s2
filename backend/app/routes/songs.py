@@ -2,14 +2,18 @@
 
 from flask import Blueprint, request, g
 from flask_login import current_user
+from sqlalchemy import or_
+from sqlalchemy.orm import joinedload
 from sqlalchemy.orm.exc import NoResultFound
 from datetime import datetime
 
 from app.extensions import db
-from app.utils import res, login_required
+from app.utils import res, login_required, query_to_int, query_to_bool
+from app.models.user import User
 from app.models.song import Song
 from app.models.setlist import Setlist
 from app.models.suggestion import Suggestion
+from app.models.rating import Rating
 
 
 songs = Blueprint('songs', __name__)
@@ -24,7 +28,39 @@ def list_songs():
     @throws {401} - if you are not logged in
     '''
 
-    return res([s.to_dict() for s in Song.query.all()])
+    setlist_id = query_to_int(request.args.get('setlist'))
+    suggested = query_to_bool(request.args.get('suggested'))
+
+    trio_query = setlist_id and suggested != False
+    # with setlist context (Song + Suggestion + Rating query)
+    if trio_query:
+        suggestions = Suggestion.query.with_entities(Suggestion.id, Suggestion.user_id, Suggestion.song_id).filter_by(setlist_id=setlist_id).subquery()
+        ratings = Rating.query.with_entities(Rating.value, Rating.suggestion_id).filter_by(user_id=current_user.id).subquery()
+        suggestion_ratings=db.session.query(suggestions, User.username, ratings).join(User).outerjoin(ratings).subquery()
+        query = db.session.query(Song, suggestion_ratings).join(suggestion_ratings, isouter=(suggested is None))
+
+    # without setlist context (Song query)
+    else:
+        query = Song.query
+        # not suggested
+        if setlist_id:
+            subquery = Suggestion.query.filter_by(setlist_id=setlist_id).with_entities(Suggestion.song_id)
+            query = query.filter(~Song.id.in_(subquery))
+        # suggested or not
+
+    result = query.all()
+    print(result)
+
+    if trio_query:
+        songs_array = [r[0].to_dict({
+            'id': r[1],
+            'suggestor': r[4],
+            'myRating': r[5],
+            'setlistID': setlist_id
+        } if r[1] is not None else None) for r in result]
+    else:
+        songs_array = [s.to_dict() for s in result]
+    return res(songs_array)
 
 
 @songs.route('', methods=['POST'])
@@ -54,6 +90,7 @@ def add_song():
     song = Song(title=title, artist=artist)
     db.session.add(song)
 
+    suggestion = None
     if autosuggest:
         try:
             setlist = Setlist.query.filter_by(id=autosuggest).one()
@@ -67,7 +104,7 @@ def add_song():
     
     db.session.commit()
 
-    return res(song.to_dict())
+    return res(song.to_dict(suggestion.to_dict() if suggestion else None))
 
 
 @songs.route('/<song_id>', methods=['DELETE'])

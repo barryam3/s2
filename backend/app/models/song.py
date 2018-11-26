@@ -16,12 +16,13 @@ class Song(db.Model):
     def __repr__(self):
         return '<Song #%s: %r by %r>' % (self.id, self.title, self.artist)
 
-    def to_dict(self):
+    def to_dict(self, suggestion_dict=None):
         return {
             "id": self.id,
             "title": self.title,
             "artist": self.artist,
             "lyrics": self.lyrics,
             "arranged": self.arranged,
-            "edited": self.edited
+            "edited": self.edited,
+            "suggestion": suggestion_dict
         }
