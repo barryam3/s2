@@ -57,12 +57,13 @@ export class SongService {
     return this.http.get<SongOverviewJSON[]>(url, { headers });
   }
 
-  addSong(title: string, artist: String): Observable<SongOverviewBase> {
+  addSong(title: string, artist: String, autosuggest = 0): Observable<SongOverviewBase> {
     const url = 'api/songs';
     const body = {
       title,
       artist,
     };
+    if (autosuggest) { body['autosuggest'] = autosuggest; }
     return this.http.post<SongOverviewJSON>(url, body, { headers });
   }
 

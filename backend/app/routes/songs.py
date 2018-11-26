@@ -34,13 +34,18 @@ def add_song():
 
     @param {str} title
     @param {str} artist
+    @param {int} autosuggest
     @return {Song} - the new song
+    @throws {401} - autosuggest & the deadline has passed
     @throws {401} - if you are not logged in
+    @throws {404} - autosuggest & the setlist does not exist
+
     '''
 
     req_body = request.get_json()
     title = req_body.get('title', '')
     artist = req_body.get('artist', '')
+    autosuggest = req_body.get('autosuggest')
 
     if not title or not artist:
         return res('Song must have a title and artist.', 400)
@@ -49,9 +54,13 @@ def add_song():
     song = Song(title=title, artist=artist)
     db.session.add(song)
 
-    # autosuggest
-    setlist = Setlist.query.order_by(Setlist.id.desc()).first()
-    if setlist is not None and setlist.sdeadline > datetime.utcnow():
+    if autosuggest:
+        try:
+            setlist = Setlist.query.filter_by(id=autosuggest).one()
+        except NoResultFound:
+            return ('Setlist not found.', 404)
+        if setlist.sdeadline < datetime.utcnow():
+            return ('Nope! The deadline has passed.', 400)
         db.session.flush() # needed to get song id
         suggestion = Suggestion(setlist_id=setlist.id, song_id=song.id, user_id=current_user.id)
         db.session.add(suggestion)

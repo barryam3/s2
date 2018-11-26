@@ -35,7 +35,6 @@ def test_setlists(client):
     })
     assert rv.status_code == 200
 
-    # need to create songs first to prevent auto-suggest
     rv = client.post('/songs', json=song_1)
     assert rv.status_code == 200
     song_1 = rv.get_json()
@@ -110,7 +109,11 @@ def test_setlists(client):
     assert rv.get_json() == [suggestion]
 
     # Should autosuggest an added song if possible
-    rv = client.post('/songs', json=song_3)
+    rv = client.post('/songs', json={
+        'title': song_3['title'],
+        'artist': song_3['artist'],
+        'autosuggest': setlist_2['id']
+    })
     assert rv.status_code == 200
 
     rv = client.get('/setlists/%d/suggestions' % setlist_2['id'])
