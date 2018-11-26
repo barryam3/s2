@@ -1,4 +1,5 @@
 from sqlalchemy import func
+from calendar import timegm
 
 from app.extensions import db
 
@@ -23,6 +24,6 @@ class Comment(db.Model):
         return {
             'id': self.id,
             'text': self.text,
-            'timestamp': self.timestamp.isoformat(),
+            'timestamp': timegm(self.timestamp.timetuple()),
             'author': self.user.username
         }

@@ -17,7 +17,7 @@ export interface SongOverviewBase {
 }
 
 interface SongOverviewJSON extends SongOverviewBase {
-  edited: string;
+  edited: number;
 }
 
 export interface SuggestedSongOverview extends SongOverviewBase {
@@ -34,6 +34,7 @@ interface SuggestionJSON {
   song: SongOverviewJSON;
   id: number;
   suggestor: string;
+  setlist: string;
 }
 
 function suggestionToSong(suggestion: SuggestionJSON): SuggestedSongOverview {

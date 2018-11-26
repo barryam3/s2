@@ -8,28 +8,25 @@ import {
   MatToolbarModule,
   MatIconModule,
   MatMenuModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
 } from '@angular/material';
 
+const modules = [
+  MatSnackBarModule,
+  MatInputModule,
+  MatButtonModule,
+  MatListModule,
+  MatCardModule,
+  MatToolbarModule,
+  MatIconModule,
+  MatMenuModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
+];
+
 @NgModule({
-  imports: [
-    MatSnackBarModule,
-    MatInputModule,
-    MatButtonModule,
-    MatListModule,
-    MatCardModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatMenuModule,
-  ],
-  exports: [
-    MatSnackBarModule,
-    MatInputModule,
-    MatButtonModule,
-    MatListModule,
-    MatCardModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatMenuModule,
-  ],
+  imports: modules,
+  exports: modules,
 })
 export class MatModule { }

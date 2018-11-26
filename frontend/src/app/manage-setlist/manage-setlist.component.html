@@ -1,0 +1,49 @@
+<div class="centered-page" *ngIf="currentSetlist">
+  <h1>{{currentSetlist.title}}</h1>
+  <form>
+    <mat-form-field>
+      <input matInput [matDatepicker]="suggestDeadline" placeholder="Suggest Deadline"
+        name="suggestDeadline" [(ngModel)]="newSuggestDeadline">
+      <mat-datepicker-toggle matSuffix [for]="suggestDeadline"></mat-datepicker-toggle>
+      <mat-datepicker #suggestDeadline></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [matDatepicker]="voteDeadline" placeholder="Suggest Deadline"
+        name="voteDeadline" [(ngModel)]="newVoteDeadline">
+      <mat-datepicker-toggle matSuffix [for]="voteDeadline"></mat-datepicker-toggle>
+      <mat-datepicker #voteDeadline></mat-datepicker>
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="accent"
+      type="submit"
+      (click)="edit()"
+    >
+      Save
+    </button>
+  </form>
+</div>
+
+<div class="centered-page">
+  <h1>Start a New Setlist</h1>
+
+  <form #newSongForm="ngForm">
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Title"
+        name="title"
+        [(ngModel)]="newSetlistTitle"
+        required
+      >
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="accent"
+      type="submit"
+      (click)="create()"
+    >
+      Start New Setlist
+    </button>
+  </form>
+</div>

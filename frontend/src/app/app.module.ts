@@ -16,6 +16,7 @@ import { AccountComponent } from './account/account.component';
 import { SongCardComponent } from './song-card/song-card.component';
 import { AddSongComponent } from './add-song/add-song.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { ManageSetlistComponent } from './manage-setlist/manage-setlist.component';
 
 import { UserService } from './user.service';
 import { SongService } from './song.service';
@@ -31,6 +32,7 @@ import { SetlistService } from './setlist.service';
     SongCardComponent,
     NavbarComponent,
     AddSongComponent,
+    ManageSetlistComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,12 +1,16 @@
 import datetime
+from calendar import timegm
 
 def test_setlists(client):
     now = datetime.datetime.utcnow().replace(microsecond=0)
-    one_month_from_now = (now + datetime.timedelta(365/12)).isoformat()
-    two_months_from_now = (now + datetime.timedelta(2*365/12)).isoformat()
+    one_month_from_now = (now + datetime.timedelta(365/12))
+    one_month_from_now = timegm(one_month_from_now.timetuple())
+    two_months_from_now = (now + datetime.timedelta(2*365/12))
+    two_months_from_now = timegm(two_months_from_now.timetuple())
+    now = timegm(now.timetuple())
     setlist_1 = {
         'title': 'Fall 2001',
-        'suggestDeadline': now.isoformat(),
+        'suggestDeadline': now,
         'voteDeadline': one_month_from_now,
     }
     setlist_2 = {

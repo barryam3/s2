@@ -2,10 +2,10 @@
 
 from flask import Blueprint, request
 from flask_login import current_user
-from dateutil.parser import parse as parse_date
 from datetime import datetime
 from sqlalchemy.orm import joinedload
 from sqlalchemy.orm.exc import NoResultFound
+from calendar import timegm
 
 from app.extensions import db
 from app.utils import res, login_required, admin_required
@@ -23,8 +23,8 @@ def add_setlist():
     '''Add a setlist.
 
     @param {str} title
-    @param {str} suggestDeadline - ISO Date
-    @param {str} voteDeadline - ISO Date
+    @param {int} suggestDeadline - num seconds since epoch
+    @param {int} voteDeadline - num seconds since epoch
     @return {Setlist} - the new setlist
     @throws {401} - if you are not logged in
     @throws {403} - if you are not an admin
@@ -36,9 +36,9 @@ def add_setlist():
         return res('Setlist must have a title.', 400)
 
     try:
-        sdeadline = parse_date(req_body.get('suggestDeadline'))
-        vdeadline = parse_date(req_body.get('voteDeadline'))
-    except (ValueError, AttributeError) as e:
+        sdeadline = datetime.utcfromtimestamp(int(req_body.get('suggestDeadline')))
+        vdeadline = datetime.utcfromtimestamp(int(req_body.get('voteDeadline')))
+    except (ValueError, TypeError) as e:
         return res('Invalid deadline.', 400)
 
     setlist = Setlist(title=title, sdeadline=sdeadline, vdeadline=vdeadline)
@@ -119,9 +119,46 @@ def list_suggestions(setlist_id):
     setlist_id = int(setlist_id)
 
     try:
-        deadline = Setlist.query.filter_by(id=setlist_id).one()
+        Setlist.query.filter_by(id=setlist_id).one()
     except NoResultFound:
         return res('Setlist not found.', 404)
 
     suggestions = Suggestion.query.options(joinedload(Suggestion.song)).filter_by(setlist_id=setlist_id).all()
     return res([s.to_dict() for s in suggestions])
+
+
+@setlists.route('/<setlist_id>', methods=['PATCH'])
+@login_required
+def update_deadlines(setlist_id):
+    '''List the songs suggested for a setlist.
+
+    @return {Suggestion[]}
+    @throws {401} - if you are not logged in
+    @throws {404} - if the setlist is not found
+    '''
+
+    setlist_id = int(setlist_id)
+    req_body = request.get_json()
+    sdeadline = req_body.get('suggestDeadline')
+    vdeadline = req_body.get('voteDeadline')
+
+    try:
+        setlist = Setlist.query.filter_by(id=setlist_id).one()
+    except NoResultFound:
+        return res('Setlist not found.', 404)
+
+    if sdeadline is not None:
+        try:
+            setlist.sdeadline = datetime.utcfromtimestamp(int(sdeadline))
+        except (ValueError, TypeError) as e:
+            return res('Invalid deadline.', 400)
+
+    if vdeadline is not None:
+        try:
+            setlist.vdeadline = datetime.utcfromtimestamp(int(vdeadline))
+        except (ValueError, AttributeError) as e:
+            return res('Invalid deadline.', 400)
+
+    db.session.commit()
+
+    return res(setlist.to_dict())

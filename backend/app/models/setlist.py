@@ -1,3 +1,5 @@
+from calendar import timegm
+
 from app.extensions import db
 
 class Setlist(db.Model):
@@ -16,6 +18,6 @@ class Setlist(db.Model):
         return {
             'id': self.id,
             'title': self.title,
-            'suggestDeadline': self.sdeadline.isoformat(),
-            'voteDeadline': self.vdeadline.isoformat()
+            'suggestDeadline': timegm(self.sdeadline.timetuple()),
+            'voteDeadline': timegm(self.vdeadline.timetuple())
         }

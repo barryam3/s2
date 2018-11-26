@@ -25,5 +25,6 @@ class Suggestion(db.Model):
         return {
             "id": self.id,
             "suggestor": self.user.username,
+            "setlist": self.setlist.title,
             "song": self.song.to_dict()
         }

@@ -3,10 +3,13 @@
 from flask import Blueprint, request, g
 from flask_login import current_user
 from sqlalchemy.orm.exc import NoResultFound
+from datetime import datetime
 
 from app.extensions import db
 from app.utils import res, login_required
 from app.models.song import Song
+from app.models.setlist import Setlist
+from app.models.suggestion import Suggestion
 
 
 songs = Blueprint('songs', __name__)
@@ -45,6 +48,14 @@ def add_song():
     # create the new song
     song = Song(title=title, artist=artist)
     db.session.add(song)
+
+    # autosuggest
+    setlist = Setlist.query.order_by(Setlist.id.desc()).first()
+    if setlist is not None and setlist.sdeadline > datetime.utcnow():
+        db.session.flush() # needed to get song id
+        suggestion = Suggestion(setlist_id=setlist.id, song_id=song.id, user_id=current_user.id)
+        db.session.add(suggestion)
+    
     db.session.commit()
 
     return res(song.to_dict())
