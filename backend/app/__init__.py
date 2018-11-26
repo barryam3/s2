@@ -8,6 +8,7 @@ from app.routes.auth import auth
 from app.routes.users import users
 from app.routes.songs import songs
 from app.routes.setlists import setlists
+from app.routes.suggestions import suggestions
 
 # models must be imported for create_all to work
 from models.comment import Comment
@@ -73,6 +74,7 @@ def register_blueprints(app):
     app.register_blueprint(users, url_prefix='/users')
     app.register_blueprint(songs, url_prefix='/songs')
     app.register_blueprint(setlists, url_prefix='/setlists')
+    app.register_blueprint(suggestions, url_prefix='/suggestions')
 
 
 def initialize_database(app):

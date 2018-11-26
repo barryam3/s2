@@ -17,3 +17,10 @@ class Rating(db.Model):
 
     def __repr__(self):
         return '<Rating #%s: on %r by %r>' % (self.id, self.suggestion, self.user)
+
+    def to_dict(self):
+        return {
+            'value': self.value,
+            'suggestion': self.suggestion.to_dict(),
+            'user': self.user.to_dict()
+        }
