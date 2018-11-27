@@ -5,13 +5,10 @@ class Suggestion(db.Model):
     chosen = db.Column(db.Boolean(), nullable=False, default=False)
 
     setlist_id = db.Column(db.Integer, db.ForeignKey('setlist.id'), nullable=False)
-    setlist = db.relationship('Setlist', backref=db.backref('suggestions', lazy=True))
-
     song_id = db.Column(db.Integer, db.ForeignKey('song.id'), nullable=False)
-    song = db.relationship('Song', backref=db.backref('suggestions', lazy=True))
-
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user = db.relationship('User', backref=db.backref('suggestions', lazy=True))
+
+    ratings = db.relationship('Rating', cascade="all,delete", backref=db.backref('suggestion', lazy=True))
 
     __table_args__ = (db.UniqueConstraint('setlist_id', 'song_id', name='_suggestion'),)
 

@@ -1,0 +1,38 @@
+
+<div class="left-page" *ngIf="song">
+
+  <div class="top-row">
+    <div class="controls">
+      <button *ngIf="!editing" mat-stroked-button color="accent" (click)="edit()">Edit</button>
+      <button *ngIf="!editing" mat-stroked-button color="warn" (click)="delete()">Delete</button>
+      <button *ngIf="editing" mat-stroked-button color="primary" (click)="save()">Save</button>
+    </div>
+    <h1 class="bold" *ngIf="!editing">{{song.title}}</h1>
+    <mat-form-field *ngIf="editing">
+      <input matInput [(ngModel)]="title" placeholder="Title" name="title" required>
+    </mat-form-field>
+  </div>
+
+  <h2 *ngIf="!editing">by <span class="bold">{{song.artist}}</span></h2>
+  <mat-form-field *ngIf="editing">
+    <input matInput [(ngModel)]="artist" placeholder="Artist" name="artist" required>
+  </mat-form-field>
+
+  <div *ngIf="song.suggestion">
+    <h3>Suggested by <span class="bold">{{song.suggestion.suggestor}}</span></h3>
+    <div id="rating">
+      <star-rating
+        [rating]="song.suggestion?.myRating || 0"
+        (starClickChange)="onRatingChange($event)"
+      ></star-rating>
+    </div>
+  </div>
+
+  <h3>Lyrics:</h3>
+  <form *ngIf="editing" class="lyrics" style="margin-bottom: 25px;">
+    <textarea [(ngModel)]="lyrics" name="lyrics"></textarea>
+  </form>
+  <pre *ngIf="!editing" class="lyrics">
+    {{song.lyrics}}
+  </pre>
+</div>

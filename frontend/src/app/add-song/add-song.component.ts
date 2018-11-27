@@ -25,7 +25,7 @@ export class AddSongComponent implements OnInit {
 
   ngOnInit() {
     this.setlistService.currentSetlist
-      .pipe(filter(newCurrentSetlist => newCurrentSetlist !== null))
+      .pipe(filter(newCurrentSetlist => newCurrentSetlist !== undefined))
       .subscribe(newCurrentSetlist => {
         this.currentSetlist = newCurrentSetlist;
       });

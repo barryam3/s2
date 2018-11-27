@@ -12,7 +12,7 @@ import { SongFilters } from '../song.service';
 })
 export class FiltersComponent implements OnInit {
   currentSetlist: Setlist;
-  suggested: boolean | null = true;
+  suggested: boolean | null = null;
 
   constructor(
     private setlistService: SetlistService,
@@ -21,7 +21,7 @@ export class FiltersComponent implements OnInit {
 
   ngOnInit() {
     this.setlistService.currentSetlist
-      .pipe(filter(newCurrentSetlist => newCurrentSetlist !== null))
+      .pipe(filter(newCurrentSetlist => newCurrentSetlist !== undefined))
       .subscribe(newCurrentSetlist => {
         this.currentSetlist = newCurrentSetlist;
       });

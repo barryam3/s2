@@ -24,11 +24,13 @@ export class ManageSetlistComponent implements OnInit {
 
   ngOnInit() {
     this.setlistService.currentSetlist
-      .pipe(filter(newCurrentSetlist => newCurrentSetlist !== null))
+      .pipe(filter(newCurrentSetlist => newCurrentSetlist !== undefined))
       .subscribe(newCurrentSetlist => {
         this.currentSetlist = newCurrentSetlist;
-        this.newSuggestDeadline = newCurrentSetlist.suggestDeadline.toISOString();
-        this.newVoteDeadline = newCurrentSetlist.voteDeadline.toISOString();
+        if (this.currentSetlist) {
+          this.newSuggestDeadline = newCurrentSetlist.suggestDeadline.toISOString();
+          this.newVoteDeadline = newCurrentSetlist.voteDeadline.toISOString();
+        }
       });
   }
 

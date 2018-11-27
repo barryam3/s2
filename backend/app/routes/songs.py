@@ -19,6 +19,32 @@ from app.models.rating import Rating
 songs = Blueprint('songs', __name__)
 
 
+@songs.route('/<song_id>', methods=['GET'])
+@login_required
+def get_song(song_id):
+    '''Get a song's info.
+
+    @return {Song} - success
+    @throws {401} - if you are not logged in
+    @throws {404} - if the song is not found
+    '''
+
+    song_id = query_to_int(song_id)
+    setlist_id = query_to_int(request.args.get('setlist'))
+    
+    try:
+        song = Song.query.filter_by(id=song_id).one()
+    except NoResultFound:
+        return res('Song not found.', 404)
+
+    suggestion = Suggestion.query.filter_by(song_id=song_id, setlist_id=setlist_id).one_or_none()
+    rating = None
+    if suggestion:
+        rating = Rating.query.filter_by(suggestion_id=suggestion.id, user_id=current_user.id).one_or_none()
+
+    return res(song.to_dict(suggestion.to_dict(rating.value if rating else None) if suggestion else None)) # TODO: full info
+
+
 @songs.route('', methods=['GET'])
 @login_required
 def list_songs():
@@ -126,3 +152,42 @@ def delete_song(song_id):
     db.session.delete(song)
     db.session.commit()
     return res(True)
+
+
+@songs.route('/<song_id>', methods=['PATCH'])
+@login_required
+def edit_song(song_id):
+    '''Edit a song's basic info.
+
+    @param {str} [title]
+    @param {str} [artist]
+    @param {str} [lyrics]
+    @param {bool} [arranged]
+    @return {bool} - success
+    @throws {401} - if you are not logged in
+    @throws {404} - if the song is not found
+    '''
+    song_id = int(song_id)
+    req_body = request.get_json()
+    title = req_body.get('title')
+    artist = req_body.get('artist')
+    lyrics = req_body.get('lyrics')
+    arranged = req_body.get('arranged')
+
+    try:
+        song = Song.query.filter_by(id=song_id).one()
+    except NoResultFound:
+        return res('Song not found.', 404)
+
+    if title:
+        song.title = title
+    if artist:
+        song.artist = artist
+    if lyrics is not None:
+        song.lyrics = lyrics
+    if arranged is not None:
+        song.arranged = arranged
+
+    db.session.commit()
+
+    return res(song.to_dict())

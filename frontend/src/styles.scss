@@ -37,14 +37,35 @@ mat-radio-group > mat-radio-button {
   min-width: 0 !important;
 }
 
-.centered-page {
+%page {
   display: flex;
   flex-direction: column;
+  margin: 0 16px;
+}
+
+.page {
+  margin: 0 16px;
+}
+
+.centered-page {
+  @extend %page;
   align-items: center;
   text-align: center;
-  margin: 0 0.5em;
+}
+
+.left-page {
+  @extend %page;
+  align-items: flex-start;
 }
 
 .bold {
   font-weight: bold;
+}
+
+.rating {
+  justify-content: flex-start;
+  width: fit-content;
+}
+.star-container {
+  margin: 0;
 }

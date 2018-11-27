@@ -37,8 +37,15 @@ function jsonToSong(json: SongOverviewJSON): SongOverview {
 }
 
 export interface SongFilters {
-  setlistID: number;
+  setlistID?: number;
   suggested?: boolean;
+}
+
+export interface UpdateSongOptions {
+  title?: string;
+  artist?: string;
+  lyrics?: string;
+  arranged?: boolean;
 }
 
 function filtersToParams(filters: SongFilters): HttpParams {
@@ -52,10 +59,18 @@ function filtersToParams(filters: SongFilters): HttpParams {
 export class SongService {
   constructor(private http: HttpClient) { }
 
+  // TODO: return full song
+  getSong(songID: number, setlistID: number): Observable<SongOverview> {
+    const url = `/api/songs/${songID}`;
+    const params = { setlist: `${setlistID}` };
+    return this.http.get<SongOverviewJSON>(url, { headers, params })
+      .pipe(map(jsonToSong));
+  }
+
   getSongs(filters: SongFilters): Observable<SongOverview[]> {
     const url = '/api/songs';
     const params = filtersToParams(filters);
-    return this.http.get<SongOverviewJSON[]>('/api/songs', { headers, params })
+    return this.http.get<SongOverviewJSON[]>(url, { headers, params })
       .pipe(map(jsonArr => jsonArr.map(jsonToSong)));
   }
 
@@ -84,6 +99,17 @@ export class SongService {
     const body = newRating;
     return this.http.put<SongOverviewJSON>(url, body, { headers })
       .pipe(map(jsonToSong));
+  }
+
+  updateSong(songID: number, body: UpdateSongOptions): Observable<SongOverview> {
+    const url = `/api/songs/${songID}`;
+    return this.http.patch<SongOverviewJSON>(url, body, { headers })
+      .pipe(map(jsonToSong));
+  }
+
+  deleteSong(songID: number): Observable<boolean> {
+    const url = `/api/songs/${songID}`;
+    return this.http.delete<boolean>(url, { headers });
   }
 
 }

@@ -8,6 +8,8 @@ class Setlist(db.Model):
     sdeadline = db.Column(db.DateTime(), nullable=False)
     vdeadline = db.Column(db.DateTime(), nullable=False)
 
+    suggestions = db.relationship('Suggestion', cascade="all,delete", backref=db.backref('setlist', lazy=True))
+
     def __init__(self, **kwargs):
         super(Setlist, self).__init__(**kwargs)
 

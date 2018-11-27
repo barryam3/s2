@@ -2,7 +2,7 @@
   <h1>Filter Songs</h1>
 
   <form #filterForm="ngForm">
-    <div class="form-group">
+    <div class="form-group" *ngIf="currentSetlist">
       <h2>Setlist: <span class="bold">{{currentSetlist.title}}</span></h2>
       <mat-radio-group [(ngModel)]="suggested" name="suggested">
         <mat-radio-button [value]="true">Suggested</mat-radio-button>

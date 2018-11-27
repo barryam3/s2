@@ -1,0 +1,43 @@
+$max-width: 600px;
+$lyric-padding: 8px;
+
+.top-row {
+  display: flex;
+  flex-direction: row-reverse;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.controls > * {
+  margin: 0 8px;
+}
+
+h1, h2, h3 {
+  margin-bottom: 0;
+}
+
+.lyrics {
+  width: 100%;
+  max-width: $max-width;
+  height: 20rem;
+}
+
+textarea {
+  height: 100%;
+  font-size: 100%;
+  padding: $lyric-padding;
+}
+
+pre.lyrics {
+  overflow: auto;
+  border: 2px solid lightgray;
+  font-size: 100%;
+  padding: $lyric-padding;
+}
+
+mat-form-field {
+  width: 100%;
+  max-width: $max-width;
+}

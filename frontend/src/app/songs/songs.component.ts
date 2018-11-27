@@ -30,13 +30,14 @@ export class SongsComponent implements OnInit {
     } else {
       combineLatest(
         this.setlistService.currentSetlist
-          .pipe(filter(newCurrentSetlist => newCurrentSetlist !== null)),
+          .pipe(filter(newCurrentSetlist => newCurrentSetlist !== undefined)),
         this.route.queryParams,
       )
         .subscribe(([newCurrentSetlist, queryParams]) => {
-          const filters: SongFilters = {
-            setlistID: newCurrentSetlist.id,
-          };
+          const filters: SongFilters = {};
+          if (newCurrentSetlist) {
+            filters.setlistID = newCurrentSetlist.id;
+          }
           if (queryParams.suggested) {
             filters.suggested = queryParams.suggested === '1';
           }
@@ -49,14 +50,6 @@ export class SongsComponent implements OnInit {
     this.songService.getSongs(filters).subscribe(songs => {
       this.songs = songs;
     });
-  }
-
-  updateRating(song: SongOverview, newRating: number) {
-    this.songService.rateSuggestion(song.suggestion.id, newRating)
-      .subscribe(
-        success => song.suggestion.myRating = newRating,
-        failure => this.snackBar.open(failure.error, 'dismiss'),
-      );
   }
 
 }

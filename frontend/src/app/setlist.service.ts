@@ -57,7 +57,7 @@ function defaultDeadlines() {
 
 @Injectable()
 export class SetlistService {
-  private setlistSubject = new BehaviorSubject<Setlist>(null);
+  private setlistSubject = new BehaviorSubject<Setlist>(undefined);
   public currentSetlist = this.setlistSubject.asObservable().pipe(distinctUntilChanged());
 
   constructor(private http: HttpClient) { }

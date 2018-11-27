@@ -23,6 +23,7 @@ import { UserService } from './user.service';
 import { SongService } from './song.service';
 import { SetlistService } from './setlist.service';
 import { CustomStarRatingConfigService } from './custom-star-rating-config.service';
+import { SongPageComponent } from './song-page/song-page.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { CustomStarRatingConfigService } from './custom-star-rating-config.servi
     AddSongComponent,
     ManageSetlistComponent,
     FiltersComponent,
+    SongPageComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,6 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { SongOverview } from '../song.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-song-card',
@@ -8,10 +9,11 @@ import { SongOverview } from '../song.service';
 })
 export class SongCardComponent {
   @Input() song: SongOverview;
-  @Output() ratingChange = new EventEmitter<number>();
 
-  onRatingChange({ rating }) {
-    this.ratingChange.emit(rating);
+  constructor(private router: Router) { }
+
+  navigate() {
+    this.router.navigateByUrl(`/song/${this.song.id}`);
   }
 
 }

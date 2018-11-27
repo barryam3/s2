@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { AddSongComponent } from './add-song/add-song.component';
 import { ManageSetlistComponent } from './manage-setlist/manage-setlist.component';
 import { FiltersComponent } from './filters/filters.component';
+import { SongPageComponent } from './song-page/song-page.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'account', component: AccountComponent },
   { path: 'add-song', component: AddSongComponent },
   { path: 'filter', component: FiltersComponent },
+  { path: 'song/:id', component: SongPageComponent },
   { path: '', component: AppComponent },
 ];
 
