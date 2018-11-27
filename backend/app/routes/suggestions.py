@@ -18,13 +18,13 @@ def rate_suggestion(suggestion_id):
 
     @param {int} - numerical rating
     @return {Rating}
-    @throws {400} - if rating is not in range [1,5]
+    @throws {400} - if rating is not in range [1,7]
     @thorws {404} - if suggestion is not found
     '''
 
     value = request.get_json()
-    if not (isinstance(value, int) and (1 <= value <= 5)):
-        return('Rating must be an integer in [1,5].', 400)
+    if not (isinstance(value, int) and (1 <= value <= 7)):
+        return('Rating must be an integer in [1,7].', 400)
 
     try:
         suggestion = Suggestion.query.filter_by(id=suggestion_id).one()

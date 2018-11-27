@@ -1,5 +1,4 @@
-import { Component, Input } from '@angular/core';
-
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { SongOverview } from '../song.service';
 
 @Component({
@@ -9,9 +8,10 @@ import { SongOverview } from '../song.service';
 })
 export class SongCardComponent {
   @Input() song: SongOverview;
+  @Output() ratingChange = new EventEmitter<number>();
 
-  showDetails() {
-    // TODO: song page
+  onRatingChange({ rating }) {
+    this.ratingChange.emit(rating);
   }
 
 }

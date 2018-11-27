@@ -5,6 +5,7 @@ import { filter } from 'rxjs/operators';
 
 import { SongService, SongOverview, SongFilters } from '../song.service';
 import { SetlistService, Setlist } from '../setlist.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-songs',
@@ -20,6 +21,7 @@ export class SongsComponent implements OnInit {
     private songService: SongService,
     private setlistService: SetlistService,
     private route: ActivatedRoute,
+    private snackBar: MatSnackBar,
   ) { }
 
   ngOnInit() {
@@ -47,6 +49,14 @@ export class SongsComponent implements OnInit {
     this.songService.getSongs(filters).subscribe(songs => {
       this.songs = songs;
     });
+  }
+
+  updateRating(song: SongOverview, newRating: number) {
+    this.songService.rateSuggestion(song.suggestion.id, newRating)
+      .subscribe(
+        success => song.suggestion.myRating = newRating,
+        failure => this.snackBar.open(failure.error, 'dismiss'),
+      );
   }
 
 }

@@ -1,6 +1,10 @@
 <div *ngIf="songs">
   <div class="song-grid">
-    <app-song-card *ngFor="let song of songs" [song]="song"></app-song-card>
+    <app-song-card
+      *ngFor="let song of songs"
+      [song]="song"
+      (ratingChange)="updateRating(song, $event)"
+    ></app-song-card>
   </div>
   <h1 *ngIf="songs.length === 0" class="message">
     Nobody seems to have suggested any songs yet.

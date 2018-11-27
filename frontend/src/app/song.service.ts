@@ -79,4 +79,11 @@ export class SongService {
       .pipe(map(jsonToSong));
   }
 
+  rateSuggestion(suggestionID: number, newRating: number): Observable<SongOverview> {
+    const url = `api/suggestions/${suggestionID}/ratings/mine`;
+    const body = newRating;
+    return this.http.put<SongOverviewJSON>(url, body, { headers })
+      .pipe(map(jsonToSong));
+  }
+
 }
