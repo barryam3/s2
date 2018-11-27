@@ -8,6 +8,7 @@ import { AccountComponent } from './account/account.component';
 import { AppComponent } from './app.component';
 import { AddSongComponent } from './add-song/add-song.component';
 import { ManageSetlistComponent } from './manage-setlist/manage-setlist.component';
+import { FiltersComponent } from './filters/filters.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'setlists', component: ManageSetlistComponent },
   { path: 'account', component: AccountComponent },
   { path: 'add-song', component: AddSongComponent },
+  { path: 'filter', component: FiltersComponent },
   { path: '', component: AppComponent },
 ];
 

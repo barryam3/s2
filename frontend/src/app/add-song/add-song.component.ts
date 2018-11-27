@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
+import { filter } from 'rxjs/operators';
 
 import { SongService } from '../song.service';
 import { SetlistService, Setlist } from '../setlist.service';
@@ -23,9 +24,11 @@ export class AddSongComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.setlistService.currentSetlist.subscribe(newCurrentSetlist => {
-      this.currentSetlist = newCurrentSetlist;
-    });
+    this.setlistService.currentSetlist
+      .pipe(filter(newCurrentSetlist => newCurrentSetlist !== null))
+      .subscribe(newCurrentSetlist => {
+        this.currentSetlist = newCurrentSetlist;
+      });
   }
 
   submit() {

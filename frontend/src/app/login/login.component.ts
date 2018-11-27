@@ -20,6 +20,11 @@ export class LoginComponent implements OnInit {
     private snackBar: MatSnackBar,
    ) {}
 
+  ngOnInit() {
+    this.user.logout().subscribe();
+    this.calculateSeason();
+  }
+
   calculateSeason() {
     const today = new Date();
     let year = today.getFullYear();
@@ -40,7 +45,7 @@ export class LoginComponent implements OnInit {
     this.user.login(this.username, this.password)
       .subscribe(
         success => {
-          this.router.navigateByUrl('/songs');
+          this.router.navigateByUrl('/songs?suggested=1');
         },
         failure => {
           if (failure.status === 504) {
@@ -50,11 +55,6 @@ export class LoginComponent implements OnInit {
           }
         },
       );
-  }
-
-  ngOnInit() {
-    this.user.logout().subscribe();
-    this.calculateSeason();
   }
 
 }

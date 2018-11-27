@@ -1,0 +1,11 @@
+.form-group {
+  display: flex;
+  justify-content: space-between;
+}
+
+mat-radio-group {
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+  margin-bottom: 25px;
+}

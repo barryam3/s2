@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { SetlistService, Setlist } from '../setlist.service';
 import { MatSnackBar } from '@angular/material';
+import { filter } from 'rxjs/operators';
+
+import { SetlistService, Setlist } from '../setlist.service';
 
 const now = new Date();
 
@@ -21,13 +23,13 @@ export class ManageSetlistComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.setlistService.currentSetlist.subscribe(newCurrentSetlist => {
-      this.currentSetlist = newCurrentSetlist;
-      if (newCurrentSetlist) {
+    this.setlistService.currentSetlist
+      .pipe(filter(newCurrentSetlist => newCurrentSetlist !== null))
+      .subscribe(newCurrentSetlist => {
+        this.currentSetlist = newCurrentSetlist;
         this.newSuggestDeadline = newCurrentSetlist.suggestDeadline.toISOString();
         this.newVoteDeadline = newCurrentSetlist.voteDeadline.toISOString();
-      }
-    });
+      });
   }
 
   edit() {

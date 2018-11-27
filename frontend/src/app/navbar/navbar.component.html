@@ -1,15 +1,15 @@
 <div *ngIf="user" style="height:100%">
   <mat-toolbar>
-    <button mat-button *ngIf="showFilters()">
+    <a mat-button routerLink="filter" *ngIf="showFilters()">
       <mat-icon>filter_list</mat-icon>
-    </button>
-    <button mat-button routerLink="add-song" *ngIf="showFilters()">
-      <mat-icon>library_add</mat-icon>
-    </button>
-    <a mat-button *ngIf="showHome()" routerLink="/songs">
-      <mat-icon>arrow_back</mat-icon>
-      <span id="to-songs">To Songs</span>
     </a>
+    <a mat-button routerLink="add-song" *ngIf="showFilters()">
+      <mat-icon>library_add</mat-icon>
+    </a>
+    <button mat-button *ngIf="showHome()" (click)="back()">
+      <mat-icon>arrow_back</mat-icon>
+      <span id="to-songs">Go Back</span>
+    </button>
     <img
       src="assets/images/s2.svg"
       alt="s2"
@@ -23,9 +23,9 @@
 
   <!-- mat-menu does not render anything -->
   <mat-menu #accountMenu="matMenu" [overlapTrigger]="false">
-    <button mat-menu-item routerLink="/account">Account</button>
-    <button mat-menu-item routerLink="/users" *ngIf="user.admin">Manage Users</button>
-    <button mat-menu-item routerLink="/setlists" *ngIf="user.admin">Manage Setlists</button>
-    <button mat-menu-item routerLink="/login">Logout</button>
+    <a mat-menu-item routerLink="/account">Account</a>
+    <a mat-menu-item routerLink="/users" *ngIf="user.admin">Manage Users</a>
+    <a mat-menu-item routerLink="/setlists" *ngIf="user.admin">Manage Setlists</a>
+    <a mat-menu-item routerLink="/login">Logout</a>
   </mat-menu>
 </div>

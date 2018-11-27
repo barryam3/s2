@@ -49,7 +49,6 @@ def list_songs():
         # suggested or not
 
     result = query.all()
-    print(result)
 
     if trio_query:
         songs_array = [r[0].to_dict({

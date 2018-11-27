@@ -21,6 +21,7 @@ import { ManageSetlistComponent } from './manage-setlist/manage-setlist.componen
 import { UserService } from './user.service';
 import { SongService } from './song.service';
 import { SetlistService } from './setlist.service';
+import { FiltersComponent } from './filters/filters.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { SetlistService } from './setlist.service';
     NavbarComponent,
     AddSongComponent,
     ManageSetlistComponent,
+    FiltersComponent,
   ],
   imports: [
     BrowserModule,

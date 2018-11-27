@@ -1,0 +1,22 @@
+<div class="centered-page">
+  <h1>Filter Songs</h1>
+
+  <form #filterForm="ngForm">
+    <div class="form-group">
+      <h2>Setlist: <span class="bold">{{currentSetlist.title}}</span></h2>
+      <mat-radio-group [(ngModel)]="suggested" name="suggested">
+        <mat-radio-button [value]="true">Suggested</mat-radio-button>
+        <mat-radio-button [value]="false">Not Suggested</mat-radio-button>
+        <mat-radio-button [value]="null">Any</mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <button
+      mat-raised-button
+      color="accent"
+      type="submit"
+      (click)="submit()"
+    >
+      Filter
+    </button>
+  </form>
+</div>
