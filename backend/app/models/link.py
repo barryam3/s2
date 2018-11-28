@@ -1,8 +1,6 @@
 from app.extensions import db
 
 class Link(db.Model):
-    mysql_engine='InnoDB',
-
     id = db.Column(db.Integer, primary_key=True)
     url = db.Column(db.String(255), nullable=False)
     description = db.Column(db.String(255), nullable=False)

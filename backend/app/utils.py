@@ -58,12 +58,3 @@ def admin_required(func):
             return res('Admin priviliges required.', 403)
         return func(*args, **kwargs)
     return decorated_function
-
-def login_required(func):
-    '''Verify that a user is authenticated.'''
-    @wraps(func)
-    def decorated_function(*args, **kwargs):
-        if not current_user.is_authenticated:
-            return res('Authentication required.', 401)
-        return func(*args, **kwargs)
-    return decorated_function

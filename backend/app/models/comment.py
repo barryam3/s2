@@ -4,8 +4,6 @@ from calendar import timegm
 from app.extensions import db
 
 class Comment(db.Model):
-    mysql_engine='InnoDB',
-
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text(), nullable=False)
     timestamp = db.Column(db.DateTime(), nullable=False, default=func.now())

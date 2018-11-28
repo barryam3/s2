@@ -7,16 +7,14 @@ from app.extensions import bcrypt, lm, db
 from app.routes.auth import auth
 from app.routes.users import users
 from app.routes.songs import songs
-from app.routes.setlists import setlists
-from app.routes.suggestions import suggestions
+from app.routes.groups import groups
 
 # models must be imported for create_all to work
 from models.comment import Comment
 from models.link import Link
 from models.rating import Rating
-from models.setlist import Setlist
 from models.song import Song
-from models.suggestion import Suggestion
+from models.group import Group
 from models.user import User
 
 
@@ -73,15 +71,17 @@ def register_blueprints(app):
     app.register_blueprint(auth, url_prefix='/auth')
     app.register_blueprint(users, url_prefix='/users')
     app.register_blueprint(songs, url_prefix='/songs')
-    app.register_blueprint(setlists, url_prefix='/setlists')
-    app.register_blueprint(suggestions, url_prefix='/suggestions')
+    app.register_blueprint(groups, url_prefix='/groups')
 
 
 def initialize_database(app):
     '''Create tables if they don't exist and create an initial user if needed.'''
 
     db.create_all()
+    if Group.query.count() == 0:
+        initial_group = Group()
+        db.session.add(initial_group)
     if User.query.count() == 0:
         initial_user = User('crossp', 'xprod05', admin=True)
         db.session.add(initial_user)
-        db.session.commit()
+    db.session.commit()

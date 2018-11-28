@@ -12,7 +12,7 @@ class User(db.Model, UserMixin):
     admin = db.Column(db.Boolean(), nullable=False, default=False)
 
     comments = db.relationship('Comment', cascade="all,delete", backref=db.backref('user', lazy=True))
-    suggestions = db.relationship('Suggestion', cascade="all,delete", backref=db.backref('user', lazy=True))
+    songs = db.relationship('Song', backref=db.backref('user', lazy=True))
     ratings = db.relationship('Rating', cascade="all,delete", backref=db.backref('user', lazy=True))
 
     def __init__(self, username, password, **kwargs):

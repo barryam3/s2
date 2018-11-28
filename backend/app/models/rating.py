@@ -1,15 +1,13 @@
 from app.extensions import db
 
 class Rating(db.Model):
-    mysql_engine='InnoDB',
-
     id = db.Column(db.Integer, primary_key=True)
     value = db.Column(db.Integer)
 
-    suggestion_id = db.Column(db.Integer, db.ForeignKey('suggestion.id'), nullable=False)
+    song_id = db.Column(db.Integer, db.ForeignKey('song.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
-    __table_args__ = (db.UniqueConstraint('suggestion_id', 'user_id', name='_rating'),)
+    __table_args__ = (db.UniqueConstraint('song_id', 'user_id', name='_rating'),)
 
     def __init__(self, **kwargs):
         super(Rating, self).__init__(**kwargs)
