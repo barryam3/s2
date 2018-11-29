@@ -35,10 +35,8 @@ def create_app(config):
 def configure(app, config):
     '''Configure the app.'''
 
-    app.config.from_mapping(
-        SITE_NAME='s2',
-        SQLALCHEMY_TRACK_MODIFICATIONS=False
-    )
+    app.config['SITE_NAME'] = 's2'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config.from_object(config)
     assert app.config['SECRET_KEY']
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://%s:%s@%s/%s' % (
