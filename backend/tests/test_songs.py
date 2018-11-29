@@ -1,5 +1,3 @@
-import time
-
 user_1 = {
     'username': 'crossp',
     'password': 'xprod05'
@@ -190,3 +188,50 @@ def test_list_songs(client):
     rv = client.get('/songs?suggested=0')
     assert rv.status_code == 200
     assert rv.get_json() == [expected_1]
+
+def test_rate_song(client):
+    client.post('/auth/login', json=user_1)
+    client.post('/songs', json=song_1)
+
+    # should be able to rate a song
+    rv = client.put('/songs/1/ratings/mine', json=3)
+    assert rv.status_code == 200
+    assert rv.get_json() == True
+    rv = client.get('/songs/1')
+    assert rv.get_json()['myRating'] == 3
+
+    # should be able to re-rate a song
+    client.put('/songs/1/ratings/mine', json=4)
+    rv = client.get('/songs/1')
+    assert rv.get_json()['myRating'] == 4
+
+    # should not be able to rate a song above 7
+    rv = client.put('/songs/1/ratings/mine', json=8)
+    assert rv.status_code == 400
+
+    # should not be able to rate a song below 1
+    rv = client.put('/songs/1/ratings/mine', json=0)
+    assert rv.status_code == 400
+
+    # should not be able to set a negative rating
+    rv = client.put('/songs/1/ratings/mine', json=-1)
+    assert rv.status_code == 400
+
+    # should not be able to rate a song a non-integer
+    rv = client.put('/songs/1/ratings/mine', json=3.5)
+    assert rv.status_code == 400
+
+    # decimal integers should work
+    rv = client.put('/songs/1/ratings/mine', json=5.0)
+    assert rv.status_code == 200
+    rv = client.get('/songs/1')
+    assert rv.get_json()['myRating'] == 5
+
+    # should not be able to rate a nonexistant song
+    rv = client.put('/songs/2/ratings/mine', json=3)
+    assert rv.status_code == 404
+
+    # should not be able to rate a song if not signed in
+    client.post('/auth/logout')
+    rv = client.put('/songs/1/ratings/mine', json=3)
+    assert rv.status_code == 401

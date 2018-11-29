@@ -13,9 +13,9 @@ groups = Blueprint('groups', __name__)
 
 
 # there is only one group
-@groups.route('/1/deadlines', methods=['PATCH'])
+@groups.route('/1/deadlines', methods=['PUT'])
 @admin_required
-def update_deadlines(group_id):
+def update_deadlines():
     '''Update the deadline(s).
 
     @param {int} suggestDeadline - unix seconds
@@ -32,13 +32,13 @@ def update_deadlines(group_id):
 
     if sdeadline is not None:
         try:
-            setlist.sdeadline = datetime.utcfromtimestamp(int(sdeadline))
+            group.sdeadline = datetime.utcfromtimestamp(int(sdeadline))
         except (ValueError, TypeError) as e:
             return res('Invalid deadline.', 400)
 
     if vdeadline is not None:
         try:
-            setlist.vdeadline = datetime.utcfromtimestamp(int(vdeadline))
+            group.vdeadline = datetime.utcfromtimestamp(int(vdeadline))
         except (ValueError, AttributeError) as e:
             return res('Invalid deadline.', 400)
 

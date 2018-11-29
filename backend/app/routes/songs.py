@@ -122,8 +122,12 @@ def edit_song(song_id):
     except NoResultFound:
         return res('Song not found.', 404)
 
-    if suggested is not None and song.user_id and song.user_id != current_user.id:
-        return res("You cannot unsuggest somebody else's song.", 403)
+    if suggested is not None:
+        if song.user_id and song.user_id != current_user.id:
+            return res("You cannot unsuggest somebody else's song.", 403)
+        group = Group.query.one()
+        if group.sdeadline and (datetime.utcnow() > group.sdeadline):
+            return ('Nope! The deadline has passed.', 403)
 
     if title:
         song.title = title
@@ -182,7 +186,7 @@ def rate_song(song_id):
     song_id = query_to_int(song_id)
 
     value = request.get_json()
-    if not (isinstance(value, int) and (1 <= value <= 7)):
+    if not (value % 1 == 0 and (1 <= value <= 7)):
         return('Rating must be an integer in [1,7].', 400)
 
     group = Group.query.one()
