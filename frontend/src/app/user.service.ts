@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap, distinctUntilChanged } from 'rxjs/operators';
+
+import { headers } from '../utils';
 
 export interface User {
   id: string;
@@ -10,10 +12,6 @@ export interface User {
   active: boolean;
   admin: boolean;
 }
-
-const headers: HttpHeaders = new HttpHeaders({
-  'Content-Type': 'application/json',
-});
 
 @Injectable()
 export class UserService {
@@ -37,7 +35,7 @@ export class UserService {
 
   logout(): Observable<boolean> {
     const url = 'api/auth/logout';
-    return this.http.get<boolean>(url, { headers })
+    return this.http.post<boolean>(url, { headers })
     .pipe(tap(
       () => this.userSubject.next(null),
       () => this.userSubject.next(null),

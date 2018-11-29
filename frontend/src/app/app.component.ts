@@ -4,8 +4,6 @@ import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 import { UserService, User } from './user.service';
-import { MatSnackBar } from '../../node_modules/@angular/material';
-import { SetlistService } from './setlist.service';
 
 @Component({
   selector: 'app-root',
@@ -19,8 +17,6 @@ export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     private userService: UserService,
-    private setlistService: SetlistService,
-    private snackBar: MatSnackBar,
   ) { }
 
   ngOnInit() {
@@ -45,12 +41,9 @@ export class AppComponent implements OnInit {
         () => {
           if (window.location.pathname !== '/login') {
             this.router.navigateByUrl('/login');
-            this.snackBar.open('Your session timed out. Please log in again.', 'dismiss');
+            throw new Error('Your session timed out. Please log in again.');
           }
         },
       );
-
-    // load the current setlist so no other component else ever has to
-    this.setlistService.getSetlists().subscribe();
   }
 }

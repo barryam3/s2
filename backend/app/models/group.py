@@ -19,6 +19,6 @@ class Group(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
-            'suggestDeadline': timegm(self.sdeadline.timetuple()),
-            'voteDeadline': timegm(self.vdeadline.timetuple())
+            'suggestDeadline': timegm(self.sdeadline.timetuple()) if self.sdeadline else None,
+            'voteDeadline': timegm(self.vdeadline.timetuple()) if self.vdeadline else None
         }

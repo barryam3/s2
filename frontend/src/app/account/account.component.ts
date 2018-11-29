@@ -25,18 +25,11 @@ export class AccountComponent implements OnInit {
 
   changePassword() {
     if (this.newPassword !== this.newPasswordConf) {
-      this.snackBar.open('Passwords do not match.', 'dismiss');
-      return;
+      throw new Error('Passwords do not match.');
     }
 
     this.user.updateCurrentUserPassword(this.oldPassword, this.newPassword)
-      .subscribe(
-        success => this.snackBar.open(
-          'Your password has been updated.',
-          'dismiss',
-        ),
-        failure => this.snackBar.open(failure.error, 'dismiss'),
-      );
+      .subscribe(() => this.snackBar.open('Your password has been updated.', 'dismiss'));
   }
 
 }

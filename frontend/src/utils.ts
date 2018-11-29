@@ -1,8 +1,4 @@
-import { HttpParams } from '@angular/common/http';
-
-export interface StringToSupportedValue {
-  [s: string]: SupportedValue;
-}
+import { HttpParams, HttpHeaders } from '@angular/common/http';
 
 // Does an in-place filter
 export function filterInPlace<T>(arr: T[], f: (elm: T) => boolean) {
@@ -16,21 +12,35 @@ export function filterInPlace<T>(arr: T[], f: (elm: T) => boolean) {
   arr.length = out;
 }
 
-type SupportedValue = string | boolean | number;
-function supportedValueToString(sv: SupportedValue) {
-  if (sv === true) { return '1'; }
-  if (sv === false) { return '0'; }
-  return `${sv}`;
+export function intToDate(date: number): Date {
+  if (date === null) { return null; }
+  if (date === undefined) { return undefined; }
+  return new Date(date * 1000);
 }
 
-export function objectToParams(obj: StringToSupportedValue) {
-  let params = new HttpParams();
+export function dateToInt(date: Date): number {
+  if (date === null) { return null; }
+  if (date === undefined) { return undefined; }
+  return Math.floor(date.getTime() / 1000);
+}
+
+export const headers: HttpHeaders = new HttpHeaders({
+  'Content-Type': 'application/json',
+});
+
+export function objectToParams(obj: { [s: string]: any }): { [s: string]: string } {
+  const params = {};
   Object.keys(obj).forEach(key => {
-    params = params.set(key, supportedValueToString(obj[key]));
+    let val = obj[key];
+    if (val === null || val === undefined) { return; }
+    if (val === true) {
+      val = '1';
+    } else if (val === false) {
+      val = '0';
+    } else {
+      val = `${val}`;
+    }
+    params[key] = val;
   });
   return params;
-}
-
-export function unixTimestamp(date: Date): number {
-  return Math.floor(date.getTime() / 1000);
 }

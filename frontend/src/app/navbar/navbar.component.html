@@ -25,7 +25,7 @@
   <mat-menu #accountMenu="matMenu" [overlapTrigger]="false">
     <a mat-menu-item routerLink="/account">Account</a>
     <a mat-menu-item routerLink="/users" *ngIf="user.admin">Manage Users</a>
-    <a mat-menu-item routerLink="/setlists" *ngIf="user.admin">Manage Setlists</a>
-    <a mat-menu-item routerLink="/login">Logout</a>
+    <a mat-menu-item routerLink="/deadlines" *ngIf="user.admin">Edit Deadlines</a>
+    <a mat-menu-item (click)="logout()">Logout</a>
   </mat-menu>
 </div>

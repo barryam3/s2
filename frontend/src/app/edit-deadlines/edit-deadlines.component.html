@@ -1,7 +1,6 @@
-<div class="centered-page section" *ngIf="currentSetlist">
-  <h1>Current Setlist: <span class='bold'>{{currentSetlist.title}}</span></h1>
+<div class="centered-page">
   <form>
-    <h2>Edit Deadlines</h2>
+    <h1>Edit Deadlines</h1>
     <mat-form-field>
       <input matInput [matDatepicker]="suggestDeadline" placeholder="Suggest Deadline"
         name="suggestDeadline" [(ngModel)]="newSuggestDeadline">
@@ -21,29 +20,6 @@
       (click)="edit()"
     >
       Save
-    </button>
-  </form>
-</div>
-
-<div class="centered-page section">
-  <form #newSongForm="ngForm">
-    <h2>Start a New Setlist</h2>
-    <mat-form-field>
-      <input
-        matInput
-        placeholder="Title"
-        name="title"
-        [(ngModel)]="newSetlistTitle"
-        required
-      >
-    </mat-form-field>
-    <button
-      mat-raised-button
-      color="accent"
-      type="submit"
-      (click)="create()"
-    >
-      Start New Setlist
     </button>
   </form>
 </div>

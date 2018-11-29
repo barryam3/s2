@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material';
+
+import { filter } from 'rxjs/operators';
 
 import { UserService } from '../user.service';
 
@@ -12,16 +13,11 @@ import { UserService } from '../user.service';
 export class LoginComponent implements OnInit {
   username: '';
   password: '';
-  season: any = 'Spring 2018';
+  season = '';
 
-  constructor(
-    private user: UserService,
-    private router: Router,
-    private snackBar: MatSnackBar,
-   ) {}
+  constructor(private user: UserService, private router: Router) {}
 
   ngOnInit() {
-    this.user.logout().subscribe();
     this.calculateSeason();
   }
 
@@ -43,18 +39,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.user.login(this.username, this.password)
-      .subscribe(
-        success => {
-          this.router.navigateByUrl('/songs?suggested=1');
-        },
-        failure => {
-          if (failure.status === 504) {
-            this.snackBar.open('Unable to connect to server.', 'dismiss');
-          } else {
-            this.snackBar.open('Unsuccessful signin attempt.', 'dismiss');
-          }
-        },
-      );
+      .subscribe(() => this.router.navigateByUrl('/songs?suggested=1'));
   }
 
 }

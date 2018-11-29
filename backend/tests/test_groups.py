@@ -33,6 +33,13 @@ def test_set_deadlines(client):
     client.post('/songs', json=song_2)
     client.patch('/songs/2', json={ 'suggested': False })
 
+    # deadlines should start unset
+    rv = client.get('/groups/1')
+    assert rv.status_code == 200
+    json = rv.get_json()
+    assert json['suggestDeadline'] == None
+    assert json['voteDeadline'] == None
+
     # should be able to update deadlines
     rv = client.put('/groups/1/deadlines', json={
         'suggestDeadline': now + 1000,
@@ -40,6 +47,13 @@ def test_set_deadlines(client):
     })
     assert rv.status_code == 200
     assert rv.get_json() == True
+
+    # should be able to get the deadlines
+    rv = client.get('/groups/1')
+    assert rv.status_code == 200
+    json = rv.get_json()
+    assert json['suggestDeadline'] == now + 1000
+    assert json['voteDeadline'] == now + 1000
 
     # should be able to add song if the deadline has not passed
     rv = client.post('/songs', json=song_1)
@@ -93,7 +107,6 @@ def test_set_deadlines(client):
     })
     assert rv.status_code == 200
 
-
     # should not be able to change deadlines if not logged in
     client.post('/auth/logout')
     rv = client.put('/groups/1/deadlines', json={
@@ -102,10 +115,18 @@ def test_set_deadlines(client):
     })
     assert rv.status_code == 401
 
+    # should not be able to get deadlines if not logged in
+    rv = client.get('/groups/1')
+    assert rv.status_code == 401
+
     # should not be able to change deadlines if not admin
     client.post('/auth/login', json=user_2)
     rv = client.put('/groups/1/deadlines', json={
         'suggestDeadline': now + 750,
         'voteDeadline': now + 750
     })
+    assert rv.status_code == 403
+
+    # should not be able to get deadlines if not admin
+    rv = client.get('/groups/1')
     assert rv.status_code == 403

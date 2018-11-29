@@ -1,12 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StarRatingModule, StarRatingConfigService } from 'angular-star-rating';
 
 import { AppRoutingModule } from './app-routing.module';
-import { MatModule } from './mat/mat.module';
+import { MatModule } from './mat.module';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -16,14 +16,16 @@ import { AccountComponent } from './account/account.component';
 import { SongCardComponent } from './song-card/song-card.component';
 import { AddSongComponent } from './add-song/add-song.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { ManageSetlistComponent } from './manage-setlist/manage-setlist.component';
+import { EditDeadlinesComponent } from './edit-deadlines/edit-deadlines.component';
 import { FiltersComponent } from './filters/filters.component';
+import { SongPageComponent } from './song-page/song-page.component';
 
 import { UserService } from './user.service';
 import { SongService } from './song.service';
-import { SetlistService } from './setlist.service';
+import { GroupService } from './group.service';
 import { CustomStarRatingConfigService } from './custom-star-rating-config.service';
-import { SongPageComponent } from './song-page/song-page.component';
+
+import { HttpErrorInterceptor } from './http-error-interceptor';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,7 @@ import { SongPageComponent } from './song-page/song-page.component';
     SongCardComponent,
     NavbarComponent,
     AddSongComponent,
-    ManageSetlistComponent,
+    EditDeadlinesComponent,
     FiltersComponent,
     SongPageComponent,
   ],
@@ -51,8 +53,9 @@ import { SongPageComponent } from './song-page/song-page.component';
   providers: [
     SongService,
     UserService,
-    SetlistService,
+    GroupService,
     { provide: StarRatingConfigService, useClass: CustomStarRatingConfigService },
+    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
 })

@@ -47,10 +47,23 @@ def update_deadlines():
     return res(True)
 
 
+@groups.route('/1', methods=['GET'])
+@admin_required
+def get_group():
+    '''Get the group info.
+
+    @return {Group} success
+    @throws {401} - if you are not logged in
+    @throws {403} - if you are not an admin
+    '''
+
+    return res(Group.query.one().to_dict())
+
+
 @groups.route('/1/suggestions', methods=['DELETE'])
 @admin_required
 def delete_suggestions(group_id):
-    '''Reset the site.
+    '''Unsuggest all songs.
 
     @return {bool} success
     @throws {401} - if you are not logged in
