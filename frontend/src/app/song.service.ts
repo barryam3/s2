@@ -54,13 +54,13 @@ export class SongService {
   constructor(private http: HttpClient) { }
 
   getSong(songID: number): Observable<Song> {
-    const url = `/api/songs/${songID}`;
+    const url = `api/songs/${songID}`;
     return this.http.get<SongJSON>(url, { headers })
       .pipe(map(jsonToSong));
   }
 
   getSongs(filters: GetSongOptions): Observable<SongOverview[]> {
-    const url = '/api/songs';
+    const url = 'api/songs';
     const params = objectToParams(filters);
     return this.http.get<SongOverviewJSON[]>(url, { headers, params })
       .pipe(map(jsonArr => jsonArr.map(jsonToSong)));
@@ -77,7 +77,7 @@ export class SongService {
   }
 
   updateSong(songID: number, body: UpdateSongOptions): Observable<boolean> {
-    const url = `/api/songs/${songID}`;
+    const url = `api/songs/${songID}`;
     return this.http.patch<boolean>(url, body, { headers });
   }
 
@@ -88,7 +88,7 @@ export class SongService {
   }
 
   deleteSong(songID: number): Observable<boolean> {
-    const url = `/api/songs/${songID}`;
+    const url = `api/songs/${songID}`;
     return this.http.delete<boolean>(url, { headers });
   }
 
