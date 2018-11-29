@@ -52,15 +52,15 @@ def list_songs():
 
     suggested = query_to_bool(request.args.get('suggested'))
 
-    query = db.session.query(Song, Rating).options(joinedload('user')).outerjoin(Rating)
-    query = query.filter(or_(Rating.id==None, Rating.user_id==current_user.id))
+    my_ratings = db.session.query(Rating).with_entities(Rating.value, Rating.song_id).filter(Rating.user_id==current_user.id).subquery()
+    query = db.session.query(Song, my_ratings).options(joinedload('user')).outerjoin(my_ratings)
     if suggested == True:
         query = query.filter(Song.user_id!=None)
     if suggested == False:
         query = query.filter(Song.user_id==None)
     query = query.order_by(Song.edited.desc())
 
-    return res([s.to_dict(r.value if r else None) for s,r in query.all()])
+    return res([s.to_dict(r) for s,r,u in query.all()])
 
 
 @songs.route('', methods=['POST'])

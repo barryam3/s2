@@ -10,6 +10,7 @@ import { AddSongComponent } from './add-song/add-song.component';
 import { EditDeadlinesComponent } from './edit-deadlines/edit-deadlines.component';
 import { FiltersComponent } from './filters/filters.component';
 import { SongPageComponent } from './song-page/song-page.component';
+import { AddUserComponent } from './add-user/add-user.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'add-song', component: AddSongComponent },
   { path: 'filter', component: FiltersComponent },
   { path: 'song/:id', component: SongPageComponent },
+  { path: 'add-user', component: AddUserComponent },
   { path: '', component: AppComponent },
 ];
 

@@ -62,9 +62,14 @@ export class UserService {
   }
 
   updateCurrentUserPassword(oldPassword: string, newPassword: string): Observable<boolean> {
-    const url = `api/users/me/password`;
-    const payload = { oldPassword, newPassword };
-    return this.http.put<boolean>(url, payload, { headers });
+    const url = 'api/users/me/password';
+    const body = { oldPassword, newPassword };
+    return this.http.put<boolean>(url, body, { headers });
   }
 
+  addUser(username: string): Observable<User> {
+    const url = 'api/users';
+    const body = { username };
+    return this.http.post<User>(url, body, { headers });
+  }
 }
