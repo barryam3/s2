@@ -2,6 +2,7 @@
 
 from flask import Blueprint, request
 from flask_login import login_user, logout_user, UserMixin
+from sqlalchemy.orm.exc import NoResultFound
 
 from app.extensions import lm, bcrypt
 from app.utils import res, login_required
@@ -32,11 +33,13 @@ def login():
     username = req_body.get('username', '')
     password = req_body.get('password', '')
 
-    user = User.query.filter_by(username=username).one_or_none()
-
-    if user and user.check_password(password):
-        login_user(user)
-        return res(user.to_dict())
+    try:
+        user = User.query.filter_by(username=username).one()
+        if user.check_password(password):
+            login_user(user)
+            return res(user.to_dict())
+    except NoResultFound:
+        pass
 
     return res('Incorrect login.', 401)
 
