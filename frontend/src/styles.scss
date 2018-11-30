@@ -41,6 +41,10 @@ form {
   max-width: 800px;
 }
 
+.mat-form-field-wrapper {
+  width: 100%;
+}
+
 mat-radio-group {
   @extend .stack;
   align-items: flex-start;
@@ -54,6 +58,10 @@ mat-radio-group > mat-radio-button {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px - 2 * $margin-size, 1fr));
   grid-gap: $margin-size;
+}
+
+.card-grid > * {
+  max-width: 400px;
 }
 
 .stack {

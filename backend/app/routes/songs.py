@@ -21,6 +21,16 @@ from app.models.view import View
 songs = Blueprint('songs', __name__)
 
 
+def update_view(song_id):
+    try:
+        view = View.query.filter_by(user_id=current_user.id, song_id=song_id).one()
+        view.touch()
+    except NoResultFound:
+        view = View(user_id=current_user.id, song_id=song_id)
+        db.session.add(view)
+    return view
+
+
 @songs.route('/<song_id>', methods=['GET'])
 @login_required
 def get_song(song_id):
@@ -39,12 +49,7 @@ def get_song(song_id):
 
     rating = Rating.query.filter_by(song_id=song_id, user_id=current_user.id).first()
 
-    try:
-        view = View.query.filter_by(user_id=current_user.id, song_id=song_id).one()
-        view.touch()
-    except NoResultFound:
-        view = View(user_id=current_user.id, song_id=song_id)
-        db.session.add(view)
+    view =update_view(song_id)
 
     db.session.commit()
 
@@ -63,6 +68,11 @@ def list_songs():
 
     try:
         suggested = query_to_bool(get_arg(request.args, 'suggested', str, None))
+        title = get_arg(request.args, 'title', str, None)
+        artist = get_arg(request.args, 'artist', str, None)
+        arranged = query_to_bool(get_arg(request.args, 'arranged', str, None))
+        suggestor = get_arg(request.args, 'suggestor', str, None)
+
     except (TypeError, ValueError) as e:
         return res(status=400)
 
@@ -73,9 +83,23 @@ def list_songs():
         query = query.filter(Song.user_id!=None)
     if suggested == False:
         query = query.filter(Song.user_id==None)
+    if title is not None:
+        query = query.filter(Song.title.like('%' + title + '%'))
+    if artist is not None:
+        query = query.filter(Song.artist.like('%' + artist + '%'))
+    if arranged is not None:
+        query = query.filter(Song.arranged==arranged)
+    if suggestor is not None:
+        try:
+            suggestor = User.query.filter_by(username=suggestor).one()
+            query = query.filter(Song.user_id==suggestor.id)
+        except NoResultFound:
+            return res('User not found.', 404)
     query = query.order_by(Song.edited.desc())
+    
+    songs = query.all()
 
-    return res([s.to_dict(v,r) for s,r,u1,v,u2 in query.all()])
+    return res([s.to_dict(v,r) for s,r,u1,v,u2 in songs])
 
 
 @songs.route('', methods=['POST'])
@@ -168,6 +192,7 @@ def edit_song(song_id):
         song.user_id = None
 
     song.touch()
+    update_view(song_id)
     db.session.commit()
 
     return res(True)
@@ -272,6 +297,7 @@ def add_comment(song_id):
     comment = Comment(text=text, song_id=song.id, user_id=current_user.id)
     db.session.add(comment)
     song.touch()
+    update_view(song_id)
     db.session.commit()
 
     return res(comment.to_dict())
@@ -310,6 +336,7 @@ def add_link(song_id):
     link = Link(url=url, description=description, song_id=song.id)
     db.session.add(link)
     song.touch()
+    update_view(song_id)
     db.session.commit()
 
     return res(link.to_dict())

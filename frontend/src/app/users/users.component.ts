@@ -31,6 +31,12 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.userStream.unsubscribe();
   }
 
+  userRole(user: User) {
+    if (user.admin) { return 'Admin'; }
+    if (user.active) { return 'Active'; }
+    return 'Inactive';
+  }
+
   resetPassword(userID: number) {
     if (confirm('Are you sure you want to reset this user\'s password?')) {
       this.userService.resetPassword(userID).subscribe();

@@ -22,9 +22,14 @@ export class SongsComponent implements OnInit {
       this.getSongs(this.filters);
     } else {
       this.route.queryParams.subscribe(queryParams => {
-        const filters: GetSongOptions = {};
+        const filters: GetSongOptions = {
+          ...queryParams,
+        };
         if (queryParams.suggested) {
           filters.suggested = queryParams.suggested === '1';
+        }
+        if (queryParams.arranged) {
+          filters.arranged = queryParams.arranged === '1';
         }
         this.getSongs(filters);
       });
@@ -33,7 +38,7 @@ export class SongsComponent implements OnInit {
 
   getSongs = (filters: GetSongOptions) => {
     this.songService.getSongs(filters).subscribe(songs => {
-      this.songs = songs;
+      this.songs = songs || [];
     });
   }
 

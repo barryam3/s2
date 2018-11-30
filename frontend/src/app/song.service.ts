@@ -35,6 +35,10 @@ export interface Song extends SongBase {
 
 export interface GetSongOptions {
   suggested?: boolean;
+  title?: string;
+  artist?: string;
+  arranged?: boolean;
+  suggestor?: string;
 }
 
 export interface UpdateSongOptions {

@@ -1,3 +1,9 @@
+mat-card-title {
+  display: flex !important;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
 mat-card-actions {
   display: flex;
   flex-direction: row;
@@ -6,4 +12,10 @@ mat-card-actions {
 
 button:last-child {
   margin-left: auto;
+}
+
+span.role {
+  display: inline-block;
+  color: gray;
+  font-size: 50%;
 }

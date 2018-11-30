@@ -10,6 +10,38 @@
         <mat-radio-button [value]="null">Any</mat-radio-button>
       </mat-radio-group>
     </div>
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Title"
+        name="title"
+        [(ngModel)]="filter.title"
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Artist"
+        name="artist"
+        [(ngModel)]="filter.artist"
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Suggestor"
+        name="suggestor"
+        [(ngModel)]="filter.suggestor"
+      >
+    </mat-form-field>
+    <div class="mat-form-field">
+      <h2>Arranged</h2>
+      <mat-radio-group [(ngModel)]="filter.arranged" name="arranged">
+        <mat-radio-button [value]="true">Yes</mat-radio-button>
+        <mat-radio-button [value]="false">No</mat-radio-button>
+        <mat-radio-button [value]="null">Any</mat-radio-button>
+      </mat-radio-group>
+    </div>
     <button
       mat-raised-button
       color="accent"
