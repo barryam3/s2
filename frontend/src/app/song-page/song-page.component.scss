@@ -7,9 +7,9 @@ $lyric-padding: 8px;
 
 .top-row {
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row;
   flex-wrap: wrap;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: space-between;
   width: 100%;
 }
@@ -48,4 +48,8 @@ pre.lyrics {
 mat-form-field {
   width: 100%;
   max-width: $max-width;
+}
+
+#suggest {
+  margin-bottom: 8px;
 }

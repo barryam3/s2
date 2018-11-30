@@ -1,22 +1,29 @@
 
-<div class="stack" *ngIf="song">
+<div class="stack" *ngIf="song && currentUser">
 
   <div class="top-row">
-    <div class="controls">
-      <button *ngIf="!editing" mat-stroked-button color="accent" (click)="edit()">Edit</button>
-      <button *ngIf="!editing" mat-stroked-button color="warn" (click)="delete()">Delete</button>
-      <button *ngIf="editing" mat-stroked-button color="primary" (click)="save()">Save</button>
+    <div>
+      <h1 *ngIf="!editing" id="title" class="bold">{{song.title}}</h1>
+      <mat-form-field *ngIf="editing">
+        <input matInput [(ngModel)]="title" placeholder="Title" name="title" required>
+      </mat-form-field>
+      <h2 *ngIf="!editing">by <span class="bold">{{song.artist}}</span></h2>
+      <mat-form-field *ngIf="editing">
+        <input matInput [(ngModel)]="artist" placeholder="Artist" name="artist" required>
+      </mat-form-field>
+      <div *ngIf="!song.suggestor" id="suggest">
+        <button mat-flat-button color="accent" (click)="setSuggested(true)">Suggest</button>
+      </div>
     </div>
-    <h1 id="title" class="bold" *ngIf="!editing">{{song.title}}</h1>
-    <mat-form-field *ngIf="editing">
-      <input matInput [(ngModel)]="title" placeholder="Title" name="title" required>
-    </mat-form-field>
+    <div class="controls">
+      <button *ngIf="!editing" mat-button color="accent" (click)="edit()">Edit</button>
+      <button *ngIf="!editing && !song.suggestor" mat-button color="warn" (click)="delete()">Delete</button>
+      <button *ngIf="editing" mat-flat-button color="accent" (click)="save()">Save</button>
+      <button *ngIf="editing" mat-flat-button color="primary" (click)="cancel()">Cancel</button>
+      <button *ngIf="!editing && song.suggestor == currentUser.username" mat-button color="warn" (click)="setSuggested(false)">Unsuggest</button>
+    </div>
   </div>
 
-  <h2 *ngIf="!editing">by <span class="bold">{{song.artist}}</span></h2>
-  <mat-form-field *ngIf="editing">
-    <input matInput [(ngModel)]="artist" placeholder="Artist" name="artist" required>
-  </mat-form-field>
 
   <div *ngIf="song.suggestor">
     <h3>Suggested by <span class="bold">{{song.suggestor}}</span></h3>
@@ -26,10 +33,6 @@
         (starClickChange)="onRatingChange($event)"
       ></star-rating>
     </div>
-  </div>
-
-  <div *ngIf="!song.suggestor">
-    <button mat-flat-button color="accent" (click)="suggest()">Suggest</button>
   </div>
 
   <h3>Lyrics:</h3>

@@ -65,14 +65,20 @@ export class SongPageComponent implements OnInit, OnDestroy {
     });
   }
 
+  cancel() {
+    this.editing = false;
+  }
+
   delete() {
     this.songService.deleteSong(this.song.id)
       .subscribe(() => this.router.navigateByUrl('/songs?suggested=1'));
   }
 
-  suggest() {
-    this.songService.updateSong(this.song.id, { suggested: true })
-      .subscribe(() => this.song.suggestor = this.currentUser.username);
+  setSuggested(suggested: boolean) {
+    this.songService.updateSong(this.song.id, { suggested })
+      .subscribe(() => {
+        this.song.suggestor = suggested ? this.currentUser.username : null;
+      });
   }
 
   onRatingChange(event: { rating: number }) {
