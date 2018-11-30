@@ -22,7 +22,7 @@ export class AccountComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.user.currentUser.subscribe(user => this.currentUser = user);
+    this.userStream = this.user.currentUser.subscribe(user => this.currentUser = user);
   }
 
   ngOnDestroy() {

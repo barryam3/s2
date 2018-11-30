@@ -12,5 +12,8 @@ mat-card:hover {
 mat-card-content {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+}
+
+#suggestor {
+  padding-top: 2px;
 }

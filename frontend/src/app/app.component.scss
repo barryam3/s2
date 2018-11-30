@@ -1,5 +1,6 @@
+@import "../constants.scss";
+
 $navbar-height: 60px;
-$side-margins: 16px;
 
 #navbar {
     height: $navbar-height;
@@ -15,6 +16,6 @@ $side-margins: 16px;
 }
 
 #main-content {
-    margin-left: 16px;
-    margin-right: 16px;
+    margin-left: $margin-size;
+    margin-right: $margin-size;
 }

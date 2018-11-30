@@ -1,9 +1,11 @@
 <mat-card *ngIf="song" (click)="navigate()" class="darken-on-hover">
   <mat-card-title class="font-condensed">{{song.title}}</mat-card-title>
   <mat-card-subtitle>{{song.artist}}</mat-card-subtitle>
-  <mat-card-content class="sug-rat">
-    <div *ngIf="song.suggestor">Suggested by {{song.suggestor}}</div>
-    <div *ngIf="!song.suggestor">Not suggested.</div>
+  <mat-card-content *ngIf="song.suggestor">
+    <div id="suggestor">{{song.suggestor}}</div>
     <star-rating [rating]="song.myRating || 0" [readOnly]="true"></star-rating>
   </mat-card-content>
+  <mat-card-actions *ngIf="!song.suggestor">
+    <button mat-flat-button color="primary">Suggest</button>
+  </mat-card-actions>
 </mat-card>

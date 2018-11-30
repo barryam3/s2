@@ -49,9 +49,8 @@ mat-radio-group > mat-radio-button {
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(302px, 1fr));
-  grid-gap: 1em;
-  margin: 0.5em;
+  grid-template-columns: repeat(auto-fit, minmax(320px - 2 * $margin-size, 1fr));
+  grid-gap: $margin-size;
 }
 
 .stack {

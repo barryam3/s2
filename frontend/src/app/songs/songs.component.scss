@@ -1,14 +1,3 @@
-.song-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(302px, 1fr));
-  grid-gap: 1em;
-  margin: 0.5em;
-}
-
-app-song-card {
-  width: 100%;
-}
-
 .message {
   width: 90%;
   margin: 0 auto;
