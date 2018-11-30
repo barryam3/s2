@@ -13,11 +13,12 @@ class Rating(db.Model):
         super(Rating, self).__init__(**kwargs)
 
     def __repr__(self):
-        return '<Rating #%s: on %r by %r>' % (self.id, self.suggestion, self.user)
+        return '<Rating #%s: on %r by %r>' % (self.id, self.song, self.user)
 
     def to_dict(self):
         return {
+            'id': self.id,
             'value': self.value,
-            'suggestion': self.suggestion.to_dict(),
+            'song': self.song.to_dict(),
             'user': self.user.to_dict()
         }

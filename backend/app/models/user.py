@@ -14,6 +14,7 @@ class User(db.Model, UserMixin):
     comments = db.relationship('Comment', cascade="all,delete", backref=db.backref('user', lazy=True))
     songs = db.relationship('Song', backref=db.backref('user', lazy=True))
     ratings = db.relationship('Rating', cascade="all,delete", backref=db.backref('user', lazy=True))
+    views = db.relationship('View', cascade="all,delete", backref=db.backref('user', lazy=True))
 
     def __init__(self, username, password, **kwargs):
         super(User, self).__init__(**kwargs)

@@ -31,7 +31,7 @@ def test_add_song(client):
     assert json['title'] == song_1['title']
     assert json['artist'] == song_1['artist']
     assert json['lyrics'] == ''
-    assert json['edited'] % 1 == 0
+    assert json['lastEdited'] % 1 == 0
     assert json['suggestor'] == 'crossp'
     assert json['myRating'] == None
 
@@ -48,7 +48,7 @@ def test_get_song(client):
     assert json['title'] == song_1['title']
     assert json['artist'] == song_1['artist']
     assert json['lyrics'] == ''
-    assert json['edited'] % 1 == 0
+    assert json['lastEdited'] % 1 == 0
     assert json['suggestor'] == 'crossp'
     assert json['myRating'] == None
     assert json['comments'] == []

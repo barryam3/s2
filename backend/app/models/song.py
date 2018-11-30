@@ -1,5 +1,6 @@
 from sqlalchemy import func
 from calendar import timegm
+from datetime import datetime
 
 from app.extensions import db
 
@@ -15,6 +16,7 @@ class Song(db.Model):
 
     comments = db.relationship('Comment', cascade="all,delete", backref=db.backref('song', lazy=True))
     links = db.relationship('Link', cascade="all,delete", backref=db.backref('song', lazy=True))
+    views = db.relationship('View', cascade="all,delete", backref=db.backref('song', lazy=True))
 
     def __init__(self, **kwargs):
         super(Song, self).__init__(**kwargs)
@@ -22,16 +24,20 @@ class Song(db.Model):
     def __repr__(self):
         return '<Song #%s: %r by %r>' % (self.id, self.title, self.artist)
 
-    def to_dict(self, rating=None, full=False):
+    def touch(self):
+      self.edited = datetime.utcnow()
+
+    def to_dict(self, view_datetime=None, rating=None, full=False):
         song = {
             "id": self.id,
             "title": self.title,
             "artist": self.artist,
             "lyrics": self.lyrics,
             "arranged": self.arranged,
-            "edited": timegm(self.edited.timetuple()),
+            "lastEdited": timegm(self.edited.timetuple()),
             "suggestor": self.user.username if self.user else None,
-            "myRating": rating
+            "myRating": rating,
+            "lastViewed": timegm(view_datetime.timetuple()) if view_datetime else 0
         }
         if full:
             song['comments'] = [c.to_dict() for c in self.comments]

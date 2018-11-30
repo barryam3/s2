@@ -15,6 +15,7 @@ from app.models.rating import Rating
 from app.models.group import Group
 from app.models.comment import Comment
 from app.models.link import Link
+from app.models.view import View
 
 
 songs = Blueprint('songs', __name__)
@@ -38,7 +39,16 @@ def get_song(song_id):
 
     rating = Rating.query.filter_by(song_id=song_id, user_id=current_user.id).first()
 
-    return res(song.to_dict(rating.value if rating else None, True))
+    try:
+        view = View.query.filter_by(user_id=current_user.id, song_id=song_id).one()
+        view.touch()
+    except NoResultFound:
+        view = View(user_id=current_user.id, song_id=song_id)
+        db.session.add(view)
+
+    db.session.commit()
+
+    return res(song.to_dict(view.timestamp, rating.value if rating else None, True))
 
 
 @songs.route('', methods=['GET'])
@@ -57,14 +67,15 @@ def list_songs():
         return res(status=400)
 
     my_ratings = db.session.query(Rating).with_entities(Rating.value, Rating.song_id).filter(Rating.user_id==current_user.id).subquery()
-    query = db.session.query(Song, my_ratings).options(joinedload('user')).outerjoin(my_ratings)
+    my_views = db.session.query(View).with_entities(View.timestamp, View.song_id).filter(View.user_id==current_user.id).subquery()
+    query = db.session.query(Song, my_ratings, my_views).options(joinedload('user')).outerjoin(my_ratings).outerjoin(my_views)
     if suggested == True:
         query = query.filter(Song.user_id!=None)
     if suggested == False:
         query = query.filter(Song.user_id==None)
     query = query.order_by(Song.edited.desc())
 
-    return res([s.to_dict(r) for s,r,u in query.all()])
+    return res([s.to_dict(v,r) for s,r,u1,v,u2 in query.all()])
 
 
 @songs.route('', methods=['POST'])
@@ -156,6 +167,7 @@ def edit_song(song_id):
     if suggested == False:
         song.user_id = None
 
+    song.touch()
     db.session.commit()
 
     return res(True)
@@ -259,6 +271,7 @@ def add_comment(song_id):
 
     comment = Comment(text=text, song_id=song.id, user_id=current_user.id)
     db.session.add(comment)
+    song.touch()
     db.session.commit()
 
     return res(comment.to_dict())
@@ -296,6 +309,7 @@ def add_link(song_id):
     
     link = Link(url=url, description=description, song_id=song.id)
     db.session.add(link)
+    song.touch()
     db.session.commit()
 
     return res(link.to_dict())
