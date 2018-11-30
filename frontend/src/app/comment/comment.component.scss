@@ -1,0 +1,44 @@
+@import "../../constants.scss";
+
+mat-card {
+  position: relative;
+}
+
+#author {
+  margin-left: -2 * $margin-size;
+  padding-bottom: 0.5 * $margin-size;
+}
+
+mat-card-content {
+  text-align: justify;
+}
+
+#editMenu {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+mat-card-footer {
+  padding: $margin-size;
+  padding-top: 0;
+  font-size: 80%;
+  color: gray;
+  display: flex;
+}
+
+span {
+  display: inline-block;
+}
+
+.timestamp {
+  margin-left: auto;
+  font-family: $font-condensed;
+}
+
+textarea {
+  width: 100%;
+  font-size: 100%;
+  resize: none;
+  height: 8rem;
+}

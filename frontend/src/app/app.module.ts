@@ -19,16 +19,21 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { EditDeadlinesComponent } from './edit-deadlines/edit-deadlines.component';
 import { FiltersComponent } from './filters/filters.component';
 import { SongPageComponent } from './song-page/song-page.component';
-import { CustomStarRatingConfigService } from './custom-star-rating-config.service';
+import { AddUserComponent } from './add-user/add-user.component';
+import { ResetSiteComponent } from './reset-site/reset-site.component';
+import { GroupComponent } from './group/group.component';
 
 import { UserService } from './user.service';
 import { SongService } from './song.service';
 import { GroupService } from './group.service';
+import { CommentService } from './comment.service';
+import { LinkService } from './link.service';
 
+import { CustomStarRatingConfigService } from './custom-star-rating-config.service';
 import { HttpErrorInterceptor } from './http-error-interceptor';
-import { AddUserComponent } from './add-user/add-user.component';
-import { ResetSiteComponent } from './reset-site/reset-site.component';
-import { GroupComponent } from './group/group.component';
+import { LinksComponent } from './links/links.component';
+import { CommentsComponent } from './comments/comments.component';
+import { CommentComponent } from './comment/comment.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +51,9 @@ import { GroupComponent } from './group/group.component';
     AddUserComponent,
     ResetSiteComponent,
     GroupComponent,
+    LinksComponent,
+    CommentsComponent,
+    CommentComponent,
   ],
   imports: [
     BrowserModule,
@@ -60,6 +68,8 @@ import { GroupComponent } from './group/group.component';
     SongService,
     UserService,
     GroupService,
+    CommentService,
+    LinkService,
     { provide: StarRatingConfigService, useClass: CustomStarRatingConfigService },
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
   ],

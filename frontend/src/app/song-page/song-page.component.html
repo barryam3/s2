@@ -45,4 +45,10 @@
   <pre *ngIf="!editing" class="lyrics">
     {{song.lyrics}}
   </pre>
+
+  <h3>Links:</h3>
+  <app-links [song]="song"></app-links>
+
+  <h3>Comments:</h3>
+  <app-comments [song]="song" [currentUser]="currentUser"></app-comments>
 </div>

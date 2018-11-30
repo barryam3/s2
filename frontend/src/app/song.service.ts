@@ -5,8 +5,10 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { headers, objectToParams } from '../utils';
+import { Link } from './link.service';
+import { Comment, CommentJSON, jsonToComment } from './comment.service';
 
-interface SongOverview {
+export interface SongOverview {
   id: number;
   title: string;
   artist: string;
@@ -19,9 +21,16 @@ interface SongOverview {
   lastViewed: number;
 }
 
-export interface Song extends SongOverview {
-  comments: [];
-  links: [];
+export interface SongBase extends SongOverview {
+  links: Link[];
+}
+
+export interface SongJSON extends SongBase {
+  comments: CommentJSON[];
+}
+
+export interface Song extends SongBase {
+  comments: Comment[];
 }
 
 export interface GetSongOptions {
@@ -36,25 +45,26 @@ export interface UpdateSongOptions {
   suggested?: boolean;
 }
 
-function jsonToSong<T>(json: T & { edited: number }): T & { edited: Date } {
-  return Object.assign({}, json, { edited: new Date(json.edited * 1000) });
-}
-
 @Injectable()
 export class SongService {
   constructor(private http: HttpClient) { }
 
   getSong(songID: number): Observable<Song> {
     const url = `api/songs/${songID}`;
-    return this.http.get<Song>(url, { headers })
-      .pipe(map(jsonToSong));
+    return this.http.get<SongJSON>(url, { headers })
+      .pipe(map(songJSON => {
+        const song: Song = {
+          ...songJSON,
+          comments: songJSON.comments.map(jsonToComment),
+        };
+        return song;
+      }));
   }
 
   getSongs(filters: GetSongOptions): Observable<SongOverview[]> {
     const url = 'api/songs';
     const params = objectToParams(filters);
-    return this.http.get<SongOverview[]>(url, { headers, params })
-      .pipe(map(jsonArr => jsonArr.map(jsonToSong)));
+    return this.http.get<SongOverview[]>(url, { headers, params });
   }
 
   addSong(title: string, artist: String): Observable<SongOverview> {
@@ -63,8 +73,7 @@ export class SongService {
       title,
       artist,
     };
-    return this.http.post<SongOverview>(url, body, { headers })
-      .pipe(map(jsonToSong));
+    return this.http.post<SongOverview>(url, body, { headers });
   }
 
   updateSong(songID: number, body: UpdateSongOptions): Observable<boolean> {

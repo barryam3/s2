@@ -1,0 +1,28 @@
+<div *ngIf="song">
+  <div *ngFor="let comment of song.comments" class="comment">
+    <app-comment
+      [comment]="comment"
+      [currentUser]="currentUser"
+      (delete)="onCommentDelete($event)"
+    ></app-comment>
+  </div>
+  <form #newCommentForm="ngForm">
+    <mat-form-field>
+      <textarea
+        matInput
+        placeholder="Add a comment!"
+        name="text"
+        [(ngModel)]="newCommentText"
+        required
+      ></textarea>
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="accent"
+      type="submit"
+      (click)="addComment()"
+    >
+      Add Comment
+    </button>
+  </form>
+</div>

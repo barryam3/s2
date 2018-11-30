@@ -1,0 +1,34 @@
+<div *ngIf="song">
+  <div *ngFor="let link of song.links">
+    <a [href]="link.url">{{link.description}}</a>
+  </div>
+  <form #newLinkForm="ngForm">
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="URL"
+        name="url"
+        [(ngModel)]="newLinkURL"
+        pattern="[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)"
+        required
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="description"
+        name="description"
+        [(ngModel)]="newLinkDescription"
+        required
+      >
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="accent"
+      type="submit"
+      (click)="addLink()"
+    >
+      Add Link
+    </button>
+  </form>
+</div>
