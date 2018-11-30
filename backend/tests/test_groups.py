@@ -130,3 +130,5 @@ def test_set_deadlines(client):
     # should not be able to get deadlines if not admin
     rv = client.get('/groups/1')
     assert rv.status_code == 403
+
+# TODO: reset site test

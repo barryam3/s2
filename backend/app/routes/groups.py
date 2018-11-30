@@ -7,6 +7,7 @@ from app.extensions import db
 from app.utils import res, get_arg, admin_required
 from app.models.group import Group
 from app.models.song import Song
+from app.models.rating import Rating
 
 
 groups = Blueprint('groups', __name__)
@@ -67,6 +68,8 @@ def delete_suggestions():
 
     for song in Song.query.all():
         song.user_id = None
+    for rating in Rating.query.all():
+        db.session.delete(rating)
     db.session.commit()
 
     return res(True)
