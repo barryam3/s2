@@ -17,7 +17,9 @@
     </div>
     <div class="controls">
       <button *ngIf="!editing" mat-button color="accent" (click)="edit()">Edit</button>
+      <!-- Deletion of a song is just too dangerous.
       <button *ngIf="!editing && !song.suggestor" mat-button color="warn" (click)="delete()">Delete</button>
+      --->
       <button *ngIf="editing" mat-flat-button color="accent" (click)="save()">Save</button>
       <button *ngIf="editing" mat-flat-button color="primary" (click)="cancel()">Cancel</button>
       <button *ngIf="!editing && song.suggestor == currentUser.username" mat-button color="warn" (click)="setSuggested(false)">Unsuggest</button>
@@ -31,6 +33,7 @@
       <star-rating
         [rating]="song.myRating || 0"
         (starClickChange)="onRatingChange($event)"
+        size="large"
       ></star-rating>
     </div>
   </div>

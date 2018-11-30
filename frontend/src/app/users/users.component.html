@@ -3,26 +3,26 @@
     <mat-card-title>{{user.username}}</mat-card-title>
     <mat-card-actions class="font-condensed">
     
-      <button mat-button (click)="resetPassword(user.id)" mat-button color="accent">
-        Reset Password
+      <button mat-button (click)="resetPassword(user.id)" mat-button color="accent" class="mat-small">
+        Reset PW
       </button>
 
-      <button *ngIf="user.admin" (click)="setAdmin(user.id, false)" mat-button color="accent">
-        Remove Admin
+      <button *ngIf="user.admin" (click)="setAdmin(user.id, false)" mat-button color="accent" class="mat-small">
+        Admin
       </button>
-      <button *ngIf="!user.admin && user.active" (click)="setAdmin(user.id, true)" mat-button color="accent">
-        Make Admin
-      </button>
-
-      <button *ngIf="!user.admin && user.active" (click)="setActive(user.id, false)" mat-button color="accent">
-        Set Inactive
+      <button *ngIf="!user.admin && user.active" (click)="setAdmin(user.id, true)" mat-button color="accent" class="mat-small">
+        Active
       </button>
 
-      <button *ngIf="!user.active" (click)="setActive(user.id, true)" mat-button color="primary">
-        Set Active
+      <button *ngIf="!user.admin && user.active" (click)="setActive(user.id, false)" mat-button color="accent" class="mat-small">
+        Inactive
       </button>
 
-      <button (click)="delete(user.id)" mat-button color="warn">
+      <button *ngIf="!user.active" (click)="setActive(user.id, true)" mat-button color="accent" class="mat-small">
+        Active
+      </button>
+
+      <button (click)="delete(user.id)" mat-button color="warn" class="mat-small">
         Delete
       </button>
 

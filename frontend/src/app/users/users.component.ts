@@ -32,7 +32,9 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   resetPassword(userID: number) {
-    this.userService.resetPassword(userID).subscribe();
+    if (confirm("Are you sure you want to reset this user's password?")) {
+      this.userService.resetPassword(userID).subscribe();
+    }
   }
 
   setAdmin(userID: number, admin: boolean) {
@@ -46,9 +48,11 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   delete(userID: number) {
-    this.userService.deleteUser(userID).subscribe(() => {
-      filterInPlace(this.users, user => user.id !== userID);
-    });
+    if (confirm('Are you sure you want to delete this user?')) {
+      this.userService.deleteUser(userID).subscribe(() => {
+        filterInPlace(this.users, user => user.id !== userID);
+      });
+    }
   }
 
 }

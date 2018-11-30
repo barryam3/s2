@@ -153,8 +153,6 @@ def edit_song(song_id):
         song.user_id = current_user.id
     if suggested == False:
         song.user_id = None
-        for rating in Rating.query.filter_by(song_id=song.id).all():
-            db.session.delete(rating)
 
     db.session.commit()
 

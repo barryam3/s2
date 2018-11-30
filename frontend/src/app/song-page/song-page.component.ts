@@ -70,8 +70,10 @@ export class SongPageComponent implements OnInit, OnDestroy {
   }
 
   delete() {
-    this.songService.deleteSong(this.song.id)
-      .subscribe(() => this.router.navigateByUrl('/songs?suggested=1'));
+    if (confirm('Are you sure you want to delete this song?')) {
+      this.songService.deleteSong(this.song.id)
+        .subscribe(() => this.router.navigateByUrl('/songs?suggested=1'));
+    }
   }
 
   setSuggested(suggested: boolean) {
