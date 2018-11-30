@@ -12,6 +12,7 @@ interface SongOverviewBase {
   artist: string;
   lyrics: string;
   arranged: boolean;
+  suggestor: string | null;
   myRating: number | null;
 }
 
@@ -81,9 +82,9 @@ export class SongService {
     return this.http.patch<boolean>(url, body, { headers });
   }
 
-  rateSong(songID: number, newRating: number): Observable<boolean> {
+  rateSong(songID: number, rating: number): Observable<boolean> {
     const url = `api/songs/${songID}/ratings/mine`;
-    const body = newRating;
+    const body = { rating };
     return this.http.put<boolean>(url, body, { headers });
   }
 

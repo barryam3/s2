@@ -1,16 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { SongService, Song } from '../song.service';
+import { UserService, User } from '../user.service';
 
 @Component({
   selector: 'app-song-page',
   templateUrl: './song-page.component.html',
   styleUrls: ['./song-page.component.scss'],
 })
-export class SongPageComponent implements OnInit {
+export class SongPageComponent implements OnInit, OnDestroy {
   song: Song; // TODO: full song
+  currentUser: User;
+  userStream: Subscription;
 
   editing = false;
   title = '';
@@ -19,8 +22,9 @@ export class SongPageComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private songService: SongService,
-    private location: Location,
+    private userService: UserService,
   ) { }
 
   ngOnInit() {
@@ -31,6 +35,13 @@ export class SongPageComponent implements OnInit {
       this.artist = song.artist;
       this.lyrics = song.lyrics;
     });
+    this.userStream = this.userService.currentUser.subscribe(newCurrentUser => {
+      this.currentUser = newCurrentUser;
+    });
+  }
+
+  ngOnDestroy() {
+    this.userStream.unsubscribe();
   }
 
   edit() {
@@ -56,7 +67,12 @@ export class SongPageComponent implements OnInit {
 
   delete() {
     this.songService.deleteSong(this.song.id)
-      .subscribe(() => this.location.back());
+      .subscribe(() => this.router.navigateByUrl('/songs?suggested=1'));
+  }
+
+  suggest() {
+    this.songService.updateSong(this.song.id, { suggested: true })
+      .subscribe(() => this.song.suggestor = this.currentUser.username);
   }
 
   onRatingChange(event: { rating: number }) {

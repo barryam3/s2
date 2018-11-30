@@ -31,7 +31,7 @@ export class GroupService {
   constructor(private http: HttpClient) { }
 
   editDeadlines(deadlines: Deadlines): Observable<boolean> {
-    const url = `api/groups/1/deadlines`;
+    const url = 'api/groups/1/deadlines';
     const body = {
       suggestDeadline: dateToInt(deadlines.suggestDeadline),
       voteDeadline: dateToInt(deadlines.voteDeadline),
@@ -40,8 +40,13 @@ export class GroupService {
   }
 
   getDeadlines(): Observable<Deadlines> {
-    const url = `api/groups/1`;
+    const url = 'api/groups/1';
     return this.http.get<DeadlinesJSON>(url, { headers })
       .pipe(map(jsonToDeadlines));
+  }
+
+  unsuggestAll(): Observable<boolean> {
+    const url = 'api/groups/1/suggestions';
+    return this.http.delete<boolean>(url, { headers });
   }
 }

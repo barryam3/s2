@@ -8,7 +8,7 @@
     </a>
     <button mat-button *ngIf="showHome()" (click)="back()">
       <mat-icon>arrow_back</mat-icon>
-      <span id="to-songs">Go Back</span>
+      <span id="to-songs">To Songs</span>
     </button>
     <img
       src="assets/images/s2.svg"
@@ -26,7 +26,7 @@
     <a mat-menu-item routerLink="/account">Account</a>
     <a mat-menu-item routerLink="/add-user" *ngIf="user.admin">Add User</a>
     <a mat-menu-item routerLink="/users" *ngIf="user.admin">Manage Users</a>
-    <a mat-menu-item routerLink="/deadlines" *ngIf="user.admin">Edit Deadlines</a>
+    <a mat-menu-item routerLink="/group" *ngIf="user.admin">Manage Group</a>
     <a mat-menu-item (click)="logout()">Logout</a>
   </mat-menu>
 </div>

@@ -27,6 +27,8 @@ import { GroupService } from './group.service';
 
 import { HttpErrorInterceptor } from './http-error-interceptor';
 import { AddUserComponent } from './add-user/add-user.component';
+import { ResetSiteComponent } from './reset-site/reset-site.component';
+import { GroupComponent } from './group/group.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +44,8 @@ import { AddUserComponent } from './add-user/add-user.component';
     FiltersComponent,
     SongPageComponent,
     AddUserComponent,
+    ResetSiteComponent,
+    GroupComponent,
   ],
   imports: [
     BrowserModule,

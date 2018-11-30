@@ -18,13 +18,18 @@
     <input matInput [(ngModel)]="artist" placeholder="Artist" name="artist" required>
   </mat-form-field>
 
-  <h3 *ngIf="song.suggestor">Suggested by <span class="bold">{{song.suggestor}}</span></h3>
+  <div *ngIf="song.suggestor">
+    <h3>Suggested by <span class="bold">{{song.suggestor}}</span></h3>
+    <div id="rating">
+      <star-rating
+        [rating]="song.myRating || 0"
+        (starClickChange)="onRatingChange($event)"
+      ></star-rating>
+    </div>
+  </div>
 
-  <div id="rating">
-    <star-rating
-      [rating]="song.myRating || 0"
-      (starClickChange)="onRatingChange($event)"
-    ></star-rating>
+  <div *ngIf="!song.suggestor">
+    <button mat-flat-button color="accent" (click)="suggest()">Suggest</button>
   </div>
 
   <h3>Lyrics:</h3>

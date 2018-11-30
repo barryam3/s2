@@ -2,20 +2,21 @@
 
 $navbar-height: 60px;
 
-#navbar {
-    height: $navbar-height;
-    width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 99;
+#app-root {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: $margin-size;
 }
 
-#main-content:nth-child(2) {
-    margin-top: $navbar-height + 15px;
+#navbar {
+    height: $navbar-height;
 }
 
 #main-content {
-    margin-left: $margin-size;
-    margin-right: $margin-size;
+    padding-top: $margin-size;
+    padding-left: $margin-size;
+    padding-right: $margin-size;
+    flex-grow: 1;
+    overflow: auto;
 }

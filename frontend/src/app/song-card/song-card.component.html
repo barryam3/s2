@@ -5,7 +5,7 @@
     <div id="suggestor">{{song.suggestor}}</div>
     <star-rating [rating]="song.myRating || 0" [readOnly]="true"></star-rating>
   </mat-card-content>
-  <mat-card-actions *ngIf="!song.suggestor">
-    <button mat-flat-button color="primary">Suggest</button>
-  </mat-card-actions>
+  <mat-card-content *ngIf="!song.suggestor">
+    <div>Not suggested.</div>
+  </mat-card-content>
 </mat-card>
