@@ -34,6 +34,6 @@ class Song(db.Model):
             "myRating": rating
         }
         if full:
-            song['comments'] = self.comments
-            song['links'] = self.links
+            song['comments'] = [c.to_dict() for c in self.comments]
+            song['links'] = [l.to_dict() for l in self.links]
         return song

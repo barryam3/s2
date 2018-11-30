@@ -13,6 +13,8 @@ from app.models.user import User
 from app.models.song import Song
 from app.models.rating import Rating
 from app.models.group import Group
+from app.models.comment import Comment
+from app.models.link import Link
 
 
 songs = Blueprint('songs', __name__)
@@ -230,3 +232,70 @@ def rate_song(song_id):
     db.session.commit()
 
     return res(True)
+
+
+@songs.route('/<song_id>/comments', methods=['POST'])
+@login_required
+def add_comment(song_id):
+    '''Add a comment.
+
+    @param {str} text
+    @return {Comment}
+    '''
+    try:
+        song_id = int(song_id)
+    except ValueError:
+        return res('Song not found.', 404)
+
+    try:
+        text = get_arg(request.get_json(), 'text', str)
+    except TypeError:
+        return res(status=400)
+
+    try:
+        song = Song.query.filter_by(id=song_id).one()
+    except NoResultFound:
+        return res('Song not found.', 404)
+
+    comment = Comment(text=text, song_id=song.id, user_id=current_user.id)
+    db.session.add(comment)
+    db.session.commit()
+
+    return res(comment.to_dict())
+
+
+@songs.route('/<song_id>/links', methods=['POST'])
+@login_required
+def add_link(song_id):
+    '''Add link.
+
+    @param {str} url
+    @param {str} description
+    @return {Link}
+    '''
+
+    try:
+        song_id = int(song_id)
+    except ValueError:
+        return res('Song not found.', 404)
+
+    req_body = request.get_json()
+    try:
+        url = get_arg(req_body, 'url', str)
+        description = get_arg(req_body, 'description', str)
+    except TypeError:
+        return res(status=400)
+
+    if not url or not description:
+        return res('URL and description are required.', 400)
+
+    try:
+        song = Song.query.filter_by(id=song_id).one()
+    except NoResultFound:
+        return res('Song not found.', 404)
+    
+    link = Link(url=url, description=description, song_id=song.id)
+    db.session.add(link)
+    db.session.commit()
+
+    return res(link.to_dict())

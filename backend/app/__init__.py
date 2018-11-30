@@ -8,6 +8,8 @@ from app.routes.auth import auth
 from app.routes.users import users
 from app.routes.songs import songs
 from app.routes.groups import groups
+from app.routes.comments import comments
+from app.routes.links import links
 
 # models must be imported for create_all to work
 from models.comment import Comment
@@ -16,6 +18,8 @@ from models.rating import Rating
 from models.song import Song
 from models.group import Group
 from models.user import User
+from models.comment import Comment
+from models.link import Link
 
 
 def create_app(config):
@@ -70,6 +74,8 @@ def register_blueprints(app):
     app.register_blueprint(users, url_prefix='/users')
     app.register_blueprint(songs, url_prefix='/songs')
     app.register_blueprint(groups, url_prefix='/groups')
+    app.register_blueprint(comments, url_prefix='/comments')
+    app.register_blueprint(links, url_prefix='/links')
 
 
 def initialize_database(app):
