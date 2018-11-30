@@ -60,7 +60,7 @@ def test_set_deadlines(client):
     assert rv.status_code == 200
 
     # should be able to vote if the deadline has not passed
-    rv = client.put('/songs/1/ratings/mine', json=6)
+    rv = client.put('/songs/1/ratings/mine', json={ 'rating': 6 })
     assert rv.status_code == 200
 
     # should be able to unsuggest if the deadline has not passed
@@ -81,7 +81,7 @@ def test_set_deadlines(client):
     })
 
     # should not be able to vote if the deadline has passed
-    rv = client.put('/songs/1/ratings/mine', json=5)
+    rv = client.put('/songs/1/ratings/mine', json={ 'rating': 5 })
     assert rv.status_code == 403
 
     # should not be able to suggest if the deadline has passed

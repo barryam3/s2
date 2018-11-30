@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
+import { Subscription } from 'rxjs';
 
 import { UserService, User } from '../user.service';
 
@@ -8,8 +9,9 @@ import { UserService, User } from '../user.service';
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.scss'],
 })
-export class AccountComponent implements OnInit {
+export class AccountComponent implements OnInit, OnDestroy {
   currentUser: User;
+  userStream: Subscription;
   oldPassword: '';
   newPassword: '';
   newPasswordConf: '';
@@ -23,9 +25,14 @@ export class AccountComponent implements OnInit {
     this.user.currentUser.subscribe(user => this.currentUser = user);
   }
 
+  ngOnDestroy() {
+    this.userStream.unsubscribe();
+  }
+
   changePassword() {
     if (this.newPassword !== this.newPasswordConf) {
-      throw new Error('Passwords do not match.');
+      this.snackBar.open('Passwords do not match.', 'dismiss');
+      return;
     }
 
     this.user.updateCurrentUserPassword(this.oldPassword, this.newPassword)

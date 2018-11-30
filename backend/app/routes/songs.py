@@ -8,7 +8,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from datetime import datetime
 
 from app.extensions import db
-from app.utils import res, login_required, active_required, query_to_int, query_to_bool
+from app.utils import res, get_arg, login_required, active_required, query_to_bool
 from app.models.user import User
 from app.models.song import Song
 from app.models.rating import Rating
@@ -28,14 +28,13 @@ def get_song(song_id):
     @throws {404} - if the song is not found
     '''
 
-    song_id = query_to_int(song_id)
-    
     try:
+        song_id = int(song_id)
         song = Song.query.filter_by(id=song_id).one()
-    except NoResultFound:
+    except (TypeError, NoResultFound) as e:
         return res('Song not found.', 404)
 
-    rating = Rating.query.filter_by(song_id=song_id, user_id=current_user.id).one_or_none()
+    rating = Rating.query.filter_by(song_id=song_id, user_id=current_user.id).first()
 
     return res(song.to_dict(rating.value if rating else None, True))
 
@@ -50,7 +49,10 @@ def list_songs():
     @throws {401} - if you are not logged in
     '''
 
-    suggested = query_to_bool(request.args.get('suggested'))
+    try:
+        suggested = query_to_bool(get_arg(request.args, 'suggested', str, None))
+    except (TypeError, ValueError) as e:
+        return res(status=400)
 
     my_ratings = db.session.query(Rating).with_entities(Rating.value, Rating.song_id).filter(Rating.user_id==current_user.id).subquery()
     query = db.session.query(Song, my_ratings).options(joinedload('user')).outerjoin(my_ratings)
@@ -76,8 +78,11 @@ def add_song():
     '''
 
     req_body = request.get_json()
-    title = req_body.get('title', '')
-    artist = req_body.get('artist', '')
+    try:
+        title = get_arg(req_body, 'title', str)
+        artist = get_arg(req_body, 'artist', str)
+    except TypeError:
+        return res(status=400)
 
     if not title or not artist:
         return res('Song must have a title and artist.', 400)
@@ -109,13 +114,20 @@ def edit_song(song_id):
     @throws {404} - if the song is not found
     '''
 
-    song_id = query_to_int(song_id)
+    try:
+        song_id = int(song_id)
+    except ValueError:
+        return res('Song not found.', 404)
+    
     req_body = request.get_json()
-    title = req_body.get('title')
-    artist = req_body.get('artist')
-    lyrics = req_body.get('lyrics')
-    arranged = req_body.get('arranged')
-    suggested = req_body.get('suggested')
+    try:
+        title = get_arg(req_body, 'title', str, None)
+        artist = get_arg(req_body, 'artist', str, None)
+        lyrics = get_arg(req_body, 'lyrics', str, None)
+        arranged = get_arg(req_body, 'arranged', bool, None)
+        suggested = get_arg(req_body, 'suggested', bool, None)
+    except TypeError:
+        return res(status=400)
 
     try:
         song = Song.query.filter_by(id=song_id).one()
@@ -157,7 +169,10 @@ def delete_song(song_id):
     @throws {404} - if the song is not found
     '''
 
-    song_id = query_to_int(song_id)
+    try:
+        song_id = int(song_id)
+    except ValueError:
+        return res('Song not found.', 404)
 
     try:
         song = Song.query.filter_by(id=song_id).one()
@@ -174,7 +189,7 @@ def delete_song(song_id):
 def rate_song(song_id):
     '''Rate a song.
 
-    @param {int} - numerical rating
+    @param {int} rating - numerical rating
     @return {bool} - success
     @throws {400} - if rating is not in range [1,7]
     @throws {401} - if you are not logged in
@@ -183,10 +198,17 @@ def rate_song(song_id):
     @thorws {404} - if song is not found
     '''
 
-    song_id = query_to_int(song_id)
+    try:
+        song_id = int(song_id)
+    except ValueError:
+        return res('Song not found.', 404)
 
-    value = request.get_json()
-    if not (value % 1 == 0 and (1 <= value <= 7)):
+    try:
+        value = get_arg(request.get_json(), 'rating', int)
+    except TypeError:
+        return res(status=400)
+
+    if not (1 <= value <= 7):
         return('Rating must be an integer in [1,7].', 400)
 
     group = Group.query.one()

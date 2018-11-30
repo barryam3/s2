@@ -4,7 +4,7 @@ from flask import Blueprint, request
 from datetime import datetime
 
 from app.extensions import db
-from app.utils import res, admin_required
+from app.utils import res, get_arg, admin_required
 from app.models.group import Group
 from app.models.song import Song
 
@@ -26,22 +26,17 @@ def update_deadlines():
     '''
 
     req_body = request.get_json()
-    sdeadline = req_body.get('suggestDeadline')
-    vdeadline = req_body.get('voteDeadline')
+    try:
+        sdeadline = get_arg(req_body, 'suggestDeadline', int, None)
+        vdeadline = get_arg(req_body, 'voteDeadline', int, None)
+    except TypeError:
+        return res(status=400)
+
     group = Group.query.one()
-
     if sdeadline is not None:
-        try:
-            group.sdeadline = datetime.utcfromtimestamp(int(sdeadline))
-        except (ValueError, TypeError) as e:
-            return res('Invalid deadline.', 400)
-
+        group.sdeadline = datetime.utcfromtimestamp(sdeadline)
     if vdeadline is not None:
-        try:
-            group.vdeadline = datetime.utcfromtimestamp(int(vdeadline))
-        except (ValueError, AttributeError) as e:
-            return res('Invalid deadline.', 400)
-
+        group.vdeadline = datetime.utcfromtimestamp(vdeadline)
     db.session.commit()
 
     return res(True)
@@ -62,7 +57,7 @@ def get_group():
 
 @groups.route('/1/suggestions', methods=['DELETE'])
 @admin_required
-def delete_suggestions(group_id):
+def delete_suggestions():
     '''Unsuggest all songs.
 
     @return {bool} success

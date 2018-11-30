@@ -1,6 +1,6 @@
-mat-radio-group {
+.mat-form-field {
   display: flex;
-  flex-flow: column;
-  align-items: flex-start;
-  margin-bottom: 25px;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }

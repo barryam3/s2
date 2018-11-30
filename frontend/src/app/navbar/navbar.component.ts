@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { Location } from '@angular/common';
 
 import { User, UserService } from '../user.service';
 
@@ -14,7 +13,6 @@ export class NavbarComponent {
 
   constructor(
     private router: Router,
-    private location: Location,
     private userService: UserService,
   ) { }
 

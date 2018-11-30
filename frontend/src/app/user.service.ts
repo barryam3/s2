@@ -7,7 +7,7 @@ import { tap, distinctUntilChanged } from 'rxjs/operators';
 import { headers } from '../utils';
 
 export interface User {
-  id: string;
+  id: number;
   username: string;
   active: boolean;
   admin: boolean;
@@ -61,7 +61,10 @@ export class UserService {
     return this.http.delete<boolean>(url, { headers });
   }
 
-  updateCurrentUserPassword(oldPassword: string, newPassword: string): Observable<boolean> {
+  updateCurrentUserPassword(
+    oldPassword: string,
+    newPassword: string,
+  ): Observable<boolean> {
     const url = 'api/users/me/password';
     const body = { oldPassword, newPassword };
     return this.http.put<boolean>(url, body, { headers });
@@ -71,5 +74,18 @@ export class UserService {
     const url = 'api/users';
     const body = { username };
     return this.http.post<User>(url, body, { headers });
+  }
+
+  deleteUser(userID: number): Observable<boolean> {
+    const url = `api/users/${userID}`;
+    return this.http.delete<boolean>(url, { headers });
+  }
+
+  editUserPermissions(
+    userID: number,
+    userPermissions: { active?: boolean, admin?: boolean },
+  ): Observable<boolean> {
+    const url = `api/users/${userID}`;
+    return this.http.patch<boolean>(url, userPermissions, { headers });
   }
 }

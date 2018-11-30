@@ -1,6 +1,6 @@
-<mat-card *ngIf="song" (click)="navigate()">
-  <mat-card-title id="song-title">{{song.title}}</mat-card-title>
-  <mat-card-subtitle id="song-artist">{{song.artist}}</mat-card-subtitle>
+<mat-card *ngIf="song" (click)="navigate()" class="darken-on-hover">
+  <mat-card-title class="font-condensed">{{song.title}}</mat-card-title>
+  <mat-card-subtitle>{{song.artist}}</mat-card-subtitle>
   <mat-card-content class="sug-rat">
     <div *ngIf="song.suggestor">Suggested by {{song.suggestor}}</div>
     <div *ngIf="!song.suggestor">Not suggested.</div>

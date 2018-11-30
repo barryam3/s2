@@ -20,9 +20,7 @@ export class AppComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.router.events
-      .pipe(filter(e => e instanceof NavigationEnd))
-      .subscribe(nav => this.getCurrentUser());
+    this.userService.getCurrentUser().subscribe();
     this.userService.currentUser.subscribe(user => this.user = user);
   }
 

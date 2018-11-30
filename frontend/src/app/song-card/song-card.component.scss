@@ -1,9 +1,12 @@
-#song-title {
-  font-family: 'BenchNine', sans-serif !important;
-}
+@import "../../constants.scss";
 
 mat-card {
   height: 100%;
+}
+
+mat-card:hover {
+  box-shadow: inset 0 0 100px 100px rgba(0, 0, 0, 0.05) !important;
+  cursor: pointer;
 }
 
 mat-card-content {

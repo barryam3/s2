@@ -1,4 +1,6 @@
 $navbar-height: 60px;
+$side-margins: 16px;
+
 #navbar {
     height: $navbar-height;
     width: 100%;
@@ -10,4 +12,9 @@ $navbar-height: 60px;
 
 #main-content:nth-child(2) {
     margin-top: $navbar-height + 15px;
+}
+
+#main-content {
+    margin-left: 16px;
+    margin-right: 16px;
 }

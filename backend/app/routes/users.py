@@ -5,7 +5,7 @@ from flask_login import current_user
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.extensions import db
-from app.utils import res, login_required, admin_required
+from app.utils import res, get_arg, login_required, admin_required
 from app.models.user import User
 
 
@@ -52,8 +52,11 @@ def update_password():
     '''
 
     req_body = request.get_json()
-    old_pass = req_body.get('oldPassword', '')
-    new_pass = req_body.get('newPassword', '')
+    try:
+        old_pass = get_arg(req_body, 'oldPassword', str)
+        new_pass = get_arg(req_body, 'newPassword', str)
+    except TypeError:
+        return res(status=400)
 
     if not current_user.check_password(old_pass):
         return res('Incorrect current password.', 401)
@@ -77,7 +80,10 @@ def delete_user(user_id):
     @throws {404} - if the user is not found
     '''
 
-    user_id = int(user_id)
+    try:
+        user_id = int(user_id)
+    except ValueError:
+        return res('User not found.', 404)
 
     if user_id == current_user.id:
         return res('You cannot delete yourself.', 403)
@@ -86,7 +92,7 @@ def delete_user(user_id):
         user = User.query.filter_by(id=user_id).one()
     except NoResultFound:
         return res('User not found.', 404)
-    
+
     db.session.delete(user)
     db.session.commit()
     return res(True)
@@ -103,22 +109,22 @@ def reset_password(user_id):
     @throws {404} - if the user is not found
     '''
 
-    user_id = int(user_id)
-
     try:
+        user_id = int(user_id)
         user = User.query.filter_by(id=user_id).one()
-    except NoResultFound:
+    except (ValueError, NoResultFound) as e:
         return res('User not found.', 404)
-    
+
     user.set_password('xprod05')
     return res(True)
 
 
-@users.route('/<user_id>/admin', methods=['PUT'])
+@users.route('/<user_id>', methods=['PATCH'])
 @admin_required
-def set_admin(user_id):
-    '''Give/remove admin powers.
+def set_active(user_id):
+    '''Give/remove active member / admin powers.
 
+    @param {bool} active
     @param {bool} admin
     @return {bool} - success
     @throws {401} - if you are not logged in
@@ -127,11 +133,17 @@ def set_admin(user_id):
     @throws {404} - if the user is not found
     '''
 
-    user_id = int(user_id)
+    try:
+        user_id = int(user_id)
+    except ValueError:
+        return res('User not found.', 404)
 
-    admin = request.get_json()
-    if type(admin) is not bool:
-        return res('Invalid request body.')
+    req_body = request.get_json()
+    try:
+        active = get_arg(req_body, 'active', bool, None)
+        admin = get_arg(req_body, 'admin', bool, None)
+    except TypeError:
+        return res(status=400)
 
     if user_id == current_user.id:
         return res('You cannot change your own priviliges.', 403)
@@ -141,39 +153,11 @@ def set_admin(user_id):
     except NoResultFound:
         return res('User not found.', 404)
     
-    user.admin = admin
-    db.session.commit()
-    return res(True)
+    if active is not None:
+        user.active = active
+    if admin is not None:
+        user.admin = admin
 
-
-@users.route('/<user_id>/active', methods=['PUT'])
-@admin_required
-def set_active(user_id):
-    '''Give/remove active member powers.
-
-    @param {bool} active
-    @return {bool} - success
-    @throws {401} - if you are not logged in
-    @throws {403} - if you are not a pitch
-    @throws {403} - if you are trying to change your own priviliges
-    @throws {404} - if the user is not found
-    '''
-
-    user_id = int(user_id)
-
-    active = request.get_json()
-    if type(active) is not bool:
-        return res('Invalid request body.')
-
-    if user_id == current_user.id:
-        return res('You cannot change your own priviliges.', 403)
-
-    try:
-        user = User.query.filter_by(id=user_id).one()
-    except NoResultFound:
-        return res('User not found.', 404)
-    
-    user.active = active
     db.session.commit()
     return res(True)
 
@@ -191,13 +175,16 @@ def add_user():
     '''
 
     req_body = request.get_json()
-    kerb = req_body.get('username')
+    try:
+        username = get_arg(req_body, 'username', str)
+    except TypeError:
+        return res(status=400)
 
-    if not (isinstance(kerb, basestring) and (3 <= len(kerb) <= 8) and kerb.isalnum()):
+    if not ((3 <= len(username) <= 8) and username.isalnum()):
         return res('You must supply a valid kerberos.', 400)
 
     # create the new user
-    user = User(kerb, 'xprod05')
+    user = User(username, 'xprod05')
     db.session.add(user)
     db.session.commit()
 

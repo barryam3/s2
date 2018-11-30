@@ -5,7 +5,7 @@ from flask_login import login_user, logout_user, UserMixin
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.extensions import lm, bcrypt
-from app.utils import res, login_required
+from app.utils import res, get_arg, login_required
 from app.models.user import User
 
 auth = Blueprint('auth', __name__)
@@ -30,8 +30,11 @@ def login():
     '''
 
     req_body = request.get_json()
-    username = req_body.get('username', '')
-    password = req_body.get('password', '')
+    try:
+        username = get_arg(req_body, 'username', str)
+        password = get_arg(req_body, 'password', str)
+    except TypeError:
+        return res(status=400)
 
     try:
         user = User.query.filter_by(username=username).one()

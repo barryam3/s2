@@ -1,10 +1,31 @@
-<mat-list>
-  <mat-list-item *ngFor="let user of users">
-    <span>
-      {{user.username}}
-    </span>
-    <button mat-button (click)="resetPassword(user.id)">
-      Reset Password
-    </button>
-  </mat-list-item>
-</mat-list>
+<div class="card-grid">
+  <mat-card *ngFor="let user of users">
+    <mat-card-title>{{user.username}}</mat-card-title>
+    <mat-card-actions class="font-condensed">
+    
+      <button mat-button (click)="resetPassword(user.id)" mat-button color="accent">
+        Reset Password
+      </button>
+
+      <button *ngIf="user.admin" (click)="setAdmin(user.id, false)" mat-button color="accent">
+        Remove Admin
+      </button>
+      <button *ngIf="!user.admin && user.active" (click)="setAdmin(user.id, true)" mat-button color="accent">
+        Make Admin
+      </button>
+
+      <button *ngIf="!user.admin && user.active" (click)="setActive(user.id, false)" mat-button color="accent">
+        Set Inactive
+      </button>
+
+      <button *ngIf="!user.active" (click)="setActive(user.id, true)" mat-button color="primary">
+        Set Active
+      </button>
+
+      <button (click)="delete(user.id)" mat-button color="warn">
+        Delete
+      </button>
+
+    </mat-card-actions>
+  </mat-card>
+</div>

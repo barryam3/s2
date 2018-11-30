@@ -1,12 +1,12 @@
-<div class="centered-page">
+<div class="stack center">
   <h1>Filter Songs</h1>
 
-  <form #filterForm="ngForm">
-    <div>
+  <form #filterForm="ngForm" class="stack center">
+    <div class="mat-form-field">
       <h2>Suggested</h2>
       <mat-radio-group [(ngModel)]="filter.suggested" name="suggested">
-        <mat-radio-button [value]="true">Suggested</mat-radio-button>
-        <mat-radio-button [value]="false">Not Suggested</mat-radio-button>
+        <mat-radio-button [value]="true">Yes</mat-radio-button>
+        <mat-radio-button [value]="false">No</mat-radio-button>
         <mat-radio-button [value]="null">Any</mat-radio-button>
       </mat-radio-group>
     </div>

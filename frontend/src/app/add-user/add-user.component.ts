@@ -16,7 +16,10 @@ export class AddUserComponent {
   ) { }
   submit() {
     this.userService.addUser(this.username)
-      .subscribe(() => this.snackBar.open('User added.', 'dismiss'));
+      .subscribe(() => {
+        this.snackBar.open('User added.', 'dismiss');
+        this.username = '';
+      });
   }
 
 }

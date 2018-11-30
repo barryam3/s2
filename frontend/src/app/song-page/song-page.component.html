@@ -1,5 +1,5 @@
 
-<div class="left-page" *ngIf="song">
+<div class="stack" *ngIf="song">
 
   <div class="top-row">
     <div class="controls">
@@ -7,7 +7,7 @@
       <button *ngIf="!editing" mat-stroked-button color="warn" (click)="delete()">Delete</button>
       <button *ngIf="editing" mat-stroked-button color="primary" (click)="save()">Save</button>
     </div>
-    <h1 class="bold" *ngIf="!editing">{{song.title}}</h1>
+    <h1 id="title" class="bold" *ngIf="!editing">{{song.title}}</h1>
     <mat-form-field *ngIf="editing">
       <input matInput [(ngModel)]="title" placeholder="Title" name="title" required>
     </mat-form-field>

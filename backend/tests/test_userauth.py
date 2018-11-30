@@ -31,17 +31,25 @@ def test_auth(client):
     assert rv.status_code == 403
 
     # Should be able to promote a user to admin.
-    rv = client.put('/users/2/admin', json=True)
+    rv = client.patch('/users/2', json={
+        'admin': True
+    })
     assert rv.status_code == 200
 
     # Should be able to set a user as inactive.
-    rv = client.put('/users/4/active', json=False)
+    rv = client.patch('/users/4', json={
+        'active': False
+    })
     assert rv.status_code == 200
 
     # Should not be able to change admin or active of self.
-    rv = client.put('/users/1/admin', json=False)
+    rv = client.patch('/users/1', json={
+        'admin': False
+    })
     assert rv.status_code == 403
-    rv = client.put('/users/1/active', json=False)
+    rv = client.patch('/users/1', json={
+        'active': False
+    })
     assert rv.status_code == 403
 
     # Should be able to sign out.
@@ -60,9 +68,13 @@ def test_auth(client):
     assert rv.status_code == 200
 
     # Non-admin should not be able to complete admin actions.
-    rv = client.put('/users/1/admin', json=False)
+    rv = client.patch('/users/1', json={
+        'admin': False
+    })
     assert rv.status_code == 403
-    rv = client.put('/users/1/active', json=False)
+    rv = client.patch('/users/1', json={
+        'active': False
+    })
     assert rv.status_code == 403
     rv = client.delete('/users/1')
     assert rv.status_code == 403
