@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 
 import { headers, objectToParams } from '../utils';
 
-interface SongOverviewBase {
+interface SongOverview {
   id: number;
   title: string;
   artist: string;
@@ -14,19 +14,9 @@ interface SongOverviewBase {
   arranged: boolean;
   suggestor: string | null;
   myRating: number | null;
-}
-
-interface SongOverviewJSON extends SongOverviewBase {
-  edited: number;
-}
-
-interface SongJSON extends SongOverviewJSON {
-  comments: [];
-  links: [];
-}
-
-export interface SongOverview extends SongOverviewBase {
-  edited: Date;
+  // below are dates but I have no need to convert them
+  lastEdited: number;
+  lastViewed: number;
 }
 
 export interface Song extends SongOverview {
@@ -56,14 +46,14 @@ export class SongService {
 
   getSong(songID: number): Observable<Song> {
     const url = `api/songs/${songID}`;
-    return this.http.get<SongJSON>(url, { headers })
+    return this.http.get<Song>(url, { headers })
       .pipe(map(jsonToSong));
   }
 
   getSongs(filters: GetSongOptions): Observable<SongOverview[]> {
     const url = 'api/songs';
     const params = objectToParams(filters);
-    return this.http.get<SongOverviewJSON[]>(url, { headers, params })
+    return this.http.get<SongOverview[]>(url, { headers, params })
       .pipe(map(jsonArr => jsonArr.map(jsonToSong)));
   }
 
@@ -73,7 +63,7 @@ export class SongService {
       title,
       artist,
     };
-    return this.http.post<SongOverviewJSON>(url, body, { headers })
+    return this.http.post<SongOverview>(url, body, { headers })
       .pipe(map(jsonToSong));
   }
 

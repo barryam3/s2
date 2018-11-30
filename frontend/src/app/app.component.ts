@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-
-import { filter } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material';
 
 import { UserService, User } from './user.service';
 
@@ -17,10 +16,11 @@ export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     private userService: UserService,
+    private snackBar: MatSnackBar,
   ) { }
 
   ngOnInit() {
-    this.userService.getCurrentUser().subscribe();
+    this.getCurrentUser();
     this.userService.currentUser.subscribe(user => this.user = user);
   }
 
@@ -39,7 +39,7 @@ export class AppComponent implements OnInit {
         () => {
           if (window.location.pathname !== '/login') {
             this.router.navigateByUrl('/login');
-            throw new Error('Your session timed out. Please log in again.');
+            this.snackBar.open('Your session timed out. Please log in again.', 'dismiss');
           }
         },
       );

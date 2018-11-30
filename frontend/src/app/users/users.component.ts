@@ -32,7 +32,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   resetPassword(userID: number) {
-    if (confirm("Are you sure you want to reset this user's password?")) {
+    if (confirm('Are you sure you want to reset this user\'s password?')) {
       this.userService.resetPassword(userID).subscribe();
     }
   }

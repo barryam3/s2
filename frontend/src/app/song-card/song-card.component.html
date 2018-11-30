@@ -1,4 +1,13 @@
-<mat-card *ngIf="song" (click)="navigate()" class="darken-on-hover">
+<mat-card
+  *ngIf="song"
+  (click)="navigate()"
+  class="darken-on-hover"
+  matBadge="|"
+  matBadgePosition="above after"
+  matBadgeSize="small"
+  matBadgeColor="accent"
+  [matBadgeHidden]="song.lastViewed > song.lastEdited"
+>
   <mat-card-title class="font-condensed">{{song.title}}</mat-card-title>
   <mat-card-subtitle>{{song.artist}}</mat-card-subtitle>
   <mat-card-content *ngIf="song.suggestor">
