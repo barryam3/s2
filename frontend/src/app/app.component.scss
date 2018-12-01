@@ -2,21 +2,19 @@
 
 $navbar-height: 60px;
 
-#app-root {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    padding-bottom: $margin-size;
-}
-
 #navbar {
     height: $navbar-height;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+}
+
+#main-content:nth-child(2) {
+    margin-top: $navbar-height;
 }
 
 #main-content {
-    padding-top: $margin-size;
-    padding-left: $margin-size;
-    padding-right: $margin-size;
-    flex-grow: 1;
-    overflow: auto;
+    padding: $margin-size;
 }

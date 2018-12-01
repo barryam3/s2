@@ -1,14 +1,20 @@
 @import '~@angular/material/theming';
 @import '../../theme';
+@import '../../constants.scss';
 
 mat-toolbar {
   height: 100%;
   padding: 0;
+  position: relative;
 }
 
+$logo-height: 0.9 * $navbar-height;
+$logo-width: $logo-aspect-ratio * $logo-height;
 #navbar-logo {
-  height: 90%;
-  margin-left: auto;
+  height: 0.9 * $navbar-height;
+  position: absolute;
+  right: calc(50% - #{0.5 * $logo-width});
+  top: 0.05 * $navbar-height;
 }
 
 #user {

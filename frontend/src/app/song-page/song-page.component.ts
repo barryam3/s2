@@ -19,6 +19,7 @@ export class SongPageComponent implements OnInit, OnDestroy {
   title = '';
   artist = '';
   lyrics = '';
+  arranged = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -34,6 +35,7 @@ export class SongPageComponent implements OnInit, OnDestroy {
       this.title = song.title;
       this.artist = song.artist;
       this.lyrics = song.lyrics;
+      this.arranged = song.arranged;
     });
     this.userStream = this.userService.currentUser.subscribe(newCurrentUser => {
       this.currentUser = newCurrentUser;
@@ -49,6 +51,7 @@ export class SongPageComponent implements OnInit, OnDestroy {
     this.artist = this.song.artist;
     this.lyrics = this.song.lyrics;
     this.editing = true;
+    this.arranged = this.song.arranged;
   }
 
   save() {
@@ -57,11 +60,12 @@ export class SongPageComponent implements OnInit, OnDestroy {
       title: this.title,
       artist: this.artist,
       lyrics: this.lyrics,
-      arranged: false, // TODO
+      arranged: this.arranged,
     }).subscribe(() => {
       this.song.title = this.title;
       this.song.artist = this.artist;
       this.song.lyrics = this.lyrics;
+      this.song.arranged = this.arranged;
     });
   }
 

@@ -5,7 +5,7 @@ import { User } from '../user.service';
 @Component({
   selector: 'app-comment',
   templateUrl: './comment.component.html',
-  styleUrls: ['./comment.component.scss']
+  styleUrls: ['./comment.component.scss'],
 })
 export class CommentComponent {
   @Input() comment: Comment;

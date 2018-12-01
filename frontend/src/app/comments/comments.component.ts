@@ -25,6 +25,7 @@ export class CommentsComponent {
     this.commentService.addComment(this.song.id, this.newCommentText)
       .subscribe(comment => {
         this.song.comments.push(comment);
+        this.newCommentText = '';
       });
   }
 
