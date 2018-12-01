@@ -34,6 +34,8 @@ import { HttpErrorInterceptor } from './http-error-interceptor';
 import { LinksComponent } from './links/links.component';
 import { CommentsComponent } from './comments/comments.component';
 import { CommentComponent } from './comment/comment.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -63,6 +65,7 @@ import { CommentComponent } from './comment/comment.component';
     StarRatingModule.forRoot(),
     AppRoutingModule,
     MatModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [
     SongService,

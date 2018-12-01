@@ -19,7 +19,8 @@
             "polyfills": "src/polyfills.ts",
             "assets": [
               "src/assets",
-              "src/favicon.ico"
+              "src/favicon.ico",
+              "src/manifest.json"
             ],
             "styles": [
               "src/styles.scss",
@@ -44,7 +45,8 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "baseHref": "/s2/"
+              "baseHref": "/s2/",
+              "serviceWorker": true
             }
           }
         },
@@ -79,7 +81,8 @@
             ],
             "assets": [
               "src/assets",
-              "src/favicon.ico"
+              "src/favicon.ico",
+              "src/manifest.json"
             ]
           }
         },

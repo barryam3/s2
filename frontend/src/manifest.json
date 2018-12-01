@@ -1,0 +1,15 @@
+{
+  "name": "s2",
+  "short_name": "s2",
+  "theme_color": "#e53935",
+  "background_color": "#fafafa",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "assets/images/s2.svg",
+      "sizes": "any"
+    }
+  ]
+}
