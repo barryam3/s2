@@ -45,10 +45,6 @@ form {
   width: 100%;
 }
 
-mat-radio-group > mat-radio-button {
-  margin: $margin-size;
-}
-
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px - 2 * $margin-size, 1fr));

@@ -60,7 +60,7 @@ export class LinksComponent implements OnInit, OnDestroy {
 
   commitChanges = () => {
     this.linksToCreate.forEach(({ url, description }) => {
-      this.linkService.addLink(this.song.id, realURL, description)
+      this.linkService.addLink(this.song.id, url, description)
         .subscribe(newLink =>  this.song.links.push(newLink));
     });
     this.idsToDelete.forEach(id => {
