@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import * as _ from 'lodash';
 
 import { headers, objectToParams } from '../utils';
 import { Link } from './link.service';
@@ -57,9 +58,10 @@ export class SongService {
     const url = `api/songs/${songID}`;
     return this.http.get<SongJSON>(url, { headers })
       .pipe(map(songJSON => {
+        songJSON.comments.sort((cA, cB) => cA.timestamp - cB.timestamp);
         const song: Song = {
           ...songJSON,
-          comments: songJSON.comments.map(jsonToComment),
+          comments: _.sortBy(songJSON.comments, 'timestamp').map(jsonToComment),
         };
         return song;
       }));

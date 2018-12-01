@@ -1,15 +1,18 @@
 <div *ngIf="song">
-  <div *ngFor="let link of song.links">
-    <a [href]="link.url">{{link.description}}</a>
+  <div class="link" *ngFor="let link of links">
+    <button mat-button *ngIf="showEdit" color="warn" (click)="deleteLink(link.id)">
+      <mat-icon>remove_circle_outline</mat-icon>
+    </button>
+    <a [href]="link.url" target="_blank">{{link.description}}</a>
   </div>
-  <form #newLinkForm="ngForm">
+  <form *ngIf="showEdit" #newLinkForm="ngForm" name="newLinkForm">
     <mat-form-field>
       <input
         matInput
         placeholder="URL"
         name="url"
+        pattern="https?://.*\..*"
         [(ngModel)]="newLinkURL"
-        pattern="[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)"
         required
       >
     </mat-form-field>
@@ -23,10 +26,11 @@
       >
     </mat-form-field>
     <button
-      mat-raised-button
+      mat-button
       color="accent"
       type="submit"
       (click)="addLink()"
+      [disabled]="newLinkForm.invalid"
     >
       Add Link
     </button>

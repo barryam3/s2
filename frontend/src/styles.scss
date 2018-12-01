@@ -45,13 +45,8 @@ form {
   width: 100%;
 }
 
-mat-radio-group {
-  @extend .stack;
-  align-items: flex-start;
-}
-
 mat-radio-group > mat-radio-button {
-  margin: 4px;
+  margin: $margin-size;
 }
 
 .card-grid {
@@ -81,6 +76,11 @@ mat-radio-group > mat-radio-button {
 .tip {
   font-weight: lighter;
   font-size: 125%;
+}
+
+.centered {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* override 3rd-party component styles */

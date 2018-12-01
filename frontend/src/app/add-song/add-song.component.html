@@ -1,7 +1,7 @@
 <div class="stack center">
-  <h1>Suggest Song</h1>
+  <h1>Suggest A New Song</h1>
 
-  <p class="tip">Please search for the song first.</p>
+  <p class="tip">Please <a routerLink="/filter">search for the song</a> before creating a new one.</p>
 
   <form #newSongForm="ngForm">
     <mat-form-field>
@@ -28,7 +28,7 @@
       type="submit"
       (click)="submit()"
     >
-      Suggest Song
+      Add and Suggest Song
     </button>
   </form>
 </div>

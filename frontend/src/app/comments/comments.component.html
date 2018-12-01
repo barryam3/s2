@@ -1,4 +1,4 @@
-<div *ngIf="song">
+<div *ngIf="song" id="comments">
   <div *ngFor="let comment of song.comments" class="comment">
     <app-comment
       [comment]="comment"

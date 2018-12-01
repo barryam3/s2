@@ -16,7 +16,7 @@ export class AddSongComponent {
 
   submit() {
     this.songService.addSong(this.title, this.artist)
-      .subscribe(() => this.router.navigateByUrl('/songs'));
+      .subscribe(({ id }) => this.router.navigateByUrl(`/song/${id}`));
   }
 
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, Subject } from 'rxjs';
 
 import { SongService, Song } from '../song.service';
 import { UserService, User } from '../user.service';
@@ -20,6 +20,9 @@ export class SongPageComponent implements OnInit, OnDestroy {
   artist = '';
   lyrics = '';
   arranged = false;
+
+  commitSubject: Subject<void> = new Subject<void>();
+  cancelSubject: Subject<void> = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
@@ -46,7 +49,7 @@ export class SongPageComponent implements OnInit, OnDestroy {
     this.userStream.unsubscribe();
   }
 
-  edit() {
+  startEdit() {
     this.title = this.song.title;
     this.artist = this.song.artist;
     this.lyrics = this.song.lyrics;
@@ -54,7 +57,7 @@ export class SongPageComponent implements OnInit, OnDestroy {
     this.arranged = this.song.arranged;
   }
 
-  save() {
+  commitEdit() {
     this.editing = false;
     this.songService.updateSong(this.song.id, {
       title: this.title,
@@ -67,13 +70,15 @@ export class SongPageComponent implements OnInit, OnDestroy {
       this.song.lyrics = this.lyrics;
       this.song.arranged = this.arranged;
     });
+    this.commitSubject.next();
   }
 
-  cancel() {
+  cancelEdit() {
     this.editing = false;
+    this.cancelSubject.next();
   }
 
-  delete() {
+  doDelete() {
     if (confirm('Are you sure you want to delete this song?')) {
       this.songService.deleteSong(this.song.id)
         .subscribe(() => this.router.navigateByUrl('/songs?suggested=1'));

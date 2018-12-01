@@ -1,6 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
+
 import { Song } from '../song.service';
-import { LinkService } from '../link.service';
+import { LinkService, Link } from '../link.service';
 import { filterInPlace } from '../../utils';
 
 @Component({
@@ -8,27 +10,71 @@ import { filterInPlace } from '../../utils';
   templateUrl: './links.component.html',
   styleUrls: ['./links.component.scss'],
 })
-export class LinksComponent {
+export class LinksComponent implements OnInit, OnDestroy {
   @Input() song: Song;
+  @Input() showEdit = false;
+  @Input() commitEvents: Observable<void>;
+  @Input() cancelEvents: Observable<void>;
 
   newLinkURL = '';
   newLinkDescription = '';
+  tempLinkID = -1;
+  idsToDelete: Set<number> = new Set();
+  linksToCreate: Link[] = [];
+
+  commitSubscription: Subscription;
+  cancelSubscription: Subscription;
+
+  ngOnInit() {
+    this.commitSubscription = this.commitEvents.subscribe(this.commitChanges);
+    this.cancelSubscription = this.cancelEvents.subscribe(this.cancelChanges);
+  }
+
+  ngOnDestroy() {
+    this.commitSubscription.unsubscribe();
+    this.cancelSubscription.unsubscribe();
+  }
 
   constructor(private linkService: LinkService) { }
 
+  get links() {
+    return [...this.song.links, ...this.linksToCreate].filter(({ id }) => !this.idsToDelete.has(id));
+  }
+
   deleteLink(linkID: number) {
-    this.linkService.deleteLink(linkID).subscribe(() => {
-      filterInPlace(this.song.links, link => link.id !== linkID);
-    });
+    this.idsToDelete.add(linkID);
   }
 
   addLink() {
-    this.linkService.addLink(this.song.id, this.newLinkURL, this.newLinkDescription)
-      .subscribe(link => {
-        this.song.links.push(link);
-        this.newLinkURL = '';
-        this.newLinkDescription = '';
+    this.linksToCreate.push({
+      // links need unique ids
+      // the database does not use negative ids
+      id: this.tempLinkID,
+      url: this.newLinkURL,
+      description: this.newLinkDescription,
+    });
+    this.tempLinkID -= 1;
+    this.newLinkURL = '';
+    this.newLinkDescription = '';
+  }
+
+  commitChanges = () => {
+    this.linksToCreate.forEach(({ url, description }) => {
+      this.linkService.addLink(this.song.id, realURL, description)
+        .subscribe(newLink =>  this.song.links.push(newLink));
+    });
+    this.idsToDelete.forEach(id => {
+      this.linkService.deleteLink(id).subscribe(() => {
+        filterInPlace(this.song.links, link => link.id !== id);
       });
+    });
+    this.linksToCreate = [];
+    this.idsToDelete = new Set();
+  }
+
+  cancelChanges = () => {
+    this.linksToCreate = [];
+    this.idsToDelete = new Set();
   }
 
 }

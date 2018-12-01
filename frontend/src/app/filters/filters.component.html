@@ -1,15 +1,9 @@
 <div class="stack center">
-  <h1>Filter Songs</h1>
 
   <form #filterForm="ngForm" class="stack center">
-    <div class="mat-form-field">
-      <h2>Suggested</h2>
-      <mat-radio-group [(ngModel)]="filter.suggested" name="suggested">
-        <mat-radio-button [value]="true">Yes</mat-radio-button>
-        <mat-radio-button [value]="false">No</mat-radio-button>
-        <mat-radio-button [value]="null">Any</mat-radio-button>
-      </mat-radio-group>
-    </div>
+
+    <h2>Search</h2>
+
     <mat-form-field>
       <input
         matInput
@@ -18,6 +12,7 @@
         [(ngModel)]="filter.title"
       >
     </mat-form-field>
+
     <mat-form-field>
       <input
         matInput
@@ -26,6 +21,27 @@
         [(ngModel)]="filter.artist"
       >
     </mat-form-field>
+
+    <h2>Filter</h2>
+
+    <div class="mat-form-field">
+      <h3>Arranged</h3>
+      <mat-radio-group [(ngModel)]="filter.arranged" name="arranged">
+        <mat-radio-button [value]="true">Yes</mat-radio-button>
+        <mat-radio-button [value]="false">No</mat-radio-button>
+        <mat-radio-button [value]="null">Any</mat-radio-button>
+      </mat-radio-group>
+    </div>
+  
+    <div class="mat-form-field">
+      <h3>Suggested</h3>
+      <mat-radio-group [(ngModel)]="filter.suggested" name="suggested">
+        <mat-radio-button [value]="true">Yes</mat-radio-button>
+        <mat-radio-button [value]="false">No</mat-radio-button>
+        <mat-radio-button [value]="null">Any</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
     <mat-form-field>
       <input
         matInput
@@ -34,21 +50,14 @@
         [(ngModel)]="filter.suggestor"
       >
     </mat-form-field>
-    <div class="mat-form-field">
-      <h2>Arranged</h2>
-      <mat-radio-group [(ngModel)]="filter.arranged" name="arranged">
-        <mat-radio-button [value]="true">Yes</mat-radio-button>
-        <mat-radio-button [value]="false">No</mat-radio-button>
-        <mat-radio-button [value]="null">Any</mat-radio-button>
-      </mat-radio-group>
-    </div>
+
     <button
       mat-raised-button
       color="accent"
       type="submit"
       (click)="submit()"
     >
-      Filter
+      Find Songs
     </button>
   </form>
 </div>

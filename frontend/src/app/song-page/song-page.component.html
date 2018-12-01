@@ -1,60 +1,73 @@
 
-<div class="stack" *ngIf="song && currentUser">
+<div *ngIf="song && currentUser" class="stack centered" id="song-page">
+  <mat-card id="song-info">
+    <button mat-button
+      id="edit-menu"
+      *ngIf="!editing"
+      [matMenuTriggerFor]="editMenu">
+      <mat-icon>more_horiz</mat-icon>
+    </button>
 
-  <div class="top-row">
-    <div>
-      <h1 *ngIf="!editing" id="title" class="bold">{{song.title}}</h1>
-      <mat-form-field *ngIf="editing">
-        <input matInput [(ngModel)]="title" placeholder="Title" name="title" required>
-      </mat-form-field>
-      <h2 *ngIf="!editing">by <span class="bold">{{song.artist}}</span></h2>
-      <mat-form-field *ngIf="editing">
-        <input matInput [(ngModel)]="artist" placeholder="Artist" name="artist" required>
-      </mat-form-field>
-      <mat-chip-list *ngIf="!editing">
-        <mat-chip *ngIf="song.arranged" color="accent" selected>Arranged</mat-chip>
-      </mat-chip-list>
-      <div *ngIf="editing">
-        <mat-checkbox [(ngModel)]="arranged">Arranged</mat-checkbox>
-      </div>
-      <div *ngIf="!song.suggestor" id="suggest">
-        <button mat-flat-button color="accent" (click)="setSuggested(true)">Suggest</button>
+    <h1 *ngIf="!editing" id="title" class="bold">{{song.title}}</h1>
+    <mat-form-field *ngIf="editing">
+      <input matInput [(ngModel)]="title" placeholder="Title" name="title" required>
+    </mat-form-field>
+
+    <h2 *ngIf="!editing">by <span class="bold">{{song.artist}}</span></h2>
+    <mat-form-field *ngIf="editing">
+      <input matInput [(ngModel)]="artist" placeholder="Artist" name="artist" required>
+    </mat-form-field>
+
+    <mat-chip-list *ngIf="!editing">
+      <mat-chip *ngIf="song.arranged" color="accent" selected>Arranged</mat-chip>
+    </mat-chip-list>
+    <div *ngIf="editing">
+      <mat-checkbox [(ngModel)]="arranged">Arranged</mat-checkbox>
+    </div>
+
+    <div *ngIf="!editing && !song.suggestor" id="suggest">
+      <button mat-flat-button color="accent" (click)="setSuggested(true)">Suggest</button>
+    </div>
+
+    <div *ngIf="!editing && song.suggestor">
+      <h3>Suggested by <span class="bold">{{song.suggestor}}</span></h3>
+      <div id="rating">
+        <star-rating
+          [rating]="song.myRating || 0"
+          (starClickChange)="onRatingChange($event)"
+          size="large"
+        ></star-rating>
       </div>
     </div>
-    <div class="controls">
-      <button *ngIf="!editing" mat-button color="accent" (click)="edit()">Edit</button>
-      <!-- Deletion of a song is just too dangerous.
-      <button *ngIf="!editing && !song.suggestor" mat-button color="warn" (click)="delete()">Delete</button>
-      --->
-      <button *ngIf="editing" mat-flat-button color="accent" (click)="save()">Save</button>
-      <button *ngIf="editing" mat-flat-button color="primary" (click)="cancel()">Cancel</button>
-      <button *ngIf="!editing && song.suggestor == currentUser.username" mat-button color="warn" (click)="setSuggested(false)">Unsuggest</button>
+
+    <h3>Lyrics:</h3>
+    <form *ngIf="editing" class="lyrics" style="margin-bottom: 25px;">
+      <textarea [(ngModel)]="lyrics" name="lyrics"></textarea>
+    </form>
+    <pre *ngIf="!editing" class="lyrics">
+      {{song.lyrics}}
+    </pre>
+
+    <h3>Links:</h3>
+    <app-links
+      [song]="song"
+      [showEdit]="editing"
+      [commitEvents]="commitSubject.asObservable()"
+      [cancelEvents]="cancelSubject.asObservable()"
+    ></app-links>
+
+    <div class="controls" *ngIf="editing">
+      <button mat-button color="accent" (click)="commitEdit()">Save</button>
+      <button mat-button color="primary" (click)="cancelEdit()">Cancel</button>
     </div>
+  </mat-card>
+
+  <div *ngIf="!editing">
+    <app-comments [song]="song" [currentUser]="currentUser"></app-comments>
   </div>
 
-
-  <div *ngIf="song.suggestor">
-    <h3>Suggested by <span class="bold">{{song.suggestor}}</span></h3>
-    <div id="rating">
-      <star-rating
-        [rating]="song.myRating || 0"
-        (starClickChange)="onRatingChange($event)"
-        size="large"
-      ></star-rating>
-    </div>
-  </div>
-
-  <h3>Lyrics:</h3>
-  <form *ngIf="editing" class="lyrics" style="margin-bottom: 25px;">
-    <textarea [(ngModel)]="lyrics" name="lyrics"></textarea>
-  </form>
-  <pre *ngIf="!editing" class="lyrics">
-    {{song.lyrics}}
-  </pre>
-
-  <h3>Links:</h3>
-  <app-links [song]="song"></app-links>
-
-  <h3>Comments:</h3>
-  <app-comments [song]="song" [currentUser]="currentUser"></app-comments>
+  <mat-menu #editMenu="matMenu" [overlapTrigger]="false" xPosition="before">
+    <button mat-button color="accent" (click)="startEdit()">Edit</button>
+    <button *ngIf="song.suggestor == currentUser.username" mat-button color="warn" (click)="setSuggested(false)">Unsuggest</button>
+  </mat-menu>
 </div>

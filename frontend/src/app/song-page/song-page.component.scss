@@ -1,55 +1,75 @@
-$max-width: 800px;
+@import "../../constants.scss";
+
 $lyric-padding: 8px;
 
-#rating {
-  margin-top: 20px;
+#song-page {
+  max-width: $max-width;
 }
 
-.top-row {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
+#song-info {
+  text-align: left;
   width: 100%;
+  position: relative;
 }
 
-#title {
-  margin-right: auto;
+#edit-menu {
+  position: absolute;
+  right: 0;
 }
 
-.controls > * {
-  margin: 0 8px;
+.controls {
+  margin-top: $margin-size;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
 }
 
 h1 {
   margin-bottom: 0;
 }
 
+#rating {
+  margin-top: 20px;
+}
+
+h3 {
+  margin-bottom: 4px;
+}
+
+#suggest {
+  margin-top: 0.5 * $margin-size;
+  margin-bottom: 0.5 * $margin-size;
+}
+
 .lyrics {
   width: 100%;
-  max-width: $max-width;
   height: 20rem;
+  padding: $lyric-padding;
+}
+
+textarea, pre {
+  border: 2px solid lightgray;
+  height: 100%;
+  font-size: 100%;
 }
 
 textarea {
   height: 100%;
-  font-size: 100%;
-  padding: $lyric-padding;
 }
 
-pre.lyrics {
+pre {
   overflow: auto;
-  border: 2px solid lightgray;
-  font-size: 100%;
-  padding: $lyric-padding;
+  white-space: pre-line;
+  margin: 0;
 }
 
 mat-form-field {
   width: 100%;
-  max-width: $max-width;
 }
 
-#suggest {
-  margin-bottom: 8px;
+@media (max-width: $small-screen-width) {
+  .lyrics {
+    font-family: $font-condensed
+  }
 }
+

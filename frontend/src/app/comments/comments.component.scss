@@ -1,6 +1,9 @@
 @import "../../constants.scss";
 
+#comments {
+  padding-top: $margin-size;
+}
+
 .comment {
   margin-bottom: $margin-size;
-  max-width: 800px;
 }

@@ -12,6 +12,7 @@ import { objectToParams } from '../../utils';
 export class FiltersComponent {
   filter: GetSongOptions = {
     suggested: null,
+    arranged: null,
   };
 
   constructor(

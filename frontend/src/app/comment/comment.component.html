@@ -23,7 +23,7 @@
 </mat-card>
 
   <!-- mat-menu does not render anything -->
-  <mat-menu #editMenu="matMenu" [overlapTrigger]="false">
+  <mat-menu #editMenu="matMenu" [overlapTrigger]="false" xPosition="before">
     <button mat-button color="accent" (click)="startEdit()">Edit</button>
     <button mat-button color="warn" (click)="doDelete()">Delete</button>
   </mat-menu>
