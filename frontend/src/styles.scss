@@ -45,14 +45,14 @@ form {
   width: 100%;
 }
 
+$card-min-width: 320px - 2 * $margin-size;
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px - 2 * $margin-size, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax($card-min-width, 1fr));
   grid-gap: $margin-size;
 }
-
 .card-grid > * {
-  max-width: 400px;
+  max-width: 2 * $card-min-width + 3 * $margin-size;;
 }
 
 .stack {

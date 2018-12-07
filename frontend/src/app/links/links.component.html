@@ -11,7 +11,7 @@
         matInput
         placeholder="URL"
         name="url"
-        pattern="https?://.*\..*"
+        pattern="https?://.+\..+"
         [(ngModel)]="newLinkURL"
         required
       >
@@ -26,7 +26,7 @@
       >
     </mat-form-field>
     <button
-      mat-button
+      mat-flat-button
       color="accent"
       type="submit"
       (click)="addLink()"

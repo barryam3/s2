@@ -1,12 +1,10 @@
 
 <div *ngIf="song && currentUser" class="stack centered" id="song-page">
   <mat-card id="song-info">
-    <button mat-button
-      id="edit-menu"
-      *ngIf="!editing"
-      [matMenuTriggerFor]="editMenu">
-      <mat-icon>more_horiz</mat-icon>
-    </button>
+    <div id="edit-menu" *ngIf="!editing">
+      <button *ngIf="song.suggestor == currentUser.username" mat-button color="warn" (click)="setSuggested(false)">Unsuggest</button>
+      <button mat-button color="accent" (click)="startEdit()">Edit</button>
+    </div>
 
     <h1 *ngIf="!editing" id="title" class="bold">{{song.title}}</h1>
     <mat-form-field *ngIf="editing">
@@ -65,9 +63,4 @@
   <div *ngIf="!editing">
     <app-comments [song]="song" [currentUser]="currentUser"></app-comments>
   </div>
-
-  <mat-menu #editMenu="matMenu" [overlapTrigger]="false" xPosition="before">
-    <button mat-button color="accent" (click)="startEdit()">Edit</button>
-    <button *ngIf="song.suggestor == currentUser.username" mat-button color="warn" (click)="setSuggested(false)">Unsuggest</button>
-  </mat-menu>
 </div>
