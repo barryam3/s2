@@ -1,8 +1,9 @@
-<div *ngIf="songs">
+<div *ngIf="songs && currentUser">
   <div class="card-grid">
     <app-song-card
       *ngFor="let song of songs"
       [song]="song"
+      [showRating]="currentUser.active"
       (ratingChange)="updateRating(song, $event)"
     ></app-song-card>
   </div>

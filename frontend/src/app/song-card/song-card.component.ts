@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 })
 export class SongCardComponent {
   @Input() song: SongOverview;
+  @Input() showRating = true;
 
   constructor(private router: Router) { }
 
