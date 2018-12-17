@@ -40,6 +40,7 @@ export interface GetSongOptions {
   artist?: string;
   arranged?: boolean;
   suggestor?: string;
+  sort?: SortOptions;
 }
 
 export interface UpdateSongOptions {
@@ -48,6 +49,15 @@ export interface UpdateSongOptions {
   lyrics?: string;
   arranged?: boolean;
   suggested?: boolean;
+  sort?: SortOptions;
+}
+
+export enum SortOptions {
+  Edited = 'edited',
+  Title = 'title',
+  Artist = 'artist',
+  Suggestor = 'suggestor',
+  Rating = 'rating',
 }
 
 @Injectable()

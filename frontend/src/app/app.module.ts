@@ -37,6 +37,7 @@ import { CommentComponent } from './comment/comment.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { RatingsComponent } from './ratings/ratings.component';
+import { TriStateCheckboxComponent } from './tri-state-checkbox/tri-state-checkbox.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { RatingsComponent } from './ratings/ratings.component';
     CommentsComponent,
     CommentComponent,
     RatingsComponent,
+    TriStateCheckboxComponent,
   ],
   imports: [
     BrowserModule,

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { UserService } from '../user.service';
+import { homepageURL } from '../../utils';
 
 @Component({
   selector: 'app-login',
@@ -37,7 +38,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.user.login(this.username, this.password)
-      .subscribe(() => this.router.navigateByUrl('/songs?suggested=1'));
+      .subscribe(() => this.router.navigateByUrl(homepageURL));
   }
 
 }

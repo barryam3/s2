@@ -11,10 +11,6 @@ button {
   width: 100%;
 }
 
-.checkbox-group {
-  display: flex;
-  justify-content: flex-end;
-}
-.checkbox-group > * {
-  margin-left: $margin-size;
+app-tri-state-checkbox {
+  margin-bottom: $margin-size;
 }

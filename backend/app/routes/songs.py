@@ -2,7 +2,7 @@
 
 from flask import Blueprint, request
 from flask_login import current_user
-from sqlalchemy import or_
+from sqlalchemy import or_, desc
 from sqlalchemy.orm import joinedload
 from sqlalchemy.orm.exc import NoResultFound
 from datetime import datetime
@@ -72,11 +72,15 @@ def list_songs():
         artist = get_arg(request.args, 'artist', str, None)
         arranged = query_to_bool(get_arg(request.args, 'arranged', str, None))
         suggestor = get_arg(request.args, 'suggestor', str, None)
+        sort = get_arg(request.args, 'sort', str, None)
 
     except (TypeError, ValueError) as e:
         return res(status=400)
 
-    my_ratings = db.session.query(Rating).with_entities(Rating.value, Rating.song_id).filter(Rating.user_id==current_user.id).subquery()
+    if sort and sort not in ('edited', 'title', 'artist', 'suggestor', 'rating'):
+        return res(status=400)
+
+    my_ratings = db.session.query(Rating).with_entities(Rating.value.label('myRating'), Rating.song_id).filter(Rating.user_id==current_user.id).subquery()
     my_views = db.session.query(View).with_entities(View.timestamp, View.song_id).filter(View.user_id==current_user.id).subquery()
     query = db.session.query(Song, my_ratings, my_views).options(joinedload('user')).outerjoin(my_ratings).outerjoin(my_views)
     if suggested == True:
@@ -95,7 +99,17 @@ def list_songs():
             query = query.filter(Song.user_id==suggestor.id)
         except NoResultFound:
             return res('User not found.', 404)
-    query = query.order_by(Song.edited.desc())
+
+    if sort == 'title':
+        query = query.order_by(Song.title)
+    elif sort == 'artist':
+        query = query.order_by(Song.artist)
+    elif sort == 'suggestor':
+        query = query.order_by(Song.user_id)
+    elif sort == 'rating':
+        query = query.order_by(desc('myRating'))
+    elif sort == 'edited':
+        query = query.order_by(Song.edited.desc())
     
     songs = query.all()
 

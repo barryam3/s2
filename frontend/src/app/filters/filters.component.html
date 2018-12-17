@@ -1,9 +1,7 @@
 <div class="stack center">
+  <h1>Find Songs</h1>
 
   <form #filterForm="ngForm" class="stack center">
-
-    <h2>Search</h2>
-
     <mat-form-field>
       <input
         matInput
@@ -22,55 +20,29 @@
       >
     </mat-form-field>
 
-    <h2>Filter</h2>
-
     <div class="mat-form-field">
-      <h3>Arranged</h3>
-      <div class="checkbox-group">
-        <mat-checkbox
-          [(ngModel)]="arranged"
-          (change)="onCheck('notArranged', $event)"
-          name="arranged"
-        >
-          Yes
-        </mat-checkbox>
-        <mat-checkbox
-          [(ngModel)]="notArranged"
-          (change)="onCheck('arranged', $event)"
-          name="notArranged"
-        >
-          No
-        </mat-checkbox>
-      </div>
-    </div>
-  
-    <div class="mat-form-field">
-      <h3>Suggested</h3>
-      <div class="checkbox-group">
-        <mat-checkbox
-          [(ngModel)]="suggested"
-          (change)="onCheck('notSuggested', $event)"
-          name="suggested"
-        >
-          Yes
-        </mat-checkbox>
-        <mat-checkbox
-          [(ngModel)]="notSuggested"
-          (change)="onCheck('suggested', $event)"
-          name="notSuggested"
-        >
-          No
-        </mat-checkbox>
-      </div>
+      <app-tri-state-checkbox [(ngModel)]="filter.suggested" name="suggested">Suggested</app-tri-state-checkbox>
     </div>
 
-    <mat-form-field>
+    <div class="mat-form-field">
+      <app-tri-state-checkbox [(ngModel)]="filter.arranged" name="arranged">Arranged</app-tri-state-checkbox>
+    </div>
+
+    <!-- <mat-form-field>
       <input
         matInput
         placeholder="Suggestor"
         name="suggestor"
         [(ngModel)]="filter.suggestor"
       >
+    </mat-form-field> -->
+
+    <mat-form-field>
+      <mat-select placeholder="Sort by" [(ngModel)]="filter.sort" name="sort">
+        <mat-option *ngFor="let option of SortOptions" [value]="option[1]">
+          {{option[0]}}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
 
     <button

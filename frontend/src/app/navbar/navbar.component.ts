@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { User, UserService } from '../user.service';
+import { homepageURL } from '../../utils';
 
 @Component({
   selector: 'app-navbar',
@@ -29,7 +30,7 @@ export class NavbarComponent {
   }
 
   back() {
-    this.router.navigateByUrl('/songs?suggested=1');
+    this.router.navigateByUrl(homepageURL);
   }
 
 }
