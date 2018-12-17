@@ -10,6 +10,13 @@ const whitelist = [
   '/users/me',
 ];
 
+function isGenericServerError(error: HttpErrorResponse): boolean {
+  return error.status === 500 && (
+    !error.error
+    || (typeof error.error === 'string' && error.error.startsWith('<!DOCTYPE HTML'))
+  );
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -24,7 +31,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         if (error.error instanceof ErrorEvent) { // Client Side Error
           errMsg = `Error: ${error.error.message}`;
         } else {  // Server Side Error
-          if (error.status === 500 && !error.error) {
+          if (isGenericServerError(error)) {
             errMsg = 'Error [500]: Something went wrong. Please try again. If the problem persists, inform the webmaster.';
           } else {
             errMsg = `Error [${error.status}]: ${error.error || error.statusText || error.message}`;
