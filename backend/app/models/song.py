@@ -17,6 +17,7 @@ class Song(db.Model):
     comments = db.relationship('Comment', cascade="all,delete", backref=db.backref('song', lazy=True))
     links = db.relationship('Link', cascade="all,delete", backref=db.backref('song', lazy=True))
     views = db.relationship('View', cascade="all,delete", backref=db.backref('song', lazy=True))
+    ratings = db.relationship('Rating', cascade="all,delete", backref=db.backref('song', lazy=True))
 
     def __init__(self, **kwargs):
         super(Song, self).__init__(**kwargs)
