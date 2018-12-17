@@ -1,5 +1,5 @@
 <mat-card *ngIf="comment && currentUser">
-  <div id="edit-menu">
+  <div id="edit-menu" *ngIf="comment.author === currentUser.username">
     <button mat-button color="warn" (click)="doDelete()">Delete</button>
     <button mat-button color="accent" (click)="startEdit()">Edit</button>
   </div>

@@ -13,6 +13,7 @@ import {
   MatBadgeModule,
   MatChipsModule,
   MatCheckboxModule,
+  MatTableModule,
 } from '@angular/material';
 
 const modules = [
@@ -29,6 +30,7 @@ const modules = [
   MatBadgeModule,
   MatChipsModule,
   MatCheckboxModule,
+  MatTableModule,
 ];
 
 @NgModule({

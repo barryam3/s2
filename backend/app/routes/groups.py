@@ -2,6 +2,7 @@
 
 from flask import Blueprint, request
 from datetime import datetime
+from sqlalchemy import func
 
 from app.extensions import db
 from app.utils import res, get_arg, admin_required
@@ -73,3 +74,26 @@ def delete_suggestions():
     db.session.commit()
 
     return res(True)
+
+@groups.route('/1/ratings', methods=['GET'])
+@admin_required
+def get_average_ratings():
+    '''Get average ratings for all songs.
+
+    @return {[title, artist, avgRating][]} success
+    @throws {401} - if you are not logged in
+    @throws {403} - if you are not an admin
+    '''
+
+    group = Group.query.one()
+    if group.vdeadline and (datetime.utcnow() <= group.vdeadline):
+        return ('Nope! The deadline has not passed.', 403)
+
+    avgRating = func.avg(Rating.value).label('avgRating')
+    query = db.session.query(Song.title, Song.artist, avgRating)
+    query = query.outerjoin(Rating)
+    query = query.filter(Song.user_id!=None)
+    query = query.group_by(Song.id)
+    query = query.order_by(avgRating.desc())
+
+    return res([[t, a, float(r) if r else None] for t, a, r in query.all()])

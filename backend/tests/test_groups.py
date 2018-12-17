@@ -132,3 +132,5 @@ def test_set_deadlines(client):
     assert rv.status_code == 403
 
 # TODO: reset site test
+
+# TODO: get ratings test

@@ -49,4 +49,9 @@ export class GroupService {
     const url = 'api/groups/1/suggestions';
     return this.http.delete<boolean>(url, { headers });
   }
+
+  getRatings(): Observable<[string, string, number][]> {
+    const url = 'api/groups/1/ratings';
+    return this.http.get<[string, string, number][]>(url, { headers });
+  }
 }

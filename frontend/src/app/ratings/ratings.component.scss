@@ -1,0 +1,7 @@
+@import '../../constants.scss';
+
+table td, table th {
+  text-align: left;
+  padding-left: $margin-size;
+  padding-right: $margin-size;
+}

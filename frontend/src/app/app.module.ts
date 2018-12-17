@@ -36,6 +36,7 @@ import { CommentsComponent } from './comments/comments.component';
 import { CommentComponent } from './comment/comment.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { RatingsComponent } from './ratings/ratings.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { environment } from '../environments/environment';
     LinksComponent,
     CommentsComponent,
     CommentComponent,
+    RatingsComponent,
   ],
   imports: [
     BrowserModule,

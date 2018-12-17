@@ -26,6 +26,7 @@
   <!-- mat-menu does not render anything -->
   <mat-menu #accountMenu="matMenu" [overlapTrigger]="false">
     <a mat-menu-item routerLink="/account">Account</a>
+    <a mat-menu-item routerLink="/ratings" *ngIf="user.admin">Ratings</a>
     <a mat-menu-item routerLink="/add-user" *ngIf="user.admin">Add User</a>
     <a mat-menu-item routerLink="/users" *ngIf="user.admin">Manage Users</a>
     <a mat-menu-item routerLink="/group" *ngIf="user.admin">Manage Group</a>
