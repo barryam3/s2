@@ -7,7 +7,7 @@ import { GroupService } from '../group.service';
   styleUrls: ['./ratings.component.scss'],
 })
 export class RatingsComponent implements OnInit {
-  dataSource: [string, string, number][] = [];
+  dataSource: [string, string, number][];
   displayedColumns: string[] = ['title', 'artist', 'avgRating'];
 
   constructor(private groupService: GroupService) { }
