@@ -3,9 +3,11 @@
     <a mat-button routerLink="filter" *ngIf="showFilters()">
       <mat-icon>filter_list</mat-icon>
     </a>
-    <a mat-button routerLink="add-song" *ngIf="showFilters()">
-      <mat-icon>library_add</mat-icon>
-    </a>
+    <!-- can't simply disable a link unfortunately -->
+    <span *ngIf="showFilters()">
+      <a mat-button *ngIf="user.canSuggest" routerLink="add-song"><mat-icon>library_add</mat-icon></a>
+      <a mat-button *ngIf="!user.canSuggest" [disabled]="true"><mat-icon>library_add</mat-icon></a>
+    </span>
     <button mat-button *ngIf="showHome()" (click)="back()">
       <mat-icon>arrow_back</mat-icon>
       <span id="to-songs">To Songs</span>

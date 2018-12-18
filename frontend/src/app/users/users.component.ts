@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { UserService, User } from '../user.service';
+import { UserService, User, UserOverview } from '../user.service';
 import { filterInPlace } from '../../utils';
 
 @Component({
@@ -10,7 +10,7 @@ import { filterInPlace } from '../../utils';
   styleUrls: ['./users.component.scss'],
 })
 export class UsersComponent implements OnInit, OnDestroy {
-  users: User[];
+  users: UserOverview[];
   currentUser: User;
   userStream: Subscription;
 

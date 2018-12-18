@@ -2,15 +2,48 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable, BehaviorSubject } from 'rxjs';
-import { tap, distinctUntilChanged } from 'rxjs/operators';
+import { map, tap, distinctUntilChanged } from 'rxjs/operators';
 
 import { headers } from '../utils';
+import { Deadlines, DeadlinesJSON, jsonToDeadlines } from './group.service';
 
-export interface User {
+export interface UserOverview {
   id: number;
   username: string;
   active: boolean;
   admin: boolean;
+}
+
+interface UserData {
+  id: number;
+  username: string;
+  active: boolean;
+  admin: boolean;
+  group: DeadlinesJSON;
+}
+
+export class User {
+  id: number;
+  username: string;
+  active: boolean;
+  admin: boolean;
+  group: Deadlines;
+
+  constructor(userData: UserData) {
+    this.id = userData.id;
+    this.username = userData.username;
+    this.active = userData.active;
+    this.admin = userData.admin;
+    this.group = jsonToDeadlines(userData.group);
+  }
+
+  get canSuggest() {
+    return this.group.suggestDeadline > new Date();
+  }
+
+  get canRate() {
+    return this.active && (this.group.rateDeadline > new Date());
+  }
 }
 
 @Injectable()
@@ -26,11 +59,14 @@ export class UserService {
       username,
       password,
     };
-    return this.http.post<User>(url, payload, { headers })
-      .pipe(tap(
-        user => this.userSubject.next(user),
-        () => this.userSubject.next(null),
-      ));
+    return this.http.post<UserData>(url, payload, { headers })
+      .pipe(
+        map(userData => userData ? new User(userData) : null),
+        tap(
+          user => this.userSubject.next(user),
+          () => this.userSubject.next(null),
+        ),
+      );
   }
 
   logout(): Observable<boolean> {
@@ -44,16 +80,19 @@ export class UserService {
 
   getCurrentUser(): Observable<User> {
     const url = 'api/users/me';
-    return this.http.get<User>(url, { headers })
-      .pipe(tap(
-        user => this.userSubject.next(user),
-        () => this.userSubject.next(null),
-      ));
+    return this.http.get<UserData>(url, { headers })
+      .pipe(
+        map(userData => userData ? new User(userData) : null),
+        tap(
+          user => this.userSubject.next(user),
+          () => this.userSubject.next(null),
+        ),
+      );
   }
 
-  getUsers(): Observable<User[]> {
+  getUsers(): Observable<UserOverview[]> {
     const url = 'api/users';
-    return this.http.get<User[]>(url, { headers });
+    return this.http.get<UserOverview[]>(url, { headers });
   }
 
   resetPassword(userID: number): Observable<boolean> {

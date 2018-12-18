@@ -1,42 +1,51 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 
-import { GroupService } from '../group.service';
+import { Subscription } from 'rxjs';
 
-const now = new Date();
+import { GroupService } from '../group.service';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-edit-deadlines',
   templateUrl: './edit-deadlines.component.html',
   styleUrls: ['./edit-deadlines.component.scss'],
 })
-export class EditDeadlinesComponent implements OnInit {
+export class EditDeadlinesComponent implements OnInit, OnDestroy {
   // ISO date strings
   newSuggestDeadline = '';
-  newVoteDeadline = '';
+  newRateDeadline = '';
+
+  userStream: Subscription;
 
   constructor(
     private snackBar: MatSnackBar,
     private groupService: GroupService,
+    private userService: UserService,
   ) { }
 
   ngOnInit() {
-    this.groupService.getDeadlines().subscribe(deadlines => {
-      if (deadlines.suggestDeadline) {
-        this.newSuggestDeadline = deadlines.suggestDeadline.toISOString();
-      }
-      if (deadlines.voteDeadline) {
-        this.newVoteDeadline = deadlines.voteDeadline.toISOString();
+    this.userStream = this.userService.currentUser.subscribe(newCurrentUser => {
+      if (newCurrentUser) {
+        this.newSuggestDeadline = newCurrentUser.group.suggestDeadline.toISOString();
+        this.newRateDeadline = newCurrentUser.group.rateDeadline.toISOString();
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.userStream.unsubscribe();
   }
 
   edit() {
     this.groupService.editDeadlines({
       suggestDeadline: new Date(this.newSuggestDeadline),
-      voteDeadline: new Date(this.newVoteDeadline),
+      rateDeadline: new Date(this.newRateDeadline),
     })
-      .subscribe(() => this.snackBar.open('Deadlines updated.', 'dismiss'));
+      .subscribe(() => {
+        this.snackBar.open('Deadlines updated.', 'dismiss');
+        this.userService.getCurrentUser().subscribe(); // load new deadlines
+      });
   }
 
 }

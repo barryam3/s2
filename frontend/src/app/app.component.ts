@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 
 import { UserService, User } from './user.service';
+import { homepageURL } from '../utils';
 
 @Component({
   selector: 'app-root',
@@ -33,7 +34,7 @@ export class AppComponent implements OnInit {
       .subscribe(
         () => {
           if (window.location.pathname === '/') {
-            this.router.navigateByUrl('/songs');
+            this.router.navigateByUrl(homepageURL);
           }
         },
         () => {

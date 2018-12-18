@@ -2,7 +2,7 @@
 <div *ngIf="song && currentUser" class="stack centered" id="song-page">
   <mat-card id="song-info">
     <div id="edit-menu" *ngIf="!editing">
-      <button *ngIf="song.suggestor == currentUser.username" mat-button color="warn" (click)="setSuggested(false)">Unsuggest</button>
+      <button *ngIf="song.suggestor == currentUser.username" mat-button color="warn" (click)="setSuggested(false)" [disabled]="!currentUser.canSuggest">Unsuggest</button>
       <button mat-button color="accent" (click)="startEdit()">Edit</button>
     </div>
 
@@ -24,17 +24,17 @@
     </div>
 
     <div *ngIf="!editing && !song.suggestor" id="suggest">
-      <button mat-flat-button color="accent" (click)="setSuggested(true)">Suggest</button>
+      <button mat-flat-button color="accent" (click)="setSuggested(true)" [disabled]="!currentUser.canSuggest">Suggest</button>
     </div>
 
     <div *ngIf="!editing && song.suggestor">
       <h3>Suggested by <span class="bold">{{song.suggestor}}</span></h3>
       <div id="rating">
         <star-rating
-          *ngIf="currentUser.active"
           [rating]="song.myRating || 0"
           (starClickChange)="onRatingChange($event)"
           size="large"
+          [readOnly]="!currentUser.canRate"
         ></star-rating>
       </div>
     </div>

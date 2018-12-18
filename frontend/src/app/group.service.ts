@@ -7,19 +7,22 @@ import { map } from 'rxjs/operators';
 import { dateToInt, headers, intToDate } from '../utils';
 
 export interface Deadlines {
-  voteDeadline: Date;
+  rateDeadline: Date;
   suggestDeadline: Date;
 }
 
-interface DeadlinesJSON {
-  voteDeadline: number;
+export interface DeadlinesJSON {
+  rateDeadline: number;
   suggestDeadline: number;
 }
 
-function jsonToDeadlines(json: DeadlinesJSON): Deadlines {
+// 30 Dec 9999 20:59:59 (max for display accounting for timezones)
+const MAX_TIMESTAMP = 253402221599;
+
+export function jsonToDeadlines(json: DeadlinesJSON): Deadlines {
   return {
-    voteDeadline: intToDate(json.voteDeadline),
-    suggestDeadline: intToDate(json.suggestDeadline),
+    rateDeadline: intToDate(json.rateDeadline || MAX_TIMESTAMP),
+    suggestDeadline: intToDate(json.suggestDeadline || MAX_TIMESTAMP),
   };
 }
 
@@ -34,7 +37,7 @@ export class GroupService {
     const url = 'api/groups/1/deadlines';
     const body = {
       suggestDeadline: dateToInt(deadlines.suggestDeadline),
-      voteDeadline: dateToInt(deadlines.voteDeadline),
+      rateDeadline: dateToInt(deadlines.rateDeadline),
     };
     return this.http.put<boolean>(url, body, { headers });
   }
