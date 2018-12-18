@@ -14,7 +14,7 @@ export class FindSongsComponent {
     title: '',
     artist: '',
     suggestor: '',
-    suggested: true,
+    suggested: null,
     arranged: null,
     sort: SortOptions.Edited,
   };
