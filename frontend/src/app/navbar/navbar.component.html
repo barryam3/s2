@@ -30,6 +30,7 @@
     <a mat-menu-item (click)="logout()">Logout</a>
     <a mat-menu-item routerLink="/account">Account</a>
     <a mat-menu-item routerLink="/deadlines">Deadlines</a>
+    <a mat-menu-item routerLink="/engagement" *ngIf="user.admin">Engagement</a>
     <a mat-menu-item routerLink="/ratings" *ngIf="user.admin && !user.canRate">Ratings</a>
     <a mat-menu-item routerLink="/users" *ngIf="user.admin">Manage Users</a>
     <a mat-menu-item routerLink="/add-user" *ngIf="user.admin">Add User</a>

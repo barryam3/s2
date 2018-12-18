@@ -34,7 +34,7 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password, password)
 
-    def to_dict(self, with_group=False):
+    def to_dict(self, with_group=False, with_engagement=False):
         user =  {
             'id': self.id,
             'username': self.username,
@@ -43,4 +43,7 @@ class User(db.Model, UserMixin):
         }
         if with_group:
             user['group'] = self.group.to_dict()
+        if with_engagement:
+            user['numSuggestions'] = len(self.songs)
+            user['numRatings'] = len(self.ratings)
         return user

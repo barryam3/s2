@@ -1,0 +1,27 @@
+<div class="stack center">
+  <h1>Active User Engagement</h1>
+
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+
+    <ng-container matColumnDef="username">
+      <th mat-header-cell *matHeaderCellDef>username</th>
+      <td mat-cell *matCellDef="let user">{{user.username}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="numSuggestions">
+      <th mat-header-cell *matHeaderCellDef># Suggestions</th>
+      <td mat-cell *matCellDef="let user">{{user.numSuggestions}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="numRatings">
+      <th mat-header-cell *matHeaderCellDef># Ratings</th>
+      <td mat-cell *matCellDef="let user">{{user.numRatings}}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

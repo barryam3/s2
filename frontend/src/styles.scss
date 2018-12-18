@@ -100,3 +100,17 @@ $card-min-width: 320px - 2 * $margin-size;
 span.mat-badge-content.mat-badge-active {
   color: rgb(229, 57, 53);
 }
+
+/* because mat tables seem to hover there's a bit more padding than is needed */
+table {
+  margin-left: -4px;
+  margin-right: -4px;
+  width: calc(100% + 8px);
+  max-width: 800px;
+}
+
+table td, table th {
+  text-align: left;
+  padding-left: $margin-size;
+  padding-right: $margin-size;
+}

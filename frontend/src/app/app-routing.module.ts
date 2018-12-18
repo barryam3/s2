@@ -13,6 +13,7 @@ import { AddUserComponent } from './add-user/add-user.component';
 import { RatingsComponent } from './ratings/ratings.component';
 import { DeadlinesComponent } from './deadlines/deadlines.component';
 import { ResetSiteComponent } from './reset-site/reset-site.component';
+import { EngagementComponent } from './engagement/engagement.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -26,6 +27,7 @@ const routes: Routes = [
   { path: 'add-user', component: AddUserComponent },
   { path: 'ratings', component: RatingsComponent },
   { path: 'reset', component: ResetSiteComponent },
+  { path: 'engagement', component: EngagementComponent },
   { path: '', component: AppComponent },
 ];
 

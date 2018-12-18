@@ -5,7 +5,7 @@ from flask_login import current_user
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.extensions import db
-from app.utils import res, get_arg, login_required, admin_required
+from app.utils import res, get_arg, login_required, admin_required, query_to_bool
 from app.models.user import User
 
 
@@ -17,12 +17,23 @@ users = Blueprint('users', __name__)
 def list_users():
     '''Enumerate all users.
 
+    @query {0|1} active - if 1, get only active users AND return num suggestions and ratings
     @return {User[]} - all users' info
     @throws {401} - if you are not logged in
     @throws {403} - if you are not a pitch
     '''
 
-    return res([u.to_dict() for u in User.query.all()])
+    try:
+        active = query_to_bool(get_arg(request.args, 'active', str, None))
+
+    except (TypeError, ValueError) as e:
+        return res(status=400)
+
+    query = User.query
+    if active:
+        query = query.filter_by(active=True)
+
+    return res([u.to_dict(False, active) for u in query.all()])
 
 
 @users.route('/me', methods=['GET'])

@@ -1,17 +1,4 @@
-@import '../../constants.scss';
-
-/* because mat tables seem to hover there's a bit more padding than is needed */
-table {
-  margin-left: -4px;
-  margin-right: -4px;
-  width: calc(100% + 8px);
-}
-
-table td, table th {
-  text-align: left;
-  padding-left: $margin-size;
-  padding-right: $margin-size;
-}
+@import "../../constants.scss";
 
 @media (max-width: $small-screen-width) {
   table td {

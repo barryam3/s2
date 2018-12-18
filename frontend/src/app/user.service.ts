@@ -14,6 +14,11 @@ export interface UserOverview {
   admin: boolean;
 }
 
+export interface ActiveUserOverview extends UserOverview {
+  numSuggestions: number;
+  numRatings: number;
+}
+
 interface UserData {
   id: number;
   username: string;
@@ -93,6 +98,11 @@ export class UserService {
   getUsers(): Observable<UserOverview[]> {
     const url = 'api/users';
     return this.http.get<UserOverview[]>(url, { headers });
+  }
+
+  getActiveUsers(): Observable<ActiveUserOverview[]> {
+    const url = 'api/users?active=1';
+    return this.http.get<ActiveUserOverview[]>(url, { headers });
   }
 
   resetPassword(userID: number): Observable<boolean> {
