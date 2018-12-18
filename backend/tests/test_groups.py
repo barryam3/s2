@@ -38,12 +38,12 @@ def test_set_deadlines(client):
     assert rv.status_code == 200
     json = rv.get_json()
     assert json['suggestDeadline'] == None
-    assert json['voteDeadline'] == None
+    assert json['rateDeadline'] == None
 
     # should be able to update deadlines
     rv = client.put('/groups/1/deadlines', json={
         'suggestDeadline': now + 1000,
-        'voteDeadline': now + 1000
+        'rateDeadline': now + 1000
     })
     assert rv.status_code == 200
     assert rv.get_json() == True
@@ -53,13 +53,13 @@ def test_set_deadlines(client):
     assert rv.status_code == 200
     json = rv.get_json()
     assert json['suggestDeadline'] == now + 1000
-    assert json['voteDeadline'] == now + 1000
+    assert json['rateDeadline'] == now + 1000
 
     # should be able to add song if the deadline has not passed
     rv = client.post('/songs', json=song_1)
     assert rv.status_code == 200
 
-    # should be able to vote if the deadline has not passed
+    # should be able to rate if the deadline has not passed
     rv = client.put('/songs/1/ratings/mine', json={ 'rating': 6 })
     assert rv.status_code == 200
 
@@ -77,10 +77,10 @@ def test_set_deadlines(client):
 
     client.put('/groups/1/deadlines', json={
         'suggestDeadline': now - 1000,
-        'voteDeadline': now - 1000
+        'rateDeadline': now - 1000
     })
 
-    # should not be able to vote if the deadline has passed
+    # should not be able to rate if the deadline has passed
     rv = client.put('/songs/1/ratings/mine', json={ 'rating': 5 })
     assert rv.status_code == 403
 
@@ -103,7 +103,7 @@ def test_set_deadlines(client):
     # should be able to unset deadlines
     rv = client.put('/groups/1/deadlines', json={
         'suggestDeadline': None,
-        'voteDeadline': None
+        'rateDeadline': None
     })
     assert rv.status_code == 200
 
@@ -111,7 +111,7 @@ def test_set_deadlines(client):
     client.post('/auth/logout')
     rv = client.put('/groups/1/deadlines', json={
         'suggestDeadline': now + 500,
-        'voteDeadline': now + 500
+        'rateDeadline': now + 500
     })
     assert rv.status_code == 401
 
@@ -123,7 +123,7 @@ def test_set_deadlines(client):
     client.post('/auth/login', json=user_2)
     rv = client.put('/groups/1/deadlines', json={
         'suggestDeadline': now + 750,
-        'voteDeadline': now + 750
+        'rateDeadline': now + 750
     })
     assert rv.status_code == 403
 

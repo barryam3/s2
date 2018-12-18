@@ -1,0 +1,39 @@
+<div class="stack center" *ngIf="currentUser">
+  <form *ngIf="currentUser.admin">
+    <h1>Edit Deadlines</h1>
+    <p class="tip">Beginning on the day, people will no longer be able to complete the action.</p>
+    <mat-form-field>
+      <input matInput [matDatepicker]="sd" placeholder="Suggest Deadline"
+        name="sd" [(ngModel)]="suggestDeadline">
+      <mat-datepicker-toggle matSuffix [for]="sd"></mat-datepicker-toggle>
+      <mat-datepicker #sd></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [matDatepicker]="rd" placeholder="Rate Deadline"
+        name="rd" [(ngModel)]="rateDeadline">
+      <mat-datepicker-toggle matSuffix [for]="rd"></mat-datepicker-toggle>
+      <mat-datepicker #rd></mat-datepicker>
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="accent"
+      type="submit"
+      (click)="edit()"
+    >
+      Save
+    </button>
+  </form>
+
+  <div *ngIf="!currentUser.admin">
+    <h1>Deadlines</h1>
+    <p class="tip">Beginning on the day, people will no longer be able to complete the action.</p>
+    <div class="non-editable-deadline">
+      <h2 class="bold">Suggest:</h2>
+      <h2>{{currentUser.group.suggestDeadline.toDateString()}}</h2>
+    </div>
+    <div class="non-editable-deadline">
+      <h2 class="bold">Rate:</h2>
+      <h2>{{currentUser.group.rateDeadline.toDateString()}}</h2>
+    </div>
+  </div>
+</div>

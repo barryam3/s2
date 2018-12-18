@@ -265,7 +265,7 @@ def rate_song(song_id):
         return('Rating must be an integer in [1,7].', 400)
 
     group = Group.query.one()
-    if group.vdeadline and (datetime.utcnow() > group.vdeadline):
+    if group.rdeadline and (datetime.utcnow() > group.rdeadline):
         return ('Nope! The deadline has passed.', 403)
 
     try:

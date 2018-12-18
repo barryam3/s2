@@ -21,7 +21,7 @@ def update_deadlines():
     '''Update the deadline(s).
 
     @param {int} suggestDeadline - unix seconds
-    @param {int} voteDeadline - unix seconds
+    @param {int} rateDeadline - unix seconds
     @return {bool} success
     @throws {401} - if you are not logged in
     @throws {403} - if you are not an admin
@@ -30,15 +30,15 @@ def update_deadlines():
     req_body = request.get_json()
     try:
         sdeadline = get_arg(req_body, 'suggestDeadline', int, None)
-        vdeadline = get_arg(req_body, 'voteDeadline', int, None)
+        rdeadline = get_arg(req_body, 'rateDeadline', int, None)
     except TypeError:
         return res(status=400)
 
     group = Group.query.one()
     if sdeadline is not None:
         group.sdeadline = datetime.utcfromtimestamp(sdeadline)
-    if vdeadline is not None:
-        group.vdeadline = datetime.utcfromtimestamp(vdeadline)
+    if rdeadline is not None:
+        group.rdeadline = datetime.utcfromtimestamp(rdeadline)
     db.session.commit()
 
     return res(True)
@@ -86,7 +86,7 @@ def get_average_ratings():
     '''
 
     group = Group.query.one()
-    if group.vdeadline and (datetime.utcnow() <= group.vdeadline):
+    if group.rdeadline and (datetime.utcnow() <= group.rdeadline):
         return ('Nope! The deadline has not passed.', 403)
 
     avgRating = func.avg(Rating.value).label('avgRating')

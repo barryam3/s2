@@ -5,11 +5,11 @@ import { GetSongOptions, SortOptions } from '../song.service';
 import { objectToParams } from '../../utils';
 
 @Component({
-  selector: 'app-filters',
-  templateUrl: './filters.component.html',
-  styleUrls: ['./filters.component.scss'],
+  selector: 'app-find-songs',
+  templateUrl: './find-songs.component.html',
+  styleUrls: ['./find-songs.component.scss'],
 })
-export class FiltersComponent {
+export class FindSongsComponent {
   filter: GetSongOptions = {
     title: '',
     artist: '',

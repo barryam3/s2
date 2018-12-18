@@ -175,7 +175,7 @@ def test_list_songs(client):
     del expected_2['comments']
 
     # should be able to list all songs
-    rv = client.get('/songs')
+    rv = client.get('/songs?sort=edited')
     assert rv.status_code == 200
     assert rv.get_json() == [expected_1, expected_2] # TODO: why is this the order?
 

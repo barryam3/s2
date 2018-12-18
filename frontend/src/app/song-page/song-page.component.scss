@@ -69,7 +69,7 @@ mat-form-field {
 }
 
 @media (max-width: $small-screen-width) {
-  .lyrics {
+  .lyrics, .lyrics * {
     font-family: $font-condensed
   }
 }

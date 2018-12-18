@@ -34,7 +34,7 @@ def get_active_user():
     @throws {401} - if you are not logged in
     '''
 
-    return res(current_user.to_dict())
+    return res(current_user.to_dict(True))
 
 
 @users.route('/me/password', methods=['PUT'])

@@ -1,4 +1,4 @@
-<div class="card-grid">
+<div class="card-grid" *ngIf="users">
   <mat-card *ngFor="let user of users">
     <mat-card-title>
       <span>{{user.username}}</span>
@@ -29,4 +29,8 @@
 
     </mat-card-actions>
   </mat-card>
+
+  <h1 *ngIf="users.length === 0" class="message">
+    You are the only user.
+  </h1>
 </div>

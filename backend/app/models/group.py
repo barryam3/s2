@@ -3,12 +3,15 @@ from calendar import timegm
 from app.extensions import db
 
 # there is only one group
+# group is connected to user for convenience
 # if we were to ever share this app with others
-# then we would connect this to the rest of the db
+# then we would connect group to song as well
 class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     sdeadline = db.Column(db.DateTime())
-    vdeadline = db.Column(db.DateTime())
+    rdeadline = db.Column(db.DateTime())
+
+    users = db.relationship('User', cascade="all,delete", backref=db.backref('group', lazy=True))
 
     def __init__(self, **kwargs):
         super(Group, self).__init__(**kwargs)
@@ -20,5 +23,5 @@ class Group(db.Model):
         return {
             'id': self.id,
             'suggestDeadline': timegm(self.sdeadline.timetuple()) if self.sdeadline else None,
-            'voteDeadline': timegm(self.vdeadline.timetuple()) if self.vdeadline else None
+            'rateDeadline': timegm(self.rdeadline.timetuple()) if self.rdeadline else None
         }

@@ -17,12 +17,8 @@ export class NavbarComponent {
     private userService: UserService,
   ) { }
 
-  showFilters() {
+  get onSongPage() {
     return this.router.url.startsWith('/songs');
-  }
-
-  showHome() {
-    return !this.showFilters();
   }
 
   logout() {

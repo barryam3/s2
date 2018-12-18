@@ -16,12 +16,11 @@ import { AccountComponent } from './account/account.component';
 import { SongCardComponent } from './song-card/song-card.component';
 import { AddSongComponent } from './add-song/add-song.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { EditDeadlinesComponent } from './edit-deadlines/edit-deadlines.component';
-import { FiltersComponent } from './filters/filters.component';
+import { DeadlinesComponent } from './deadlines/deadlines.component';
+import { FindSongsComponent } from './find-songs/find-songs.component';
 import { SongPageComponent } from './song-page/song-page.component';
 import { AddUserComponent } from './add-user/add-user.component';
 import { ResetSiteComponent } from './reset-site/reset-site.component';
-import { GroupComponent } from './group/group.component';
 
 import { UserService } from './user.service';
 import { SongService } from './song.service';
@@ -49,12 +48,11 @@ import { TriStateCheckboxComponent } from './tri-state-checkbox/tri-state-checkb
     SongCardComponent,
     NavbarComponent,
     AddSongComponent,
-    EditDeadlinesComponent,
-    FiltersComponent,
+    DeadlinesComponent,
+    FindSongsComponent,
     SongPageComponent,
     AddUserComponent,
     ResetSiteComponent,
-    GroupComponent,
     LinksComponent,
     CommentsComponent,
     CommentComponent,

@@ -1,0 +1,9 @@
+.non-editable-deadline {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.non-editable-deadline > h2 {
+  display: inline-block;
+}

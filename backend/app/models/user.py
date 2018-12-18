@@ -10,6 +10,8 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     active = db.Column(db.Boolean(), nullable=False, default=True)
     admin = db.Column(db.Boolean(), nullable=False, default=False)
+    
+    group_id =  db.Column(db.Integer, db.ForeignKey('group.id'), nullable=False, default=1)
 
     comments = db.relationship('Comment', cascade="all,delete", backref=db.backref('user', lazy=True))
     songs = db.relationship('Song', backref=db.backref('user', lazy=True))
@@ -32,10 +34,13 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password, password)
 
-    def to_dict(self):
-        return {
+    def to_dict(self, with_group=False):
+        user =  {
             'id': self.id,
             'username': self.username,
             'active': self.active,
             'admin': self.admin
         }
+        if with_group:
+            user['group'] = self.group.to_dict()
+        return user

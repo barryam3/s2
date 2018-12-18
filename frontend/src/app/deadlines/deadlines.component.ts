@@ -4,18 +4,19 @@ import { MatSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs';
 
 import { GroupService } from '../group.service';
-import { UserService } from '../user.service';
+import { UserService, User } from '../user.service';
 
 @Component({
-  selector: 'app-edit-deadlines',
-  templateUrl: './edit-deadlines.component.html',
-  styleUrls: ['./edit-deadlines.component.scss'],
+  selector: 'app-deadlines',
+  templateUrl: './deadlines.component.html',
+  styleUrls: ['./deadlines.component.scss'],
 })
-export class EditDeadlinesComponent implements OnInit, OnDestroy {
+export class DeadlinesComponent implements OnInit, OnDestroy {
   // ISO date strings
-  newSuggestDeadline = '';
-  newRateDeadline = '';
+  suggestDeadline = '';
+  rateDeadline = '';
 
+  currentUser: User;
   userStream: Subscription;
 
   constructor(
@@ -26,9 +27,10 @@ export class EditDeadlinesComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.userStream = this.userService.currentUser.subscribe(newCurrentUser => {
+      this.currentUser = newCurrentUser;
       if (newCurrentUser) {
-        this.newSuggestDeadline = newCurrentUser.group.suggestDeadline.toISOString();
-        this.newRateDeadline = newCurrentUser.group.rateDeadline.toISOString();
+        this.suggestDeadline = newCurrentUser.group.suggestDeadline.toISOString();
+        this.rateDeadline = newCurrentUser.group.rateDeadline.toISOString();
       }
     });
   }
@@ -39,8 +41,8 @@ export class EditDeadlinesComponent implements OnInit, OnDestroy {
 
   edit() {
     this.groupService.editDeadlines({
-      suggestDeadline: new Date(this.newSuggestDeadline),
-      rateDeadline: new Date(this.newRateDeadline),
+      suggestDeadline: new Date(this.suggestDeadline),
+      rateDeadline: new Date(this.rateDeadline),
     })
       .subscribe(() => {
         this.snackBar.open('Deadlines updated.', 'dismiss');

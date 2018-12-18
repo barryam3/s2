@@ -40,7 +40,7 @@ def login():
         user = User.query.filter_by(username=username).one()
         if user.check_password(password):
             login_user(user)
-            return res(user.to_dict())
+            return res(user.to_dict(True))
     except NoResultFound:
         pass
 

@@ -1,14 +1,14 @@
 <div *ngIf="user" style="height:100%">
   <mat-toolbar>
-    <a mat-button routerLink="filter" *ngIf="showFilters()">
+    <a mat-button routerLink="find-songs" *ngIf="onSongPage">
       <mat-icon>filter_list</mat-icon>
     </a>
     <!-- can't simply disable a link unfortunately -->
-    <span *ngIf="showFilters()">
+    <span *ngIf="onSongPage">
       <a mat-button *ngIf="user.canSuggest" routerLink="add-song"><mat-icon>library_add</mat-icon></a>
       <a mat-button *ngIf="!user.canSuggest" [disabled]="true"><mat-icon>library_add</mat-icon></a>
     </span>
-    <button mat-button *ngIf="showHome()" (click)="back()">
+    <button mat-button *ngIf="!onSongPage" (click)="back()">
       <mat-icon>arrow_back</mat-icon>
       <span id="to-songs">To Songs</span>
     </button>
@@ -27,11 +27,12 @@
 
   <!-- mat-menu does not render anything -->
   <mat-menu #accountMenu="matMenu" [overlapTrigger]="false">
-    <a mat-menu-item routerLink="/account">Account</a>
-    <a mat-menu-item routerLink="/ratings" *ngIf="user.admin">Ratings</a>
-    <a mat-menu-item routerLink="/add-user" *ngIf="user.admin">Add User</a>
-    <a mat-menu-item routerLink="/users" *ngIf="user.admin">Manage Users</a>
-    <a mat-menu-item routerLink="/group" *ngIf="user.admin">Manage Group</a>
     <a mat-menu-item (click)="logout()">Logout</a>
+    <a mat-menu-item routerLink="/account">Account</a>
+    <a mat-menu-item routerLink="/deadlines">Deadlines</a>
+    <a mat-menu-item routerLink="/ratings" *ngIf="user.admin && !user.canRate">Ratings</a>
+    <a mat-menu-item routerLink="/users" *ngIf="user.admin">Manage Users</a>
+    <a mat-menu-item routerLink="/add-user" *ngIf="user.admin">Add User</a>
+    <a mat-menu-item routerLink="/reset" *ngIf="user.admin">Reset Site</a>
   </mat-menu>
 </div>
