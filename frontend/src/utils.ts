@@ -1,6 +1,12 @@
 import { HttpHeaders } from '@angular/common/http';
 
-export const homepageURL = '/songs?suggested=1&sort=edited';
+export const homepage = {
+  route: ['songs'],
+  queryParams: {
+    suggested: '1',
+    sort: 'edited',
+  },
+};
 
 // Does an in-place filter
 export function filterInPlace<T>(arr: T[], f: (elm: T) => boolean) {

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { UserService } from '../user.service';
-import { homepageURL } from '../../utils';
+import { homepage } from '../../utils';
 
 @Component({
   selector: 'app-login',
@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.user.login(this.username, this.password)
-      .subscribe(() => this.router.navigateByUrl(homepageURL));
+      .subscribe(() => this.router.navigate(homepage.route, { queryParams: homepage.queryParams }));
   }
 
 }

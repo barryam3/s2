@@ -1,28 +1,32 @@
 <div *ngIf="user" style="height:100%">
   <mat-toolbar>
-    <a mat-button routerLink="find-songs" *ngIf="onSongPage">
-      <mat-icon>filter_list</mat-icon>
+
+    <a mat-button *ngIf="onSongPage" routerLink="find-songs">
+      <mat-icon>search</mat-icon>
     </a>
+
     <!-- can't simply disable a link unfortunately -->
-    <span *ngIf="onSongPage">
-      <a mat-button *ngIf="user.canSuggest" routerLink="add-song"><mat-icon>library_add</mat-icon></a>
-      <a mat-button *ngIf="!user.canSuggest" [disabled]="true"><mat-icon>library_add</mat-icon></a>
-    </span>
-    <button mat-button *ngIf="!onSongPage" (click)="back()">
+    <a mat-button *ngIf="onSongPage && user.canSuggest" routerLink="add-song"><mat-icon>library_add</mat-icon></a>
+    <a mat-button *ngIf="onSongPage && !user.canSuggest" [disabled]="true"><mat-icon>library_add</mat-icon></a>
+
+    <a mat-button *ngIf="!onSongPage" routerLink="songs" [queryParams]="lastParams">
       <mat-icon>arrow_back</mat-icon>
       <span id="to-songs">To Songs</span>
-    </button>
+    </a>
+
     <img
-      routerLink="/songs"
-      [queryParams]="{suggested: '1'}"
+      [routerLink]="homepage.route"
+      [queryParams]="homepage.queryParams"
       src="assets/images/s2.svg"
       alt="s2"
       id="navbar-logo"
     >
+
     <button mat-button class="right" [matMenuTriggerFor]="accountMenu">
       <span id="user" *ngIf="user">{{user.username}}</span>
       <mat-icon>account_box</mat-icon>
     </button>
+
   </mat-toolbar>
 
   <!-- mat-menu does not render anything -->
@@ -30,6 +34,7 @@
     <a mat-menu-item (click)="logout()">Logout</a>
     <a mat-menu-item routerLink="/account">Account</a>
     <a mat-menu-item routerLink="/deadlines">Deadlines</a>
+
     <a mat-menu-item routerLink="/engagement" *ngIf="user.admin">Engagement</a>
     <a mat-menu-item routerLink="/ratings" *ngIf="user.admin && !user.canRate">Ratings</a>
     <a mat-menu-item routerLink="/users" *ngIf="user.admin">Manage Users</a>

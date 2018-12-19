@@ -4,7 +4,7 @@ import { Subscription, Subject } from 'rxjs';
 
 import { SongService, Song } from '../song.service';
 import { UserService, User } from '../user.service';
-import { homepageURL } from '../../utils';
+import { homepage } from '../../utils';
 
 @Component({
   selector: 'app-song-page',
@@ -82,7 +82,7 @@ export class SongPageComponent implements OnInit, OnDestroy {
   doDelete() {
     if (confirm('Are you sure you want to delete this song?')) {
       this.songService.deleteSong(this.song.id)
-        .subscribe(() => this.router.navigateByUrl(homepageURL));
+        .subscribe(() => this.router.navigate(homepage.route, { queryParams: homepage.queryParams }));
     }
   }
 
