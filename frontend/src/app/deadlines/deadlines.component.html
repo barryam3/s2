@@ -1,7 +1,7 @@
 <div class="stack center" *ngIf="currentUser">
   <form *ngIf="currentUser.admin">
     <h1>Edit Deadlines</h1>
-    <p class="tip">Beginning on the day, people will no longer be able to complete the action.</p>
+    <p class="tip">At the end of the day in Hawaii, people will no longer be able to complete the action.</p>
     <mat-form-field>
       <input matInput [matDatepicker]="sd" placeholder="Suggest Deadline"
         name="sd" [(ngModel)]="suggestDeadline">
@@ -26,7 +26,7 @@
 
   <div *ngIf="!currentUser.admin">
     <h1>Deadlines</h1>
-    <p class="tip">Beginning on the day, people will no longer be able to complete the action.</p>
+    <p class="tip">At the end of the day, people will no longer be able to complete the action.</p>
     <div class="non-editable-deadline">
       <h2 class="bold">Suggest:</h2>
       <h2>{{currentUser.group.suggestDeadline.toDateString()}}</h2>

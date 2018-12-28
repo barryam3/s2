@@ -29,8 +29,12 @@ export class DeadlinesComponent implements OnInit, OnDestroy {
     this.userStream = this.userService.currentUser.subscribe(newCurrentUser => {
       this.currentUser = newCurrentUser;
       if (newCurrentUser) {
-        this.suggestDeadline = newCurrentUser.group.suggestDeadline.toISOString();
-        this.rateDeadline = newCurrentUser.group.rateDeadline.toISOString();
+        const suggestDeadline = new Date(newCurrentUser.group.suggestDeadline.getTime());
+        const rateDeadline = new Date(newCurrentUser.group.rateDeadline.getTime());
+        // show last active day, not first inactive day
+        [suggestDeadline, rateDeadline].forEach(date => date.setDate(date.getDate() - 1));
+        this.suggestDeadline = suggestDeadline.toISOString();
+        this.rateDeadline = rateDeadline.toISOString();
       }
     });
   }
@@ -40,10 +44,14 @@ export class DeadlinesComponent implements OnInit, OnDestroy {
   }
 
   edit() {
-    this.groupService.editDeadlines({
-      suggestDeadline: new Date(this.suggestDeadline),
-      rateDeadline: new Date(this.rateDeadline),
-    })
+    const suggestDeadline = new Date(this.suggestDeadline);
+    const rateDeadline = new Date(this.rateDeadline);
+    [suggestDeadline, rateDeadline].forEach(date => {
+      date.setDate(date.getDate() + 1); // end of selected day
+      date.setMinutes(-1 * date.getTimezoneOffset()); // clear local timezone
+      date.setUTCHours(10); // midnight in Hawaii
+    });
+    this.groupService.editDeadlines({ suggestDeadline, rateDeadline })
       .subscribe(() => {
         this.snackBar.open('Deadlines updated.', 'dismiss');
         this.userService.getCurrentUser().subscribe(); // load new deadlines
