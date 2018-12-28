@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { Router, NavigationEnd, ActivatedRoute, Params, UrlHandlingStrategy } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+import { Router, NavigationEnd, ActivatedRoute, Params } from '@angular/router';
 
 import { User, UserService } from '../user.service';
 import { homepage } from '../../utils';
@@ -10,7 +10,7 @@ import { filter, first } from 'rxjs/operators';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
   @Input() user: User;
   homepage = homepage;
   lastParams: Params;
@@ -18,7 +18,7 @@ export class NavbarComponent {
   constructor(
     private router: Router,
     private userService: UserService,
-    route: ActivatedRoute,
+    private route: ActivatedRoute,
   ) {
     router.events
       .pipe(filter(e => e instanceof NavigationEnd && this.isSongPageURL(e.urlAfterRedirects)))
@@ -27,6 +27,12 @@ export class NavbarComponent {
           this.lastParams = params;
         });
       });
+  }
+
+  ngOnInit() {
+    this.route.queryParams.pipe(first()).subscribe(params => {
+      this.lastParams = params;
+    });
   }
 
   get onSongPage(): boolean {
