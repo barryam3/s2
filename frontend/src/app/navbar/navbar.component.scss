@@ -15,6 +15,7 @@ $logo-width: $logo-aspect-ratio * $logo-height;
   position: absolute;
   right: calc(50% - #{0.5 * $logo-width});
   top: 0.05 * $navbar-height;
+  cursor: pointer;
 }
 
 #user {
