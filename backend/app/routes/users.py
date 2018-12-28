@@ -3,6 +3,7 @@
 from flask import Blueprint, request
 from flask_login import current_user
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.orm import joinedload
 
 from app.extensions import db
 from app.utils import res, get_arg, login_required, admin_required, query_to_bool
@@ -31,7 +32,7 @@ def list_users():
 
     query = User.query
     if active:
-        query = query.filter_by(active=True)
+        query = query.filter_by(active=True).options(joinedload('songs'), joinedload('ratings'))
 
     return res([u.to_dict(False, active) for u in query.all()])
 

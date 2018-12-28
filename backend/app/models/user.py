@@ -45,5 +45,6 @@ class User(db.Model, UserMixin):
             user['group'] = self.group.to_dict()
         if with_engagement:
             user['numSuggestions'] = len(self.songs)
-            user['numRatings'] = len(self.ratings)
+            rated_suggested_songs = [r for r in self.ratings if r.song.user_id != None]
+            user['numRatings'] = len(rated_suggested_songs)
         return user
