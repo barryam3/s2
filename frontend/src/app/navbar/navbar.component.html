@@ -1,15 +1,15 @@
 <div *ngIf="user" style="height:100%">
   <mat-toolbar>
 
-    <a mat-button *ngIf="onSongPage" routerLink="find-songs">
+    <a mat-button *ngIf="onSongsPage" routerLink="find-songs">
       <mat-icon>search</mat-icon>
     </a>
 
     <!-- can't simply disable a link unfortunately -->
-    <a mat-button *ngIf="onSongPage && user.canSuggest" routerLink="add-song"><mat-icon>library_add</mat-icon></a>
-    <a mat-button *ngIf="onSongPage && !user.canSuggest" [disabled]="true"><mat-icon>library_add</mat-icon></a>
+    <a mat-button *ngIf="onSongsPage && user.canSuggest" routerLink="add-song"><mat-icon>library_add</mat-icon></a>
+    <a mat-button *ngIf="onSongsPage && !user.canSuggest" [disabled]="true"><mat-icon>library_add</mat-icon></a>
 
-    <a mat-button *ngIf="!onSongPage" routerLink="songs" [queryParams]="lastParams">
+    <a mat-button *ngIf="!onSongsPage" routerLink="songs" [queryParams]="lastParams">
       <mat-icon>arrow_back</mat-icon>
       <span id="to-songs">To Songs</span>
     </a>

@@ -13,7 +13,7 @@ import { filter, first } from 'rxjs/operators';
 export class NavbarComponent implements OnInit {
   @Input() user: User;
   homepage = homepage;
-  lastParams: Params;
+  lastParams: Params = homepage.queryParams;
 
   constructor(
     private router: Router,
@@ -21,7 +21,7 @@ export class NavbarComponent implements OnInit {
     private route: ActivatedRoute,
   ) {
     router.events
-      .pipe(filter(e => e instanceof NavigationEnd && this.isSongPageURL(e.urlAfterRedirects)))
+      .pipe(filter(e => e instanceof NavigationEnd && this.isSongsPageURL(e.urlAfterRedirects)))
       .subscribe(() => {
         route.queryParams.pipe(first()).subscribe(params => {
           this.lastParams = params;
@@ -30,16 +30,18 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.queryParams.pipe(first()).subscribe(params => {
-      this.lastParams = params;
-    });
+    if (this.onSongsPage) {
+      this.route.queryParams.pipe(first()).subscribe(params => {
+        this.lastParams = params;
+      });
+    }
   }
 
-  get onSongPage(): boolean {
-    return this.isSongPageURL(this.router.url);
+  get onSongsPage(): boolean {
+    return this.isSongsPageURL(this.router.url);
   }
 
-  isSongPageURL(url: string): boolean {
+  isSongsPageURL(url: string): boolean {
     return url.startsWith('/songs');
   }
 
